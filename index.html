@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm GDQP 10 - Ôn Tập</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --correct-bg: #d4edda;
+            --correct-border: #c3e6cb;
+            --incorrect-bg: #f8d7da;
+            --incorrect-border: #f5c6cb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .question-block {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .options label {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #e9ecef;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #results-container {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9f7ef;
+            border-radius: 8px;
+            border: 1px solid #d4edda;
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .review-mode .question-block {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .review-mode .correct-option {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            font-weight: bold;
+        }
+
+        .review-mode .incorrect-option {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+            text-decoration: line-through;
+        }
+        
+        #btn-review {
+            background-color: #17a2b8;
+        }
+        #btn-review:hover {
+            background-color: #117a8b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ôn Tập Giữa Học Kỳ II - GDQP 10</h1>
+    <form id="quiz-form">
+        <div id="quiz-container"></div>
+        <button type="button" class="btn" id="btn-submit" onclick="submitQuiz()">Nộp Bài & Xem Điểm</button>
+    </form>
+
+    <div id="results-container">
+        <h2>Kết Quả Của Bạn</h2>
+        <div class="score" id="score-display"></div>
+        <p id="percentage-display"></p>
+        <button type="button" class="btn" id="btn-review" onclick="enableReviewMode()">Xem Chi Tiết Đáp Án</button>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu trắc nghiệm được trích xuất từ tài liệu cung cấp
+    const quizData = [
+        // Bài 1
+        { id: "1_1", q: "Câu 1. Nội dung nào dưới đây không phản ánh đúng nghệ thuật quân sự của Quân đội nhân dân Việt Nam?", options: { A: "Kết hợp sáng tạo nhiều cách đánh, nhiều hình thức đấu tranh.", B: "Hạn chế chỗ mạnh, khoét sâu chỗ yếu của địch để đánh địch.", C: "Đánh tiêu diệt có trọng điểm; đánh bằng mưu, kế, thế, thời.", D: "Nêu cao tinh thần tự lực, không có sự đoàn kết quốc tế." }, ans: "D" },
+        { id: "1_2", q: "Câu 2. Từ năm 1950, Quân đội Quốc gia Việt Nam đổi tên thành?", options: { A: "Đội Việt Nam tuyên truyền giải phóng quân.", B: "Quân đội nhân dân Việt Nam.", C: "Việt Nam Giải phóng quân.", D: "Vệ quốc đoàn." }, ans: "B" },
+        { id: "1_3", q: "Câu 3. Ở Việt Nam, ngày 28/3 hằng năm là ngày truyền thống của lực lượng nào?", options: { A: "Công an nhân dân.", B: "Dân quân tự vệ.", C: "Báo chí cách mạng.", D: "Quân đội nhân dân." }, ans: "B" },
+        { id: "1_4", q: "Câu 4. Nhận định nào dưới đây thể hiện đúng một trong những truyền thống vẻ vang của Quân đội nhân dân Việt Nam?", options: { A: "Tuyệt đối trung thành với Tổ quốc, với Đảng và Nhân dân.", B: "Chỉ tập trung thực hiện nhiệm vụ trong thời bình.", C: "Không tham gia lao động sản xuất và giúp dân khi cần thiết.", D: "Hoạt động độc lập, không phối hợp với các lực lượng khác." }, ans: "A" },
+        { id: "1_5", q: "Câu 5. Ngày thành lập lực lượng Công an nhân dân Việt Nam là ngày nào?", options: { A: "Ngày 28/03/1935.", B: "Ngày 02/9/1945.", C: "Ngày 19/8/1945.", D: "Ngày 22/12/1944." }, ans: "C" },
+        { id: "1_6", q: "Câu 6. Vì sao nói Công an nhân dân Việt Nam mang bản chất giai cấp công nhân?", options: { A: "Vì lực lượng này của Nhà nước do Đảng Cộng sản Việt Nam lãnh đạo.", B: "Vì đa số cán bộ, chiến sĩ xuất thân từ gia đình công nhân.", C: "Vì lực lượng này hoạt động chủ yếu trong các khu công nghiệp.", D: "Vì được thành lập từ phong trào đấu tranh của nông dân." }, ans: "A" },
+        { id: "1_7", q: "Câu 7. Trong lực lượng vũ trang nhân dân Việt Nam thì lực lượng nào được ra đời sớm nhất?", options: { A: "Quân đội nhân dân.", B: "Công an nhân dân.", C: "Dân quân tự vệ.", D: "Cảnh sát biển." }, ans: "C" },
+        { id: "1_8", q: "Câu 8. Quân đội nhân dân, Công an nhân dân do ai lãnh đạo?", options: { A: "Hồ Chí Minh.", B: "Đảng cộng sản Việt Nam.", C: "Hoàng Sâm.", D: "Võ Nguyên Giáp." }, ans: "B" },
+        { id: "1_9", q: "Câu 9. Ngày đầu thành lập, Đội Việt Nam tuyên truyền giải phóng quân có bao nhiêu chiến sĩ?", options: { A: "34 chiến sĩ.", B: "33 chiến sĩ.", C: "32 chiến sĩ.", D: "31 chiến sĩ." }, ans: "A" },
+        { id: "1_10", q: "Câu 10. Ở Việt Nam, ngày 22/12 hằng năm là ngày truyền thống của lực lượng nào?", options: { A: "Công an nhân dân.", B: "Dân quân tự vệ.", C: "Báo chí cách mạng.", D: "Quân đội nhân dân." }, ans: "D" },
+        { id: "1_11", q: "Câu 11. Nội dung nào dưới đây không phản ánh đúng truyền thống của Công an nhân dân Việt Nam?", options: { A: "Tuyệt đối trung thành với Tổ quốc.", B: "Vì nhân dân phục vụ, dựa vào dân chiến đấu.", C: "Tự lực, tự cường, không có sự đoàn kết quốc tế.", D: "Tận tụy trong công việc, cảnh giác, bí mật, mưu trí." }, ans: "C" },
+        { id: "1_12", q: "Câu 12. Khi tham gia sinh hoạt truyền thống 22/12 tại trường, học sinh cần thể hiện thái độ như thế nào để phát huy truyền thống lực lượng vũ trang?", options: { A: "Tham gia đầy đủ, nghiêm túc, tìm hiểu ý nghĩa lịch sử.", B: "Chỉ tham gia cho có mặt.", C: "Đứng ngoài xem vì không liên quan.", D: "Tham gia nhưng nói chuyện riêng." }, ans: "A" },
+        { id: "1_13", q: "Câu 13. Công an nhân dân Việt Nam mang bản chất của giai cấp nào?", options: { A: "Nông dân.", B: "Công nhân.", C: "Tư sản.", D: "Tiểu tư sản." }, ans: "B" },
+        { id: "1_14", q: "Câu 14. Tổ chức nào dưới đây được thành lập vào ngày 22/12/1944?", options: { A: "Đội Việt Nam Tuyên truyền Giải phóng quân.", B: "Việt Nam Giải phóng quân.", C: "Vệ Quốc Đoàn.", D: "Quân đội quốc gia Việt Nam." }, ans: "A" },
+        // Bài 2
+        { id: "2_8", q: "Câu 8 (Bài 2). Ở cấp học nào môn học giáo dục quốc phòng và an ninh được thực hiện lồng ghép thông qua nội dung các môn trong chương trình, hoạt động ngoại khóa?", options: { A: "Tiểu học.", B: "Trung học phổ thông.", C: "Cao đẳng.", D: "Đại học." }, ans: "A" },
+        { id: "2_9", q: "Câu 9. Mục tiêu của giáo dục quốc phòng và an ninh nhằm hướng tới điều gì?", options: { A: "Cung cấp kiến thức quân sự.", B: "Hình thành ý thức, trách nhiệm bảo vệ Tổ quốc cho công dân.", C: "Đào tạo sĩ quan quân đội.", D: "Tuyển chọn công dân nhập ngũ." }, ans: "B" },
+        { id: "2_10", q: "Câu 10. Quyền và trách nhiệm của công dân được quy định như thế nào trong Điều 7 của Luật Giáo dục quốc phòng và an ninh?", options: { A: "Tham gia thực hiện nghĩa vụ quân sự khi đủ độ tuổi quy định.", B: "Học tập, nghiên cứu để nắm vững kiến thức quốc phòng và an ninh.", C: "Tuyên truyền đường lối, quan điểm, chính sách của Đảng và nhà nước.", D: "Học tập, nghiên cứu để hiểu được vị trí, chức năng của sĩ quan công an." }, ans: "B" },
+        { id: "2_11", q: "Câu 11. Sĩ quan Quân đội nhân dân Việt Nam có chức năng gì?", options: { A: "Đấu tranh phòng, chống tội phạm và vi phạm pháp luật về an ninh quốc gia.", B: "Đấu tranh chống âm mưu và hoạt động chống phá của các thế lực thù địch.", C: "Đảo đảm cho quân đội sẵn sàng chiến đấu và hoàn thành nhiệm vụ được giao.", D: "Làm lực lượng nòng cốt trong bảo đảm trật tự an toàn xã hội." }, ans: "C" },
+        { id: "2_12", q: "Câu 12. Nội dung nào không đúng với khái niệm về sĩ quan quân đội nhân dân Việt Nam?", options: { A: "Là cán bộ của Đảng Cộng Sản Việt Nam, Nhà nước CHXHCN Việt Nam.", B: "Là người hoạt động trong lĩnh vực quân sự.", C: "Được nhà nước phong quân hàm cấp úy, cấp tá, cấp tướng.", D: "Là quân nhân phục vụ trong lực lượng vũ trang." }, ans: "D" },
+        { id: "2_13", q: "Câu 13. Hằng năm, Công an nhân dân được tuyển chọn công dân trong độ tuổi gọi nhập ngũ vào phục vụ trong Công an nhân dân với thời hạn là bao nhiêu lâu?", options: { A: "12 tháng.", B: "16 tháng.", C: "24 tháng.", D: "6 tháng." }, ans: "C" },
+        { id: "2_14", q: "Câu 14. Nội dung nào dưới đây không phản ánh đúng tiêu chuẩn để trở thành sĩ quan Công an nhân dân Việt Nam?", options: { A: "Công dân nước ngoài sinh sống trên lãnh thổ nước Việt Nam.", B: "Chiều cao: đối với nam từ 1m64, đối với nữ từ 1m58 trở lên.", C: "Lý lịch nhân thân rõ ràng, tuân thủ hiến pháp và pháp luật.", D: "Có phẩm chất, tư cách đạo đức tốt; tuổi đời phù hợp." }, ans: "A" },
+        { id: "2_15", q: "Câu 15. Lực lượng nào dưới đây là nòng cốt trong thực hiện nhiệm vụ bảo vệ an ninh quốc gia, đảm bảo trật tự, an toàn xã hội, đấu tranh phòng, chống tội phạm...?", options: { A: "Quân đội nhân dân.", B: "Công an nhân dân.", C: "Dân quân tự vệ.", D: "Công chức." }, ans: "B" },
+        { id: "2_10b", q: "Câu 10*. Luật nào dưới đây quy định: nguyên tắc, chính sách, nội dung cơ bản... giáo dục quốc phòng và an ninh?", options: { A: "Luật Giáo dục quốc phòng và an ninh.", B: "Luật Sĩ quan Quân đội nhân dân Việt Nam.", C: "Luật Nghĩa vụ quân sự.", D: "Luật An ninh quốc gia." }, ans: "A" },
+        { id: "2_13b", q: "Câu 13*. Bộ trưởng bộ Công an quyết định kéo dài thời gian phục vụ tại ngũ của hạ sĩ quan, chiến sĩ trong thời gian bao nhiêu lâu?", options: { A: "Không quá 05 tháng.", B: "Không quá 06 tháng.", C: "Không quá 04 tháng.", D: "Không quá 07 tháng." }, ans: "B" },
+        { id: "2_15b", q: "Câu 15*. Lực lượng Công an nhân dân Việt Nam có chức năng cơ bản nào sau đây?", options: { A: "Bảo vệ an ninh quốc gia và bảo đảm trật tự, an toàn xã hội.", B: "Tổ chức hoạt động sản xuất kinh doanh trong lĩnh vực quốc phòng.", C: "Thực hiện nhiệm vụ đối ngoại quân sự quốc tế.", D: "Huấn luyện dân quân tự vệ địa phương." }, ans: "A" },
+        { id: "2_16", q: "Câu 16. Sĩ quan Quân đội nhân dân Việt Nam có nghĩa vụ?", options: { A: "Phòng, chống tội phạm và vi phạm pháp luật về trật tự, an toàn xã hội.", B: "Lãnh đạo, chỉ huy, quản lý hoặc trực tiếp thực hiện một số nhiệm vụ khác.", C: "Đấu tranh phòng, chống âm mưu, hoạt động của các thế lực thù địch.", D: "Sẵn sàng chiến đấu, hy sinh bảo vệ độc lập, chủ quyền, toàn vẹn lãnh thổ của Tổ quốc." }, ans: "D" },
+        { id: "2_17", q: "Câu 17. Cách phân chia cấp bậc quân hàm sĩ quan Quân đội nhân dân Việt Nam được thực hiện theo nguyên tắc nào?", options: { A: "Theo chức vụ đảm nhiệm và cấp bậc quy định.", B: "Theo độ tuổi của sĩ quan.", C: "Theo thời gian tham gia quân đội.", D: "Theo nơi công tác." }, ans: "A" },
+        // Bài 3
+        { id: "3_1", q: "Câu 1 (Bài 3). Loại cây nào dưới đây không chứa chất ma túy?", options: { A: "Cây thuốc phiện.", B: "Cây Côca.", C: "Cây xuyên tâm liên.", D: "Cây cần sa." }, ans: "C" },
+        { id: "3_2", q: "Câu 2. Chất kích thích hoặc ức chế thần kinh hoặc gây ảo giác, nếu sử dụng nhiều lần có thể dẫn tới tình trạng nghiện đối với người sử dụng được gọi là?", options: { A: "Chất chống viêm.", B: "Chất gây nghiện.", C: "Chất hướng thần.", D: "Chất an thần." }, ans: "C" },
+        { id: "3_3", q: "Câu 3. Trong việc phòng, chống ma túy cá nhân, gia đình có trách nhiệm như thế nào?", options: { A: "Cung cấp kịp thời thông tin về tội phạm, tệ nạn ma túy.", B: "Cản trở hoặc chống lại việc xét nghiệm chất ma túy.", C: "Cản trở người tham gia phòng, chống chất ma túy.", D: "Lôi kéo người khác sử dụng trái phép chất ma túy." }, ans: "A" },
+        { id: "3_4", q: "Câu 4. Quá trình nghiện ma túy thường trải qua những giai đoạn nào?", options: { A: "Lạm dụng ma túy => sử dụng ma túy => lệ thuộc ma túy.", B: "Sử dụng ma túy => lạm dụng ma túy => lệ thuộc ma túy.", C: "Lệ thuộc ma túy => sử dụng ma túy => lạm dụng ma túy.", D: "Sử dụng ma túy => lệ thuộc ma túy => lạm dụng ma túy." }, ans: "B" },
+        { id: "3_5", q: "Câu 5. Ma túy gây tác hại như thế nào đối với bản thân người nghiện?", options: { A: "Gây tổn hại về sức khỏe thể chất và tinh thần.", B: "Lực lượng lao động của xã hội bị suy giảm.", C: "Nguồn vốn đầu tư nước ngoài bị suy giảm.", D: "Xã hội kém an toàn do phát sinh nhiều tệ nạn." }, ans: "A" },
+        { id: "3_6", q: "Câu 6. Một học sinh do tò mò, muốn thể hiện bản thân nên thử sử dụng ma túy và dần bị lệ thuộc. Nguyên nhân chủ quan trong tình huống trên là gì?", options: { A: "Sự tò mò, thích “chơi trội”, lối sống buông thả, thực dụng.", B: "Thiếu sự quan tâm, giáo dục của gia đình, người thân.", C: "Công tác tuyên truyền về tác hại của ma túy chưa hiệu quả.", D: "Chế tài xử phạt của nhà nước còn nhẹ, chưa đủ sức răn đe." }, ans: "A" },
+        { id: "3_7", q: "Câu 7. Một học sinh thường xuyên ngủ gật trong lớp, da xanh tái, tính cách thay đổi thất thường và hay xin tiền bất thường. Dấu hiệu trên cho thấy khả năng cao học sinh đó đang:", options: { A: "Bị suy dinh dưỡng.", B: "Có biểu hiện sử dụng ma túy.", C: "Gặp khó khăn trong học tập.", D: "Mắc bệnh cảm cúm thông thường." }, ans: "B" },
+        { id: "3_8", q: "Câu 8. Trong việc phòng, chống ma túy học sinh có trách nhiệm như thế nào?", options: { A: "Không vi phạm quy định về các hành vi bị nghiêm cấm tại luật phòng, chống ma túy.", B: "Cản trở hoặc chống lại việc xét nghiệm chất ma túy.", C: "Cản trở người tham gia phòng, chống chất ma túy.", D: "Lôi kéo người khác sử dụng trái phép chất ma túy." }, ans: "A" },
+        { id: "3_9", q: "Câu 9. Trách nhiệm pháp lý được xác định như thế nào? (Cô H được nhờ chuyển gói hàng chứa ma túy mà không biết)", options: { A: "Chỉ người hàng xóm và tài xế xe tải vi phạm pháp luật.", B: "Cô H, người hàng xóm và tài xế đều vi phạm như nhau.", C: "Chỉ cô H phải chịu trách nhiệm hình sự.", D: "Không ai vi phạm vì cô H không biết bên trong là gì." }, ans: "A" },
+        { id: "3_10", q: "Câu 10. Hành vi vi phạm pháp luật nào được đề cập đến trong tình huống sau? (Bố mẹ G trồng thuốc phiện làm thuốc)", options: { A: "Trồng cây có chứa chất ma túy.", B: "Sản xuất, tàng trữ, vận chuyển trái phép chất ma túy.", C: "Chống lại hoặc cản trở việc xét nghiệm chất ma túy.", D: "Cưỡng bức, lôi kéo người khác sử dụng chất ma túy." }, ans: "A" },
+        { id: "3_11", q: "Câu 11. Khi phát hiện người thân/ bạn bè tàng trữ và sử dụng trái phép chất ma túy, em nên lựa chọn cách ứng xử nào dưới đây?", options: { A: "Im lặng và tuyệt đối che giấu thông tin cho người thân, bạn bè.", B: "Nhanh chóng báo cáo thông tin tới cơ quan chức năng gần nhất.", C: "Chất vấn người thân, bạn bè; thông báo cho mọi người xung quanh.", D: "Im lặng và không quan tâm vì việc đó không ảnh hưởng gì tới mình." }, ans: "B" },
+        { id: "3_12", q: "Câu 12. Trong tình huống sau, những nhân vật nào đã vi phạm pháp luật về phòng, chống ma túy? (Anh trai X trồng cần sa)", options: { A: "X và anh trai của X.", B: "Không có nhân vật nào.", C: "Bạn X.", D: "Anh trai của X." }, ans: "D" },
+        { id: "3_13", q: "Câu 13. Vì sao việc thử sử dụng ma túy dù chỉ một lần cũng có thể dẫn đến nghiện?", options: { A: "Vì cơ thể có thể hình thành sự lệ thuộc nhanh chóng vào chất gây nghiện.", B: "Vì ma túy không gây tác động gì nếu dùng ít.", C: "Vì pháp luật không xử lý người dùng thử một lần.", D: "Vì người trẻ tuổi có sức đề kháng cao." }, ans: "A" },
+        { id: "3_14", q: "Câu 14. Trong lớp có bạn N thường xuyên tụ tập với nhóm thanh niên lạ mặt, hay xin tiền gia đình bất thường. Nếu là bạn cùng lớp, em nên làm gì?", options: { A: "Kệ bạn vì đó là việc riêng của bạn.", B: "Nói xấu bạn trước lớp để cảnh báo mọi người.", C: "Trao đổi với giáo viên chủ nhiệm hoặc người có trách nhiệm.", D: "Theo dõi rồi đăng lên mạng xã hội." }, ans: "C" },
+        { id: "3_15", q: "Câu 15. Nội dung nào dưới đây không phản ánh đúng dấu hiệu nhận biết học sinh nghiện ma túy?", options: { A: "Bị toát mồ hôi, ngáp vặt, ngủ gật, da xanh tái, nổi da gà.", B: "Hay lo sợ, hoảng tưởng, tính cách thay đổi thất thường.", C: "Cất giấu chất ma túy hoặc dụng cụ sử dụng chất ma túy.", D: "Cơ thể đầy đặn, khỏe mạnh, thần thái tươi tỉnh, học lực tốt." }, ans: "D" },
+        { id: "3_16", q: "Câu 16. Trong tình huống sau, nhân vật nào không vi phạm pháp luật về phòng, chống ma túy? (Ông A dụ dỗ C, K báo công an)", options: { A: "Ông A.", B: "Bạn C.", C: "Bạn K.", D: "Bạn C và bạn K." }, ans: "C" },
+        { id: "3_17", q: "Câu 17. Khái niệm về chất ma túy trong Luật phòng chống ma túy được quy định trong danh mục do Chính phủ ban hành là chất gì?", options: { A: "Là chất gây nghiện, chất hướng thần.", B: "Chất kích thích, khi dùng nhiều thần kinh sẽ bị tê liệt.", C: "Tất cả các chất nào mà khi dùng sẽ bị say như say rượu.", D: "Chất gây tâm lý hoang mang, ảo tưởng, khi dùng sẽ nghiện." }, ans: "A" },
+        { id: "3_18", q: "Câu 18. Tác hại của ma túy đối với an ninh quốc gia và trật tự, an toàn xã hội như thế nào?", options: { A: "Gây tổn hại về sức khỏe thể chất và tinh thần.", B: "Gây thiệt hại kinh tế gia đình.", C: "Nguồn vốn đầu tư nước ngoài bị suy giảm.", D: "Xã hội kém an toàn do phát sinh một số loại tội phạm." }, ans: "D" },
+        { id: "3_19", q: "Câu 19. Ma túy gây tác hại như thế nào đối với nền kinh tế?", options: { A: "Gây tổn hại về sức khỏe thể chất và tinh thần.", B: "Hạnh phúc gia đình bị rạn nứt, dễ tan vỡ.", C: "Nguồn vốn đầu tư nước ngoài bị suy giảm.", D: "Xã hội kém an toàn do phát sinh nhiều tệ nạn" }, ans: "C" },
+        // Bài 4
+        { id: "4_1", q: "Câu 1 (Bài 4). Tại nơi có hoặc không có vạch kẻ đường dành cho người đi bộ, người điều khiển phương tiện phải?", options: { A: "Quan sát, giảm tốc độ và nhường đường cho người đi bộ.", B: "Tăng tốc độ và nhường đường cho xe của người khuyết tật.", C: "Dừng lại, đợi xe của người khuyết tật đi qua mới được di chuyển.", D: "Tăng tốc độ, không cần nhường đường cho người đi bộ, người khuyết tật." }, ans: "A" },
+        { id: "4_2", q: "Câu 2. Hành vi nào dưới đây bị nghiêm cấm khi tham gia giao thông đường bộ?", options: { A: "Đội mũ bảo hiểm khi điều khiển xe mô tô, xe gắn máy.", B: "Bật đèn tín hiệu khi chuyển hướng, chuyển làn đường.", C: "Đua xe, cổ vũ đua xe, tổ chức đua xe trái phép, lạng lách.", D: "Lắp đặt, sử dụng còi, đèn đúng với thiết kế của nhà sản xuất." }, ans: "C" },
+        { id: "4_3", q: "Câu 3. Theo quy định của pháp luật, trường hợp nào dưới đây người điều khiển xe máy được chở 2 người?", options: { A: "Chở người bệnh đi cấp cứu, áp giải người có hành vi vi phạm pháp luật, chở trẻ em dưới 14 tuổi.", B: "Chở người bệnh đi cấp cứu, áp giải người có hành vi vi phạm pháp luật.", C: "Áp giải người có hành vi vi phạm pháp luật, chở trẻ em dưới 14 tuổi.", D: "Không được chở quá một người trong mọi trường hợp." }, ans: "B" },
+        { id: "4_4", q: "Câu 4. Vì sao người tham gia giao thông phải đi đúng làn đường, phần đường quy định?", options: { A: "Để tránh bị xử phạt hành chính.", B: "Để bảo đảm an toàn và trật tự giao thông.", C: "Để phương tiện lưu thông nhanh hơn.", D: "Để thuận tiện cho việc kiểm tra của lực lượng chức năng." }, ans: "B" },
+        { id: "4_5", q: "Câu 5. Người điều khiển xe mô tô hai bánh, xe mô tô ba bánh, xe gắn máy, xe đạp máy phải?", options: { A: "Đội mũ bảo hiểm có cài quai đúng quy cách.", B: "Đi xe vào phần đường dành cho người đi bộ.", C: "Đi xe vào phần đường dành cho phương tiện khác.", D: "Đội mũ bảo hiểm nhưng không cần cài quai mũ." }, ans: "A" },
+        { id: "4_6", q: "Câu 6. Trong tình huống sau, hành vi của M và em gái trèo qua dải phân cách vi phạm quy định nào?", options: { A: "Vi phạm quy định về phần đường và cách qua đường của người đi bộ.", B: "Không vi phạm vì mục đích là để đến trường đúng giờ.", C: "Vi phạm quy định về cách qua đường của người đi bộ.", D: "Không vi phạm vì chưa gây ra tai nạn giao thông." }, ans: "A" },
+        { id: "4_7", q: "Câu 7. Khi thấy bạn đu bám vào phương tiện giao thông đang chạy, em nên làm gì?", options: { A: "Mặc kệ vì đó là việc của bạn.", B: "Cổ vũ để bạn thể hiện bản thân.", C: "Nhắc nhở và khuyên bạn dừng hành vi nguy hiểm đó.", D: "Quay video đăng lên mạng xã hội." }, ans: "C" },
+        { id: "4_8", q: "Câu 8. Vì sao pháp luật quy định người điều khiển xe mô tô phải đội mũ bảo hiểm đạt chuẩn và cài quai đúng quy cách?", options: { A: "Để tránh bị xử phạt hành chính.", B: "Để bảo vệ tính mạng, giảm chấn thương khi xảy ra tai nạn.", C: "Để tạo hình ảnh đẹp khi tham gia giao thông.", D: "Vì phương tiện bắt buộc phải có mũ bảo hiểm." }, ans: "B" },
+        { id: "4_9", q: "Câu 9. Trong tình huống sau, những chủ thể nào đã vi phạm quy định về trật tự, an toàn giao thông đường thủy nội địa? (P đi đò không mặc áo phao)", options: { A: "Bạn P.", B: "Bác lái đò.", C: "Bác lái đò và bạn P.", D: "Không có nhân vật nào." }, ans: "A" },
+        { id: "4_10", q: "Câu 10. Trong tình huống sau, những chủ thể nào đã vi phạm quy định về trật tự, an toàn giao thông đường sắt? (H và P chơi trên đường ray, H xếp đá...)", options: { A: "Bạn H và bác K.", B: "Bạn P và bác K.", C: "Bác K, bạn H và P.", D: "Bạn H và P." }, ans: "D" },
+        { id: "4_11", q: "Câu 11. Anh K điều khiển xe mô tô vượt đèn đỏ dù biết rõ hành vi này bị pháp luật cấm và có thể gây tai nạn. Theo quy định, hành vi của anh K được xác định là gì?", options: { A: "Hành vi không có lỗi của chủ thể có năng lực trách nhiệm pháp lý.", B: "Hành vi trái pháp luật, có lỗi của chủ thể có năng lực trách nhiệm pháp lý.", C: "Hành vi không bị xử lý nếu chưa gây hậu quả nghiêm trọng.", D: "Hành vi của chủ thể mất năng lực trách nhiệm pháp lý." }, ans: "B" },
+        { id: "4_12", q: "Câu 12. Trong phòng, chống vi phạm an toàn giao thông, học sinh không có trách nhiệm nào dưới đây?", options: { A: "Chủ động học tập và tự giác, gương mẫu tuân thủ quy định của pháp luật.", B: "Giúp đỡ người khác tham gia giao thông an toàn, đúng quy định pháp luật.", C: "Vận động người thân thực hiện pháp luật về trật tự, an toàn giao thông.", D: "Ban hành các chính sách, cơ chế xử lý hành vi vi phạm luật giao thông." }, ans: "D" },
+        { id: "4_13", q: "Câu 13. Theo quy định của pháp luật, công dân từ đủ bao nhiêu tuổi trở lên phải chịu trách nhiệm hành chính về hành vi vi phạm pháp luật giao thông?", options: { A: "Đủ 14 tuổi.", B: "Đủ 16 tuổi.", C: "Đủ 18 tuổi.", D: "Đủ 19 tuổi." }, ans: "A" },
+        { id: "4_14", q: "Câu 14. Tình huống: Khi chở em nhỏ dưới 14 tuổi đi học, người điều khiển xe máy cần làm gì?", options: { A: "Chở tối đa 2 người và đội mũ bảo hiểm đúng quy định.", B: "Chở bao nhiêu cũng được nếu đi gần.", C: "Không cần đội mũ bảo hiểm cho trẻ em.", D: "Đi vào phần đường dành cho người đi bộ." }, ans: "A" },
+        { id: "4_15", q: "Câu 15. Nội dung nào dưới đây phản ánh đúng nguyên tắc chung khi tham gia giao thông đường bộ ở Việt Nam?", options: { A: "Có thể đi về bên trái hoặc bên phải theo chiều đi của mình.", B: "Đi đúng làn đường, phần đường quy định.", C: "Không chấp hành hệ thống báo hiệu đường bộ.", D: "Không bật đèn tín hiệu khi chuyển làn đường." }, ans: "B" },
+        { id: "4_16", q: "Câu 16. Khi thấy bạn mình không đội mũ bảo hiểm khi điều khiển xe máy đến trường, em nên:", options: { A: "Nhắc nhở bạn chấp hành đúng quy định.", B: "Không quan tâm vì không ảnh hưởng đến mình.", C: "Trêu chọc bạn.", D: "Quay video đăng mạng." }, ans: "A" },
+        { id: "4_17", q: "Câu 17. Trong tình huống sau, chủ thể nào đã vi phạm pháp luật về an toàn giao thông đường bộ? (Anh em M trèo qua dải phân cách)", options: { A: "Em gái M.", B: "Bạn M.", C: "Không có nhân vật nào.", D: "Cả hai anh em M." }, ans: "B" },
+        { id: "4_18", q: "Câu 18. Khi tham gia giao thông, người đi bộ không được thực hiện hành vi nào dưới đây?", options: { A: "Đu bám vào phương tiện giao thông đang chạy.", B: "Đi trên hè phố, lề đường, đi sát mép đường.", C: "Qua đường ở những nơi có vạch kẻ đường.", D: "Tuân thủ hiệu lệnh của biển báo hiệu." }, ans: "A" },
+        { id: "4_19", q: "Câu 19. Hành vi nào dưới đây vi phạm luật giao thông?", options: { A: "Không đội mũ bảo hiểm khi điều khiển xe gắn máy.", B: "Bật đèn tín hiệu khi chuyển làn đường, chuyển hướng xe.", C: "Giảm tốc độ khi điều khiển xe từ đường nhánh ra đường chính.", D: "Chấp hành nghiêm túc hiệu lệnh của người điều khiển giao thông." }, ans: "A" },
+        { id: "4_20", q: "Câu 20. Tình huống: Nhóm bạn H rủ nhau tổ chức đua xe trái phép. Q cổ vũ và quay clip. Ai vi phạm pháp luật?", options: { A: "Chỉ những người trực tiếp đua xe.", B: "Chỉ Q.", C: "Cả nhóm đua xe và Q.", D: "Không ai vi phạm vì chưa gây tai nạn." }, ans: "C" }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    // Hàm load câu hỏi
+    function renderQuiz() {
+        quizData.forEach((item, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-block';
+            questionDiv.id = `q-block-${index}`;
+
+            const questionText = document.createElement('div');
+            questionText.className = 'question-text';
+            questionText.textContent = `${index + 1}. ${item.q}`;
+            questionDiv.appendChild(questionText);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            for (const [key, value] of Object.entries(item.options)) {
+                const label = document.createElement('label');
+                label.id = `label-${index}-${key}`;
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `question-${index}`;
+                input.value = key;
+                
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(` ${key}. ${value}`));
+                optionsDiv.appendChild(label);
+            }
+
+            questionDiv.appendChild(optionsDiv);
+            quizContainer.appendChild(questionDiv);
+        });
+    }
+
+    // Hàm nộp bài & tính điểm
+    function submitQuiz() {
+        let score = 0;
+        let total = quizData.length;
+
+        quizData.forEach((item, index) => {
+            const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+            if (selectedOption && selectedOption.value === item.ans) {
+                score++;
+            }
+        });
+
+        // Ẩn nút nộp bài, hiện kết quả
+        document.getElementById('btn-submit').style.display = 'none';
+        const resultsContainer = document.getElementById('results-container');
+        resultsContainer.style.display = 'block';
+
+        const percentage = ((score / total) * 100).toFixed(1);
+        document.getElementById('score-display').textContent = `${score} / ${total}`;
+        document.getElementById('percentage-display').textContent = `Tỉ lệ hoàn thành: ${percentage}%`;
+        
+        // Cuộn xuống kết quả
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Hàm chuyển sang chế độ xem chi tiết
+    function enableReviewMode() {
+        const container = document.querySelector('.container');
+        container.classList.add('review-mode');
+        
+        quizData.forEach((item, index) => {
+            const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+            const userAns = selectedOption ? selectedOption.value : null;
+
+            // Đánh dấu đáp án đúng
+            const correctLabel = document.getElementById(`label-${index}-${item.ans}`);
+            if (correctLabel) {
+                correctLabel.classList.add('correct-option');
+            }
+
+            // Đánh dấu đáp án sai do người dùng chọn
+            if (userAns && userAns !== item.ans) {
+                const incorrectLabel = document.getElementById(`label-${index}-${userAns}`);
+                if (incorrectLabel) {
+                    incorrectLabel.classList.add('incorrect-option');
+                }
+            }
+
+            // Vô hiệu hóa inputs
+            const inputs = document.querySelectorAll(`input[name="question-${index}"]`);
+            inputs.forEach(input => input.disabled = true);
+        });
+
+        document.getElementById('btn-review').style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Khởi tạo quiz khi load trang
+    window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
