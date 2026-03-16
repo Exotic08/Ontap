@@ -32,6 +32,7 @@ body {
     padding: 0 20px;
 }
 
+/* --- Phần Header & Bộ đếm --- */
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -81,6 +82,7 @@ body {
     display: none !important;
 }
 
+/* --- Khối Câu hỏi --- */
 .question-block {
     margin-bottom: 30px;
     padding-bottom: 20px;
@@ -103,6 +105,7 @@ body {
     gap: 10px;
 }
 
+/* --- Giao diện Trắc nghiệm --- */
 .option-label {
     display: flex;
     align-items: center;
@@ -124,6 +127,45 @@ body {
     accent-color: var(--primary-color);
 }
 
+/* --- Giao diện câu Tự luận Dài (Essay) --- */
+.essay-input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 120px;
+    background-color: #f8fafc;
+    transition: all 0.2s;
+}
+
+.essay-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- Giao diện câu Trả lời ngắn (Short Answer) --- */
+.short-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.short-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- Nút bấm --- */
 .btn {
     padding: 12px 24px;
     font-size: 1rem;
@@ -153,7 +195,7 @@ body {
     background: var(--text-main);
 }
 
-/* Results section styling */
+/* --- Phần Kết quả --- */
 .stats {
     display: flex;
     gap: 20px;
@@ -197,12 +239,17 @@ body {
     background: #f8fafc;
 }
 
+/* Các trạng thái báo lỗi / đúng */
 .review-correct {
     border-left-color: var(--correct-border);
 }
 
 .review-incorrect {
     border-left-color: var(--incorrect-border);
+}
+
+.review-essay {
+    border-left-color: var(--primary-color); 
 }
 
 .review-item h4 {
@@ -216,3 +263,4 @@ body {
 
 .feedback-correct { color: #16a34a; font-weight: 600; }
 .feedback-incorrect { color: #dc2626; font-weight: 600; }
+.feedback-essay { color: var(--primary-color); font-weight: 600; }
