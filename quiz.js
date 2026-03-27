@@ -1,5 +1,5 @@
 /**
- * EdTech Quiz Logic Controller (Hỗ trợ Trắc nghiệm, Tự luận dài & Điền từ ngắn)
+ * EdTech Quiz Logic Controller (Hỗ trợ Trắc nghiệm, Tự luận dài, Điền từ ngắn & Hình ảnh)
  */
 
 const FIREBASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com/quizStats.json";
@@ -77,10 +77,24 @@ document.addEventListener("DOMContentLoaded", () => {
             line = line.trim();
             if (!line) return;
 
+            // Bắt đầu một câu hỏi mới
             let qMatch = line.match(/^Ask\d+:\s*(.*)/i);
             if (qMatch) {
                 if (currentQ) parsedQuestions.push(currentQ);
-                currentQ = { questionText: qMatch[1], options: [], rawKey: null, type: 'single' };
+                currentQ = { 
+                    questionText: qMatch[1], 
+                    options: [], 
+                    rawKey: null, 
+                    type: 'single',
+                    image: null // Thêm thuộc tính lưu link ảnh
+                };
+                return;
+            }
+
+            // Nhận diện link ảnh (hỗ trợ cả anh1: và anh:)
+            let imgMatch = line.match(/^anh1?:\s*(.*)/i);
+            if (imgMatch && currentQ) {
+                currentQ.image = imgMatch[1];
                 return;
             }
 
@@ -103,9 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         if (currentQ) parsedQuestions.push(currentQ);
 
+        // Xử lý key
         parsedQuestions.forEach(q => {
              if (q.type === 'essay' || q.type === 'short') {
-                 q.key = q.rawKey; // Lưu nguyên chuỗi
+                 q.key = q.rawKey; 
              } else {
                  if (q.rawKey && q.rawKey.includes(',')) {
                      q.type = 'multi';
@@ -141,15 +156,38 @@ document.addEventListener("DOMContentLoaded", () => {
             const block = document.createElement('div');
             block.className = 'question-block';
 
+            // 1. Tiêu đề câu hỏi
             const title = document.createElement('div');
             title.className = 'question-text';
             title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
             if (q.type === 'multi') title.textContent += ' (Có thể chọn nhiều đáp án)';
             if (q.type === 'essay') title.textContent += ' (Tự luận mở rộng)';
-            // Điền từ ngắn không cần ghi chú thêm
-            
             block.appendChild(title);
 
+            // 2. Chèn Hình Ảnh (nếu có)
+            if (q.image) {
+                const imgContainer = document.createElement('div');
+                const img = document.createElement('img');
+                img.src = q.image;
+                img.alt = "Hình ảnh minh họa";
+                img.className = 'question-image';
+                
+                // Hiển thị thông báo nếu ảnh bị lỗi đường dẫn
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    const err = document.createElement('p');
+                    err.style.color = '#ef4444';
+                    err.style.fontSize = '0.85rem';
+                    err.style.marginBottom = '15px';
+                    err.textContent = `[Lỗi: Không thể tải ảnh từ link: ${q.image}]`;
+                    imgContainer.appendChild(err);
+                };
+                
+                imgContainer.appendChild(img);
+                block.appendChild(imgContainer);
+            }
+
+            // 3. Render nhóm lựa chọn / ô nhập liệu
             const optionsGroup = document.createElement('div');
             optionsGroup.className = 'options-group';
 
@@ -160,13 +198,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 textarea.placeholder = 'Nhập câu trả lời của bạn vào đây...';
                 optionsGroup.appendChild(textarea);
             } else if (q.type === 'short') {
-                // TẠO Ô NHẬP ĐIỀN TỪ NGẮN
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.name = `question_${qIndex}`;
                 input.className = 'short-input';
                 input.placeholder = 'Nhập đáp án...';
-                input.autocomplete = "off"; // Tắt gợi ý từ trình duyệt để chống gian lận
+                input.autocomplete = "off";
                 optionsGroup.appendChild(input);
             } else {
                 q.options.forEach((optText, optIndex) => {
@@ -210,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function evaluateResults(timeTakenMs) {
         let correctCount = 0;
-        let objectiveCount = 0; // Đếm số câu có thể tự động chấm (single, multi, short)
+        let objectiveCount = 0; 
         const formData = new FormData(quizForm);
         reviewContainer.innerHTML = '';
         const reviewFragment = document.createDocumentFragment();
@@ -255,10 +292,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             return isMatch;
         } else if (q.type === 'short') {
-            // LOGIC CHẤM ĐIỂM CÂU ĐIỀN TỪ: KHÔNG PHÂN BIỆT HOA THƯỜNG
             const selected = formData.get(`question_${qIndex}`);
             if (!selected) return false;
-            // Loại bỏ khoảng trắng 2 đầu và chuyển về chữ thường
             const userAnswer = selected.trim().toLowerCase();
             const correctAnswer = q.key.trim().toLowerCase();
             return userAnswer === correctAnswer;
@@ -271,6 +306,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const title = document.createElement('h4');
         title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
         div.appendChild(title);
+
+        // Hiển thị lại ảnh thu nhỏ ở phần kết quả (để dễ đối chiếu)
+        if (q.image) {
+            const img = document.createElement('img');
+            img.src = q.image;
+            img.className = 'review-image';
+            div.appendChild(img);
+        }
 
         if (q.type === 'essay') {
             div.className = 'review-item review-essay';
@@ -309,7 +352,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const correctOpts = q.key.map((val, idx) => val === 1 ? q.options[idx] : null).filter(v => v !== null);
                 correctInfo.textContent = `Đáp án đúng: ${correctOpts.join(', ')}`;
             } else if (q.type === 'short') {
-                // Hiển thị cả đáp án đúng và đáp án học sinh vừa nhập
                 const userAnswer = formData.get(`question_${qIndex}`) || 'Bỏ trống';
                 correctInfo.innerHTML = `<strong>Đáp án đúng:</strong> ${q.key} <br/><span style="color:var(--text-muted)">Bạn đã nhập: ${userAnswer}</span>`;
             }
