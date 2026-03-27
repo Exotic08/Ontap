@@ -9,7 +9,6 @@
 <body>
     <div class="app-container">
         
-        <!-- HEADER -->
         <header class="app-header hidden" id="main-header">
             <div class="header-title-group">
                 <button id="home-btn" class="btn-icon" title="Về sảnh chính">🏠 Sảnh</button>
@@ -24,7 +23,6 @@
             </div>
         </header>
 
-        <!-- 1. MÀN HÌNH ĐẶT TÊN (ĐĂNG NHẬP) -->
         <main id="login-section" class="section">
             <div class="login-box">
                 <h2>👋 Chào mừng bạn đến với hệ thống ôn tập</h2>
@@ -35,15 +33,22 @@
             </div>
         </main>
 
-        <!-- 2. SẢNH CHỜ (LOBBY) -->
         <main id="lobby-section" class="section hidden">
+            <div class="adblock-reminder">
+                ❤️ Bạn ơi, web hoạt động hoàn toàn miễn phí. Hãy tắt trình chặn quảng cáo (AdBlock) để ủng hộ mình có kinh phí duy trì hệ thống nhé! Cảm ơn bạn rất nhiều!
+            </div>
+
             <h2 style="text-align: center; margin-bottom: 30px; color: var(--text-main);">📚 Chọn bài thi của bạn</h2>
             <div id="quiz-list-container" class="lobby-grid">
-                <!-- Nút môn học sinh ra tự động -->
+                </div>
+
+            <div class="ad-container">
+                <p class="ad-label">- Quảng cáo tài trợ -</p>
+                <script async="async" data-cfasync="false" src="https://pl28989653.profitablecpmratenetwork.com/8ebfdd2fcf5378c3eb7c9ad14cc36990/invoke.js"></script>
+                <div id="container-8ebfdd2fcf5378c3eb7c9ad14cc36990"></div>
             </div>
         </main>
 
-        <!-- 3. MÀN HÌNH TẢI & THI -->
         <main id="loading-section" class="section hidden">
             <p style="text-align: center; font-weight: 600;">Đang tải dữ liệu bài thi...</p>
         </main>
@@ -55,23 +60,19 @@
             </form>
         </main>
 
-        <!-- 4. KẾT QUẢ -->
         <main id="result-section" class="section hidden">
+            <div class="ad-container" style="margin-bottom: 20px;">
+                <p class="ad-label">- Quảng cáo tài trợ -</p>
+                <script async="async" data-cfasync="false" src="https://pl28989653.profitablecpmratenetwork.com/8ebfdd2fcf5378c3eb7c9ad14cc36990/invoke.js"></script>
+                <div id="container-8ebfdd2fcf5378c3eb7c9ad14cc36990"></div>
+            </div>
+
             <div class="result-summary">
                 <h2>Kết quả bài làm</h2>
                 <div class="stats">
-                    <div class="stat-box">
-                        <span class="stat-label">Điểm số</span>
-                        <span id="score-display" class="stat-value">0/0</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-label">Tỷ lệ chính xác</span>
-                        <span id="accuracy-display" class="stat-value">0%</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-label">Thời gian làm bài</span>
-                        <span id="time-display" class="stat-value">00:00</span>
-                    </div>
+                    <div class="stat-box"><span class="stat-label">Điểm số</span><span id="score-display" class="stat-value">0/0</span></div>
+                    <div class="stat-box"><span class="stat-label">Tỷ lệ chính xác</span><span id="accuracy-display" class="stat-value">0%</span></div>
+                    <div class="stat-box"><span class="stat-label">Thời gian làm bài</span><span id="time-display" class="stat-value">00:00</span></div>
                 </div>
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                     <button id="view-leaderboard-btn" class="btn btn-primary" style="background:#f59e0b; flex:1;">🏆 Xem Bảng Xếp Hạng</button>
@@ -84,7 +85,6 @@
             </div>
         </main>
 
-        <!-- 5. BẢNG XẾP HẠNG -->
         <main id="leaderboard-section" class="section hidden">
             <h2 style="text-align: center; color: var(--primary-color);">🏆 Bảng Xếp Hạng</h2>
             <h3 id="lb-title" style="text-align: center; margin-bottom: 20px; color: var(--text-muted);">Môn học</h3>
@@ -102,17 +102,27 @@
                         </tr>
                     </thead>
                     <tbody id="lb-body">
-                        <!-- Dữ liệu BXH sẽ chèn vào đây -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
             
             <div style="text-align: center; margin-top: 20px;">
                 <button id="lb-back-btn" class="btn btn-secondary">Quay lại</button>
             </div>
+
+            <div class="ad-container" style="margin-top: 30px;">
+                <p class="ad-label">- Quảng cáo tài trợ -</p>
+                <script async="async" data-cfasync="false" src="https://pl28989653.profitablecpmratenetwork.com/8ebfdd2fcf5378c3eb7c9ad14cc36990/invoke.js"></script>
+                <div id="container-8ebfdd2fcf5378c3eb7c9ad14cc36990"></div>
+            </div>
         </main>
 
     </div>
+
+    <div id="social-bar-wrapper">
+        <script src="https://pl28989646.profitablecpmratenetwork.com/aa/4b/6a/aa4b6a92cb32709e52b0eedcef29c515.js"></script>
+    </div>
+
     <script src="quiz.js"></script>
 </body>
 </html>
