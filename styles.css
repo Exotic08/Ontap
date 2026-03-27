@@ -99,6 +99,27 @@ body {
     margin-bottom: 15px;
 }
 
+/* --- Hình ảnh minh họa cho câu hỏi --- */
+.question-image {
+    max-width: 100%;
+    max-height: 400px;
+    height: auto;
+    display: block;
+    margin: 0 0 15px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.review-image {
+    max-width: 250px;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
 .options-group {
     display: flex;
     flex-direction: column;
@@ -264,3 +285,4 @@ body {
 .feedback-correct { color: #16a34a; font-weight: 600; }
 .feedback-incorrect { color: #dc2626; font-weight: 600; }
 .feedback-essay { color: var(--primary-color); font-weight: 600; }
+
