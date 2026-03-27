@@ -1,73 +1,132 @@
 /**
- * EdTech Quiz Logic Controller (Hỗ trợ Trắc nghiệm, Tự luận dài, Điền từ ngắn & Hình ảnh)
+ * EdTech Quiz Logic Controller - ĐA ĐỀ THI
  */
 
-const FIREBASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com/quizStats.json";
+// ==========================================
+// 1. CẤU HÌNH DANH SÁCH BÀI THI (Sửa ở đây)
+// ==========================================
+const QUIZ_LIST = [
+    { 
+        id: "cong_nghe", // ID phải viết liền không dấu (Dùng để lưu Firebase)
+        title: "Ôn tập Công Nghệ", // Tên hiện trên nút bấm
+        file: "data.txt" // Tên file chứa dữ liệu
+    },
+    { 
+        id: "tieng_anh", 
+        title: "Bài tập Tiếng Anh", 
+        file: "data1.txt" 
+    },
+    // Bạn có thể thêm file mới tùy ý: { id: "lich_su", title: "Lịch Sử", file: "data2.txt" }
+];
+
+// Firebase URL gốc (Hệ thống sẽ tự động ghép ID vào sau để tách biệt)
+const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com/stats_";
 
 document.addEventListener("DOMContentLoaded", () => {
+    let currentQuiz = null; // Lưu trữ đề thi đang chọn
     let questions = [];
     let startTime = null;
     let timerInterval = null;
 
+    // --- DOM ELEMENTS ---
+    const lobbySection = document.getElementById('lobby-section');
     const loadingSection = document.getElementById('loading-section');
     const quizSection = document.getElementById('quiz-section');
     const resultSection = document.getElementById('result-section');
+    
+    const quizListContainer = document.getElementById('quiz-list-container');
     const questionsContainer = document.getElementById('questions-container');
     const quizForm = document.getElementById('quiz-form');
-    const timerDisplay = document.getElementById('timer-display');
-    const timeSpan = timerDisplay.querySelector('span');
     const reviewContainer = document.getElementById('review-container');
+    
+    const headerStats = document.getElementById('header-stats');
+    const homeBtn = document.getElementById('home-btn');
+    const appTitle = document.getElementById('app-main-title');
+    const timerDisplay = document.querySelector('#timer-display span');
     const attemptsSpan = document.querySelector('#attempts-display span');
 
-    init();
+    // Khởi tạo Sảnh
+    initLobby();
 
-    async function init() {
+    function initLobby() {
+        quizListContainer.innerHTML = '';
+        
+        QUIZ_LIST.forEach(quiz => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-card-btn';
+            btn.innerHTML = `
+                ${quiz.title}
+                <small>File: ${quiz.file}</small>
+            `;
+            btn.onclick = () => selectQuiz(quiz);
+            quizListContainer.appendChild(btn);
+        });
+
+        showSection('lobby');
+        appTitle.textContent = "Hệ thống Trắc nghiệm";
+        headerStats.classList.add('hidden');
+        homeBtn.classList.add('hidden');
+    }
+
+    async function selectQuiz(quizObj) {
+        currentQuiz = quizObj;
+        appTitle.textContent = quizObj.title;
+        homeBtn.classList.remove('hidden');
+        headerStats.classList.remove('hidden');
+        showSection('loading');
+
         try {
-            fetchGlobalAttempts();
-            const rawData = await fetchQuizData('data.txt');
+            // Lấy số lượt làm bài RIÊNG cho bài này
+            fetchCurrentQuizAttempts();
+
+            // Tải file dữ liệu tương ứng
+            const cacheBuster = `?t=${new Date().getTime()}`;
+            const response = await fetch(currentQuiz.file + cacheBuster);
+            if (!response.ok) throw new Error(`Không tìm thấy file ${currentQuiz.file}`);
+            
+            const rawData = await response.text();
             questions = parseData(rawData);
             startQuiz();
         } catch (error) {
-            loadingSection.innerHTML = `<p style="color:red;">Lỗi tải dữ liệu: ${error.message}</p>`;
+            loadingSection.innerHTML = `<p style="color:red; text-align:center;">Lỗi: ${error.message}</p>`;
         }
     }
 
-    async function fetchQuizData(url) {
-        const cacheBuster = `?t=${new Date().getTime()}`;
-        const response = await fetch(url + cacheBuster);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.text();
+    // --- FIREBASE LOGIC (TÁCH BIỆT THEO ID) ---
+    function getFirebaseUrl() {
+        return `${FIREBASE_BASE_URL}${currentQuiz.id}.json`;
     }
 
-    async function fetchGlobalAttempts() {
+    async function fetchCurrentQuizAttempts() {
+        attemptsSpan.textContent = "...";
         try {
-            const response = await fetch(FIREBASE_URL);
+            const response = await fetch(getFirebaseUrl());
             const data = await response.json();
             attemptsSpan.textContent = (data && data.totalAttempts) ? data.totalAttempts : 0;
         } catch (error) {
-            console.error("Lỗi đồng bộ Firebase:", error);
             attemptsSpan.textContent = "Lỗi";
         }
     }
 
-    async function incrementGlobalAttempts() {
+    async function incrementQuizAttempts() {
         try {
-            const response = await fetch(FIREBASE_URL);
+            const response = await fetch(getFirebaseUrl());
             let data = await response.json();
             let currentTotal = (data && data.totalAttempts) ? data.totalAttempts : 0;
             currentTotal += 1;
 
-            await fetch(FIREBASE_URL, {
+            await fetch(getFirebaseUrl(), {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ totalAttempts: currentTotal })
             });
             attemptsSpan.textContent = currentTotal;
         } catch (error) {
-            console.error("Lỗi cập nhật Firebase:", error);
+            console.error("Lỗi Firebase");
         }
     }
 
+    // --- DATA PARSER ---
     function parseData(text) {
         const lines = text.split('\n');
         const parsedQuestions = [];
@@ -77,50 +136,27 @@ document.addEventListener("DOMContentLoaded", () => {
             line = line.trim();
             if (!line) return;
 
-            // Bắt đầu một câu hỏi mới
             let qMatch = line.match(/^Ask\d+:\s*(.*)/i);
             if (qMatch) {
                 if (currentQ) parsedQuestions.push(currentQ);
-                currentQ = { 
-                    questionText: qMatch[1], 
-                    options: [], 
-                    rawKey: null, 
-                    type: 'single',
-                    image: null // Thêm thuộc tính lưu link ảnh
-                };
-                return;
-            }
-
-            // Nhận diện link ảnh (hỗ trợ cả anh1: và anh:)
-            let imgMatch = line.match(/^anh1?:\s*(.*)/i);
-            if (imgMatch && currentQ) {
-                currentQ.image = imgMatch[1];
+                currentQ = { questionText: qMatch[1], options: [], rawKey: null, type: 'single' };
                 return;
             }
 
             let tMatch = line.match(/^Type:\s*(.*)/i);
-            if (tMatch && currentQ) {
-                currentQ.type = tMatch[1].toLowerCase().trim();
-                return;
-            }
+            if (tMatch && currentQ) { currentQ.type = tMatch[1].toLowerCase().trim(); return; }
 
             let aMatch = line.match(/^answer\d+:\s*(.*)/i);
-            if (aMatch && currentQ) {
-                currentQ.options.push(aMatch[1]);
-                return;
-            }
+            if (aMatch && currentQ) { currentQ.options.push(aMatch[1]); return; }
 
             let kMatch = line.match(/^Key:\s*(.*)/i);
-            if (kMatch && currentQ) {
-                currentQ.rawKey = kMatch[1];
-            }
+            if (kMatch && currentQ) { currentQ.rawKey = kMatch[1]; }
         });
         if (currentQ) parsedQuestions.push(currentQ);
 
-        // Xử lý key
         parsedQuestions.forEach(q => {
              if (q.type === 'essay' || q.type === 'short') {
-                 q.key = q.rawKey; 
+                 q.key = q.rawKey;
              } else {
                  if (q.rawKey && q.rawKey.includes(',')) {
                      q.type = 'multi';
@@ -134,15 +170,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return parsedQuestions;
     }
 
+    // --- QUIZ EXECUTION ---
     function startQuiz() {
         renderQuestions();
-        loadingSection.classList.add('hidden');
-        resultSection.classList.add('hidden');
-        quizSection.classList.remove('hidden');
+        showSection('quiz');
         
         quizForm.reset();
         startTime = Date.now();
-        timerDisplay.classList.remove('hidden');
         clearInterval(timerInterval);
         timerInterval = setInterval(updateTimer, 1000);
         updateTimer();
@@ -156,38 +190,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const block = document.createElement('div');
             block.className = 'question-block';
 
-            // 1. Tiêu đề câu hỏi
             const title = document.createElement('div');
             title.className = 'question-text';
             title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
-            if (q.type === 'multi') title.textContent += ' (Có thể chọn nhiều đáp án)';
-            if (q.type === 'essay') title.textContent += ' (Tự luận mở rộng)';
+            if (q.type === 'multi') title.textContent += ' (Chọn nhiều đáp án)';
+            if (q.type === 'essay') title.textContent += ' (Tự luận)';
             block.appendChild(title);
 
-            // 2. Chèn Hình Ảnh (nếu có)
-            if (q.image) {
-                const imgContainer = document.createElement('div');
-                const img = document.createElement('img');
-                img.src = q.image;
-                img.alt = "Hình ảnh minh họa";
-                img.className = 'question-image';
-                
-                // Hiển thị thông báo nếu ảnh bị lỗi đường dẫn
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    const err = document.createElement('p');
-                    err.style.color = '#ef4444';
-                    err.style.fontSize = '0.85rem';
-                    err.style.marginBottom = '15px';
-                    err.textContent = `[Lỗi: Không thể tải ảnh từ link: ${q.image}]`;
-                    imgContainer.appendChild(err);
-                };
-                
-                imgContainer.appendChild(img);
-                block.appendChild(imgContainer);
-            }
-
-            // 3. Render nhóm lựa chọn / ô nhập liệu
             const optionsGroup = document.createElement('div');
             optionsGroup.className = 'options-group';
 
@@ -195,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const textarea = document.createElement('textarea');
                 textarea.name = `question_${qIndex}`;
                 textarea.className = 'essay-input';
-                textarea.placeholder = 'Nhập câu trả lời của bạn vào đây...';
+                textarea.placeholder = 'Nhập câu trả lời...';
                 optionsGroup.appendChild(textarea);
             } else if (q.type === 'short') {
                 const input = document.createElement('input');
@@ -209,12 +218,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 q.options.forEach((optText, optIndex) => {
                     const label = document.createElement('label');
                     label.className = 'option-label';
-
                     const input = document.createElement('input');
                     input.type = q.type === 'single' ? 'radio' : 'checkbox';
                     input.name = `question_${qIndex}`;
                     input.value = optIndex + 1;
-
                     label.appendChild(input);
                     label.appendChild(document.createTextNode(` ${optText}`));
                     optionsGroup.appendChild(label);
@@ -231,15 +238,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const elapsed = Math.floor((Date.now() - startTime) / 1000);
         const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
         const s = String(elapsed % 60).padStart(2, '0');
-        timeSpan.textContent = `${m}:${s}`;
+        timerDisplay.textContent = `${m}:${s}`;
     }
 
+    // --- NỘP BÀI ---
     quizForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearInterval(timerInterval);
-        timerDisplay.classList.add('hidden');
         
-        await incrementGlobalAttempts();
+        // Cập nhật số lượt làm bài LÊN DATABASE CỦA ĐÚNG MÔN ĐÓ
+        await incrementQuizAttempts();
 
         const timeTakenMs = Date.now() - startTime;
         evaluateResults(timeTakenMs);
@@ -254,14 +262,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         questions.forEach((q, qIndex) => {
             if (q.type === 'essay') {
-                const reviewItem = buildReviewItem(q, qIndex, null, formData);
-                reviewFragment.appendChild(reviewItem);
+                reviewFragment.appendChild(buildReviewItem(q, qIndex, null, formData));
             } else {
                 objectiveCount++;
                 const isCorrect = checkAnswer(q, qIndex, formData);
                 if (isCorrect) correctCount++;
-                const reviewItem = buildReviewItem(q, qIndex, isCorrect, formData);
-                reviewFragment.appendChild(reviewItem);
+                reviewFragment.appendChild(buildReviewItem(q, qIndex, isCorrect, formData));
             }
         });
 
@@ -275,8 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('accuracy-display').textContent = `${accuracy}%`;
         document.getElementById('time-display').textContent = `${m}:${s}`;
 
-        quizSection.classList.add('hidden');
-        resultSection.classList.remove('hidden');
+        showSection('result');
         window.scrollTo(0, 0);
     }
 
@@ -294,9 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (q.type === 'short') {
             const selected = formData.get(`question_${qIndex}`);
             if (!selected) return false;
-            const userAnswer = selected.trim().toLowerCase();
-            const correctAnswer = q.key.trim().toLowerCase();
-            return userAnswer === correctAnswer;
+            return selected.trim().toLowerCase() === q.key.trim().toLowerCase();
         }
         return false;
     }
@@ -306,14 +309,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const title = document.createElement('h4');
         title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
         div.appendChild(title);
-
-        // Hiển thị lại ảnh thu nhỏ ở phần kết quả (để dễ đối chiếu)
-        if (q.image) {
-            const img = document.createElement('img');
-            img.src = q.image;
-            img.className = 'review-image';
-            div.appendChild(img);
-        }
 
         if (q.type === 'essay') {
             div.className = 'review-item review-essay';
@@ -357,12 +352,31 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             div.appendChild(correctInfo);
         }
-
         return div;
     }
 
+    // --- ĐIỀU HƯỚNG GIAO DIỆN ---
+    function showSection(sectionId) {
+        lobbySection.classList.add('hidden');
+        loadingSection.classList.add('hidden');
+        quizSection.classList.add('hidden');
+        resultSection.classList.add('hidden');
+        document.getElementById(sectionId + '-section').classList.remove('hidden');
+    }
+
+    // Nút điều hướng
     document.getElementById('retake-btn').addEventListener('click', () => {
-        startQuiz();
-        fetchGlobalAttempts(); 
+        selectQuiz(currentQuiz); 
+    });
+
+    homeBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        initLobby(); // Quay về sảnh
+    });
+
+    document.getElementById('back-lobby-btn').addEventListener('click', () => {
+        initLobby(); // Quay về sảnh từ kết quả
     });
 });
+
+
