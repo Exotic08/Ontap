@@ -32,7 +32,7 @@ body {
     padding: 0 20px;
 }
 
-/* --- Phần Header & Bộ đếm --- */
+/* --- Header --- */
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -44,9 +44,30 @@ body {
     gap: 15px;
 }
 
+.header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .app-header h1 {
     font-size: 1.5rem;
     color: var(--text-main);
+}
+
+.btn-icon {
+    background: #e2e8f0;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-main);
+    transition: 0.2s;
+}
+
+.btn-icon:hover {
+    background: #cbd5e1;
 }
 
 .header-controls {
@@ -82,6 +103,42 @@ body {
     display: none !important;
 }
 
+/* --- Sảnh chờ (Lobby) --- */
+.lobby-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.quiz-card-btn {
+    background: #ffffff;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 30px 20px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.quiz-card-btn:hover {
+    background: var(--primary-color);
+    color: #ffffff;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.quiz-card-btn small {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
 /* --- Khối Câu hỏi --- */
 .question-block {
     margin-bottom: 30px;
@@ -99,34 +156,12 @@ body {
     margin-bottom: 15px;
 }
 
-/* --- Hình ảnh minh họa cho câu hỏi --- */
-.question-image {
-    max-width: 100%;
-    max-height: 400px;
-    height: auto;
-    display: block;
-    margin: 0 0 15px 0;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.review-image {
-    max-width: 250px;
-    height: auto;
-    display: block;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-}
-
 .options-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* --- Giao diện Trắc nghiệm --- */
 .option-label {
     display: flex;
     align-items: center;
@@ -148,42 +183,19 @@ body {
     accent-color: var(--primary-color);
 }
 
-/* --- Giao diện câu Tự luận Dài (Essay) --- */
-.essay-input {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 1rem;
-    resize: vertical;
-    min-height: 120px;
-    background-color: #f8fafc;
-    transition: all 0.2s;
-}
-
-.essay-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-/* --- Giao diện câu Trả lời ngắn (Short Answer) --- */
-.short-input {
+/* --- Input --- */
+.essay-input, .short-input {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
-    transition: border-color 0.2s;
 }
 
-.short-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+.essay-input {
+    min-height: 120px;
+    resize: vertical;
 }
 
 /* --- Nút bấm --- */
@@ -197,26 +209,12 @@ body {
     transition: background 0.2s, transform 0.1s;
 }
 
-.btn-primary {
-    background: var(--primary-color);
-    color: white;
-    width: 100%;
-}
+.btn-primary { background: var(--primary-color); color: white; width: 100%; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: var(--text-muted); color: white; }
+.btn-secondary:hover { background: var(--text-main); }
 
-.btn-primary:hover {
-    background: var(--primary-hover);
-}
-
-.btn-secondary {
-    background: var(--text-muted);
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: var(--text-main);
-}
-
-/* --- Phần Kết quả --- */
+/* --- Kết quả --- */
 .stats {
     display: flex;
     gap: 20px;
@@ -248,10 +246,6 @@ body {
     color: var(--primary-color);
 }
 
-.detailed-review {
-    margin-top: 40px;
-}
-
 .review-item {
     margin-bottom: 20px;
     padding: 20px;
@@ -260,29 +254,12 @@ body {
     background: #f8fafc;
 }
 
-/* Các trạng thái báo lỗi / đúng */
-.review-correct {
-    border-left-color: var(--correct-border);
-}
+.review-correct { border-left-color: var(--correct-border); }
+.review-incorrect { border-left-color: var(--incorrect-border); }
+.review-essay { border-left-color: var(--primary-color); }
 
-.review-incorrect {
-    border-left-color: var(--incorrect-border);
-}
+.feedback-text { font-size: 0.9rem; margin: 10px 0; font-weight: 600; }
+.feedback-correct { color: #16a34a; }
+.feedback-incorrect { color: #dc2626; }
 
-.review-essay {
-    border-left-color: var(--primary-color); 
-}
-
-.review-item h4 {
-    margin-bottom: 10px;
-}
-
-.feedback-text {
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
-.feedback-correct { color: #16a34a; font-weight: 600; }
-.feedback-incorrect { color: #dc2626; font-weight: 600; }
-.feedback-essay { color: var(--primary-color); font-weight: 600; }
 
