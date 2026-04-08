@@ -6,8 +6,10 @@
 // 1. CẤU HÌNH ĐỀ THI VÀ DATABASE
 // ==========================================
 const QUIZ_LIST = [
-    { id: "cong_nghe", title: "Ôn tập Công Nghệ", file: "data.txt" },
-    { id: "tieng_anh", title: "Bài tập Tiếng Anh", file: "data1.txt" }
+    { id: "tieng_anh1", title: "Đề 1 Tiếng Anh", file: "tieng_anh1.txt" },
+    { id: "tieng_anh2", title: "Đề 2 Tiếng Anh", file: "tieng_anh2.txt" },
+    { id: "tieng_anh3", title: "Đề 3 Tiếng Anh", file: "tieng_anh3.txt" },
+    { id: "tieng_anh4", title: "Đề 4 Tiếng Anh", file: "tieng_anh4.txt" }
 ];
 
 // Thay bằng URL Database Firebase của bạn
