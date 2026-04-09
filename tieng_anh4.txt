@@ -4,221 +4,226 @@ answer2: greater
 answer3: heatwave
 answer4: clearing
 Key: 2
-​Ask2: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
+
+Ask2: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: protection
 answer2: control
 answer3: pollution
 answer4: forest
 Key: 4
-​Ask3: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
+
+Ask3: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: discuss
 answer2: issue
 answer3: fossil
 answer4: classroom
 Key: 2
-​Ask4: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
+
+Ask4: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: protection
 answer2: domestic
 answer3: consequence
 answer4: distraction
 Key: 3
-​Ask5: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
+
+Ask5: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: sustainable
 answer2: responsibility
 answer3: competitive
 answer4: environment
 Key: 2
-​Ask6: In modern schools, teachers play the key role ________ a guide for students to prepare themselves for lifelong learning.
+
+Ask6: In modern schools, teachers play the key role ________ a guide for students to prepare themselves for lifelong learning.
 answer1: in
 answer2: of
 answer3: with
 answer4: from
 Key: 2
-​Ask7: ________ learning is the advantageous combination of in-person learning and online learning tools.
+
+Ask7: ________ learning is the advantageous combination of in-person learning and online learning tools.
 answer1: Face-to-face
 answer2: Blended
 answer3: Remote
 answer4: Distance
 Key: 2
-​Ask8: David had difficulty choosing an online dictionary, so his teacher ________ him some advice.
+
+Ask8: David had difficulty choosing an online dictionary, so his teacher ________ him some advice.
 answer1: took
 answer2: passed
 answer3: offered
 answer4: explained
 Key: 3
-​Ask9: Governments, organizations and individuals must work together to achieve gender ________.
+
+Ask9: Governments, organizations and individuals must work together to achieve gender ________.
 answer1: equality
 answer2: difference
 answer3: similarity
 answer4: benefit
 Key: 1
-​Ask10: Fossil fuels which are non-renewable pollute the air and cause air ________.
+
+Ask10: Fossil fuels which are non-renewable pollute the air and cause air ________.
 answer1: pollution
 answer2: pollute
 answer3: polluted
 answer4: polluting
 Key: 1
-​Ask11: Their work involves protecting and create natural ________ for plants and animals.
+
+Ask11: Their work involves protecting and create natural ________ for plants and animals.
 answer1: biodiversity
 answer2: habitat
 answer3: ecosystem
 answer4: wildlife
 Key: 2
-​Ask12: This is ________ wedding party I've ever attended.
+
+Ask12: This is ________ wedding party I've ever attended.
 answer1: the more memorable
 answer2: more memorable
 answer3: the most memorable
 answer4: most memorable
 Key: 3
-​Ask13: She told me that she ________ to me the Sunday before.
+
+Ask13: She told me that she ________ to me the Sunday before.
 answer1: wrote
 answer2: has written
 answer3: was writing
 answer4: had written
 Key: 4
-​Ask14: If pollution ________ on, the earth ________ a dangerous place to live on.
+
+Ask14: If pollution ________ on, the earth ________ a dangerous place to live on.
 answer1: would go - would become
 answer2: would go - became
 answer3: go - will become
 answer4: goes - will become
 Key: 4
-​Ask15: A major issue for teachers ________ allow students to use their own devices is how to provide online access to such devices.
+
+Ask15: A major issue for teachers ________ allow students to use their own devices is how to provide online access to such devices.
 answer1: who
 answer2: whose
 answer3: which
 answer4: that
 Key: 1
-​Ask16: The speed of light is ________ than the speed of sound.
+
+Ask16: The speed of light is ________ than the speed of sound.
 answer1: the fastest
 answer2: as fast
 answer3: faster
 answer4: faster and faster
 Key: 3
-​Ask17: Women should ________ the same salaries as men for doing the same jobs by companies.
+
+Ask17: Women should ________ the same salaries as men for doing the same jobs by companies.
 answer1: have given
 answer2: be given
 answer3: to give
 answer4: give
 Key: 2
-​Ask18: John asked me ________ in English.
+
+Ask18: John asked me ________ in English.
 answer1: what does this word mean
 answer2: what that word means
 answer3: what did this word mean
 answer4: what that word meant
 Key: 4
-​Ask19: Chia từ trong ngoặc (LOSE): Many endangered animals are at risk of disappearing due to habitat ________ and illegal hunting.
+
+Ask19: Chia từ trong ngoặc (LOSE): Many endangered animals are at risk of disappearing due to habitat ________ and illegal hunting.
 Type: short
 Key: loss
-​Ask20: Chia từ trong ngoặc (LEGAL): ________ hunting can cause pain and suffering to wild animals, and destroy animal families.
+
+Ask20: Chia từ trong ngoặc (LEGAL): ________ hunting can cause pain and suffering to wild animals, and destroy animal families.
 Type: short
 Key: Illegal
-​Ask21: Chia từ trong ngoặc (PRESERVE): The protection and ________ of the environment is one of the most important issues facing humankind today.
+
+Ask21: Chia từ trong ngoặc (PRESERVE): The protection and ________ of the environment is one of the most important issues facing humankind today.
 Type: short
 Key: preservation
-​Ask22: Chia từ trong ngoặc (EDUCATE): ________ gives girls the opportunity to have a better life.
+
+Ask22: Chia từ trong ngoặc (EDUCATE): ________ gives girls the opportunity to have a better life.
 Type: short
 Key: Education
-​Ask23: Viết lại câu dùng câu điều kiện: "Phong doesn't have enough money so he can't travel abroad."
+
+Ask23: Viết lại câu dùng câu điều kiện: "Phong doesn't have enough money so he can't travel abroad."
 Type: short
 Key: If Phong had enough money, he could travel abroad.
-​Ask24: Viết lại câu dùng mệnh đề quan hệ: "My sister helps me with my homework. She is very intelligent."
+
+Ask24: Viết lại câu dùng mệnh đề quan hệ: "My sister helps me with my homework. She is very intelligent."
 Type: short
 Key: My sister, who is very intelligent, helps me with my homework.
-​Ask25: Viết lại câu so sánh nhất: "Mount Everest is higher than every mountain in the world."
+
+Ask25: Viết lại câu so sánh nhất: "Mount Everest is higher than every mountain in the world."
 Type: short
 Key: Mount Everest is the highest mountain in the world.
-​Ask26: Viết lại câu bị động: "You can download these study materials onto your computer at any time."
+
+Ask26: Viết lại câu bị động: "You can download these study materials onto your computer at any time."
 Type: short
 Key: These study materials can be downloaded onto your computer at any time.
-​Ask27: Viết lại câu gián tiếp: "Do you know the girl over there?" Tom said.
+
+Ask27: Viết lại câu gián tiếp: "Do you know the girl over there?" Tom said.
 Type: short
 Key: Tom asked if I knew the girl over there.
-​Ask28: [The environment we live in is facing many serious problems. We need to be aware
-of these problems so that we can find ways to protect nature. Global warming is the rise in the
-average temperature of the earth's atmosphere. It is one of the biggest issues facing humans
-today. It can have serious consequences such as rising sea levels, polar ice melting, and ( 1 )
-______ weather events like floods or heatwaves. Another environmental problem is the cutting
-and clearing of natural forests. The loss of forests can have a negative impact on the
-environment. It can damage the natural habitats of many animals and put wildlife in danger. It
-can also ( 2 ) ______ the natural soil and lead to climate change. Air pollution is also a serious
-problem. It is mainly caused by waste gases that come out of vehicles, machines, or factories.
-When these harmful gases combine with the water in the air, they come down as rain or snow, (
-3 ) ______ can damage all forms of life. ( 4 ) ______, this problem leads to global warming and
-climate change. It is also a major cause of respiratory diseases or even lung cancer. Around the
-world, the number of endangered animals is rising. ( 5 ) ______ of them disappear because of
-pollution and climate change. In addition, humans illegally hunt and kill animals, and catch too
-many fish at once. This is upsetting the natural balance of ecosystems, which can be harmful to
-all living and non-living things.] Điền từ vào chỗ trống (1): ...and (1) ________ weather events like floods or heatwaves.
+
+Ask28: [The environment we live in is facing many serious problems. We need to be aware of these problems so that we can find ways to protect nature. Global warming is the rise in the average temperature of the earth's atmosphere. It is one of the biggest issues facing humans today. It can have serious consequences such as rising sea levels, polar ice melting, and (1) ______ weather events like floods or heatwaves. Another environmental problem is the cutting and clearing of natural forests. The loss of forests can have a negative impact on the environment. It can damage the natural habitats of many animals and put wildlife in danger. It can also (2) ______ the natural soil and lead to climate change. Air pollution is also a serious problem. It is mainly caused by waste gases that come out of vehicles, machines, or factories. When these harmful gases combine with the water in the air, they come down as rain or snow, (3) ______ can damage all forms of life. (4) ______, this problem leads to global warming and climate change. It is also a major cause of respiratory diseases or even lung cancer. Around the world, the number of endangered animals is rising. (5) ______ of them disappear because of pollution and climate change. In addition, humans illegally hunt and kill animals, and catch too many fish at once. This is upsetting the natural balance of ecosystems, which can be harmful to all living and non-living things.] Điền từ vào chỗ trống (1): ...and (1) ________ weather events like floods or heatwaves.
 answer1: extreme
 answer2: mild
 answer3: normal
 answer4: pleasant
 Key: 1
-​Ask29: [Bài đọc 1] Điền từ vào chỗ trống (2): It can also (2) ________ the natural soil and lead to climate change.
+
+Ask29: [Bài đọc 1] Điền từ vào chỗ trống (2): It can also (2) ________ the natural soil and lead to climate change.
 answer1: destroy
 answer2: destructive
 answer3: destruction
 answer4: destroyed
 Key: 1
-​Ask30: [Bài đọc 1] Điền từ vào chỗ trống (3): ...they come down as rain or snow, (3) ________ can damage all forms of life.
+
+Ask30: [Bài đọc 1] Điền từ vào chỗ trống (3): ...they come down as rain or snow, (3) ________ can damage all forms of life.
 answer1: which
 answer2: that
 answer3: where
 answer4: who
 Key: 1
-​Ask31: [Bài đọc 1] Điền từ vào chỗ trống (4): (4) ________, this problem leads to global warming and climate change.
+
+Ask31: [Bài đọc 1] Điền từ vào chỗ trống (4): (4) ________, this problem leads to global warming and climate change.
 answer1: In addition
 answer2: Moreover
 answer3: However
 answer4: Nevertheless
 Key: 1
-​Ask32: [Bài đọc 1] Điền từ vào chỗ trống (5): (5) ________ of them disappear because of pollution and climate change.
+
+Ask32: [Bài đọc 1] Điền từ vào chỗ trống (5): (5) ________ of them disappear because of pollution and climate change.
 answer1: Much
 answer2: Every
 answer3: Each
 answer4: Many
 Key: 4
-​Ask33: [There are many reasons for reducing the forest areas, and this causes many
-complicated problems for any nation without any exception. Due to the population explosion,
-many governments need more land for residents to live and develop the economy. They also
-clear forests to build dams for generating electricity or to develop resorts and recreational
-complexes. Besides, a huge number of trees are logged illegally to trade wood. All of these lead
-to serious issues as forests always have an important role in the ecosystem balance. It is
-undoubted that when a forest area is destroyed, the following results affect the other neighbor
-regions. The first negative effect of the loss of forest lands is flooding. Forests help to prevent
-erosion and flooding and without them, the downstream areas tend to be inundated frequently in
-rainy and hurricane seasons. Another problem is global warming. Forests are often considered
-as the lungs of the earth because they absorb the carbon dioxide and release the oxygen. This
-helps to refresh the atmosphere and lower the rate of the carbon dioxide in the air. If not, the
-average temperature will be higher and higher since the emission of the gas into the
-atmosphere increases every day. Consequently, the price we would pay for the flooding or for
-the increase of greenhouse gases is not only the damaged and polluted environment but also
-our deteriorated health and lives. To save ourselves, it is advisable to join hands in protecting
-and growing more and more forests.] What is the passage mainly about?
+
+Ask33: [There are many reasons for reducing the forest areas, and this causes many complicated problems for any nation without any exception. Due to the population explosion, many governments need more land for residents to live and develop the economy. They also clear forests to build dams for generating electricity or to develop resorts and recreational complexes. Besides, a huge number of trees are logged illegally to trade wood. All of these lead to serious issues as forests always have an important role in the ecosystem balance. It is undoubted that when a forest area is destroyed, the following results affect the other neighbor regions. The first negative effect of the loss of forest lands is flooding. Forests help to prevent erosion and flooding and without them, the downstream areas tend to be inundated frequently in rainy and hurricane seasons. Another problem is global warming. Forests are often considered as the lungs of the earth because they absorb the carbon dioxide and release the oxygen. This helps to refresh the atmosphere and lower the rate of the carbon dioxide in the air. If not, the average temperature will be higher and higher since the emission of the gas into the atmosphere increases every day. Consequently, the price we would pay for the flooding or for the increase of greenhouse gases is not only the damaged and polluted environment but also our deteriorated health and lives. To save ourselves, it is advisable to join hands in protecting and growing more and more forests.] What is the passage mainly about?
 answer1: Some reasons of deforestation and its impacts on people's lives
 answer2: Why floods happen frequently
 answer3: Human's responsibility for protecting forests
 answer4: The rate of carbon dioxide has been rising
 Key: 1
-​Ask34: [Bài đọc 2] The word "they" in paragraph 1 refers to ________.
+
+Ask34: [Bài đọc 2] The word "they" in paragraph 1 refers to ________.
 answer1: forest areas
 answer2: many governments
 answer3: residents
 answer4: dams
 Key: 2
-​Ask35: [Bài đọc 2] According to the reading, which of the following is NOT the reason for cutting down trees?
+
+Ask35: [Bài đọc 2] According to the reading, which of the following is NOT the reason for cutting down trees?
 answer1: Lack of shelters for local people
 answer2: Developing the local or national production and trade
 answer3: Illegal logging
 answer4: Lack of land for agriculture
 Key: 4
-​Ask36: [Bài đọc 2] What is one of the negative impacts of clearing forests?
+
+Ask36: [Bài đọc 2] What is one of the negative impacts of clearing forests?
 answer1: The increase of heat
 answer2: Severe environmental disasters
 answer3: Poor economic development
 answer4: The loss of animals' habitats
 Key: 2
-​Ask37: [Bài đọc 2] The word "inundated" in paragraph 2 is closest in meaning to ________.
+
+Ask37: [Bài đọc 2] The word "inundated" in paragraph 2 is closest in meaning to ________.
 answer1: flooded
 answer2: destroyed
 answer3: polluted
