@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ thống Ôn Tập</title>
+    <title>Hệ thống Trắc nghiệm Hiện đại</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -32,7 +33,13 @@
                 <p>Vui lòng nhập họ và tên của bạn để bắt đầu.</p>
                 <input type="text" id="username-input" placeholder="Ví dụ: Nguyễn Văn A..." autocomplete="off">
                 
-                <p style="margin-top: 15px; font-weight: 600; color: var(--primary-color);">Chọn ảnh đại diện tân thủ:</p>
+                <p style="margin-top: 15px; font-weight: 600; color: var(--primary-color);">Chọn hoặc Tải ảnh đại diện lên:</p>
+                
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('avatar-upload-input').click()" style="margin-bottom: 10px; font-size: 0.85rem; padding: 8px 15px;">
+                    📁 Tải ảnh từ máy (Tự động nén)
+                </button>
+                <input type="file" id="avatar-upload-input" accept="image/*" style="display: none;">
+
                 <div class="avatar-selector" id="avatar-selector"></div>
 
                 <div class="warning-text">⚠️ Lưu ý: Dữ liệu điểm số, túi đồ và chìa khóa được lưu theo tên này. Hãy nhập tên thật hoặc biệt danh cố định.</div>
@@ -101,12 +108,18 @@
     </div>
 
     <div id="modal-overlay" class="hidden modal-overlay">
+        
         <div id="inventory-modal" class="hidden modal-content">
             <h2 style="text-align: center; color: var(--primary-color); margin-bottom: 20px;">🎒 Túi Đồ Của Bạn</h2>
-            <h4 style="margin-bottom: 10px;">🖼️ Ảnh đại diện đã mở khóa:</h4>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('avatar-upload-input').click()" style="font-size: 0.85rem; padding: 8px 15px;">📁 Tải ảnh mới từ máy</button>
+            </div>
+            <h4 style="margin-bottom: 10px;">🖼️ Ảnh đại diện:</h4>
             <div id="inventory-avatars" class="inventory-grid"></div>
+            
             <h4 style="margin: 20px 0 10px 0;">✨ Khung viền đã mở khóa:</h4>
             <div id="inventory-borders" class="inventory-grid"></div>
+            
             <div style="text-align: center; margin-top: 25px;"><button id="close-inventory-btn" class="btn btn-secondary">Đóng Túi Đồ</button></div>
         </div>
 
@@ -135,7 +148,22 @@
             </ul>
             <div style="text-align: center; margin-top: 20px;"><button id="close-rates-btn" class="btn btn-secondary">Đã hiểu</button></div>
         </div>
+        
+        <div id="crop-modal" class="hidden modal-content" style="max-width: 400px; text-align: center;">
+            <h2 style="color: var(--primary-color); margin-bottom: 15px;">✂️ Chỉnh Sửa Ảnh</h2>
+            <div style="width: 100%; max-height: 300px; overflow: hidden; background: #e2e8f0; border-radius: 8px;">
+                <img id="crop-image" src="" style="max-width: 100%; display: block;">
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Kéo, thu phóng và cắt ảnh thành hình vuông</p>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button id="apply-crop-btn" class="btn btn-primary" style="flex: 1;">Lưu Ảnh</button>
+                <button id="cancel-crop-btn" class="btn btn-secondary" style="flex: 1;">Hủy</button>
+            </div>
+        </div>
+
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="quiz.js"></script>
 </body>
 </html>
