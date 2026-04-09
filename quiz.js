@@ -20,14 +20,14 @@ const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
 // ==========================================
 // Bạn có thể thay link "https://..." bằng link ảnh Imgur, Facebook, Drive của bạn tùy thích
 const AVATAR_LINKS = {
-    default: "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix",
-    aneka: "https://api.dicebear.com/9.x/adventurer/svg?seed=Aneka",
-    nala: "https://api.dicebear.com/9.x/adventurer/svg?seed=Nala",
-    oliver: "https://api.dicebear.com/9.x/adventurer/svg?seed=Oliver",
-    jack: "https://api.dicebear.com/9.x/adventurer/svg?seed=Jack",
-    mimi: "https://api.dicebear.com/9.x/adventurer/svg?seed=Mimi",
-    loki: "https://api.dicebear.com/9.x/adventurer/svg?seed=Loki",
-    garfield: "https://api.dicebear.com/9.x/adventurer/svg?seed=Garfield",
+    default: "https://i.postimg.cc/hj8DCTpQ/01af2884a28422c9b0b74d770b7d49e0.jpg",
+    aneka: "https://i.postimg.cc/nrHHNrPc/1aa831227f9ddd8af411d903c205e3bb.jpg",
+    nala: "https://i.postimg.cc/ZnTTXnM3/581328a1c0b2821d7b282ba65c07b731.jpg",
+    oliver: "https://i.postimg.cc/gJyzM8Nw/5b722aa3543f18499b6f8c9eedb661e9.jpg",
+    jack: "https://i.postimg.cc/D022R0MG/8042a652a469ac4ecb517b023509acc8.jpg",
+    mimi: "https://i.postimg.cc/63VWHnY8/805d935d7af9351a34ac6be41f078024.jpg",
+    loki: "https://i.postimg.cc/vB7YPf3c/85fdab604c083ecb008d748e1e5bd9ef.jpg",
+    garfield: "https://i.postimg.cc/NM8sNmp9/999f5c55e020fcee41e97b1036a6640b.jpg",
     
     // Avatar trong Vòng quay Gacha
     dragon: "https://api.dicebear.com/9.x/adventurer/svg?seed=Dragon",
