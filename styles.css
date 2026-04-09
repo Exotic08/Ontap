@@ -137,35 +137,19 @@ body { font-family: var(--font-family); background-color: var(--bg-color); color
 @keyframes sparkleAnim { 0% { transform: scale(0) rotate(0deg); opacity: 0; } 50% { transform: scale(1.2) rotate(180deg); opacity: 1; } 100% { transform: scale(0) rotate(360deg); opacity: 0; } }
 
 /* CSS KHU VỰC NHẬP GIFTCODE */
-.giftcode-container { 
-    margin-top: 30px; 
-    padding: 25px; 
-    border-radius: 12px; 
-    background: #ffffff; 
-    border: 2px dashed var(--primary-color); 
-    text-align: center; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-}
-.giftcode-input-group { 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    gap: 10px; 
-    margin-top: 15px; 
-    flex-wrap: wrap; 
-}
-#giftcode-input { 
-    padding: 12px 15px; 
-    font-size: 1.1rem; 
-    border: 2px solid var(--border-color); 
-    border-radius: 8px; 
-    width: 60%; 
-    max-width: 300px; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    text-align: center;
-}
-#giftcode-input:focus { 
-    outline: none; 
-    border-color: var(--primary-color); 
+.giftcode-container { margin-top: 30px; padding: 25px; border-radius: 12px; background: #ffffff; border: 2px dashed var(--primary-color); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.giftcode-input-group { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+#giftcode-input { padding: 12px 15px; font-size: 1.1rem; border: 2px solid var(--border-color); border-radius: 8px; width: 60%; max-width: 300px; font-weight: bold; text-transform: uppercase; text-align: center;}
+#giftcode-input:focus { outline: none; border-color: var(--primary-color); }
+
+/* Thẻ hiển thị số lượt làm bài */
+.play-count-badge {
+    background: #f1f5f9;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-top: 5px;
+    display: inline-block;
 }
