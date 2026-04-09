@@ -1,10 +1,7 @@
 /**
- * EdTech Quiz - Tên người dùng & Bảng xếp hạng (Không Quảng Cáo)
+ * EdTech Quiz - Tên người dùng, Avatar Cá nhân & Bảng xếp hạng Rực rỡ
  */
 
-// ==========================================
-// 1. CẤU HÌNH ĐỀ THI VÀ DATABASE
-// ==========================================
 const QUIZ_LIST = [
     { id: "tieng_anh1", title: "Đề 1 Tiếng Anh", file: "tieng_anh1.txt" },
     { id: "tieng_anh2", title: "Đề 2 Tiếng Anh", file: "tieng_anh2.txt" },
@@ -12,17 +9,21 @@ const QUIZ_LIST = [
     { id: "tieng_anh4", title: "Đề 4 Tiếng Anh", file: "tieng_anh4.txt" }
 ];
 
-// Thay bằng URL Database Firebase của bạn
 const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
+
+// Danh sách các "mẫu" avatar có sẵn từ DiceBear API
+const AVATAR_SEEDS = ['Felix', 'Aneka', 'Nala', 'Oliver', 'Jack', 'Mimi', 'Loki', 'Garfield'];
 
 document.addEventListener("DOMContentLoaded", () => {
     let currentQuiz = null; 
     let questions = [];
     let startTime = null;
     let timerInterval = null;
+    
+    // Lấy thông tin từ bộ nhớ tạm
     let userName = localStorage.getItem('quiz_username') || "";
+    let userAvatar = localStorage.getItem('quiz_avatar') || "";
 
-    // DOM Elements
     const mainHeader = document.getElementById('main-header');
     const loginSection = document.getElementById('login-section');
     const lobbySection = document.getElementById('lobby-section');
@@ -42,25 +43,47 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById('timer-display');
     const timerSpan = timerDisplay.querySelector('span');
     const displayUserName = document.getElementById('display-user-name');
+    const displayUserAvatar = document.getElementById('display-user-avatar');
     const usernameInput = document.getElementById('username-input');
 
-    // ==========================================
-    // KHỞI ĐỘNG HỆ THỐNG
-    // ==========================================
     initApp();
 
     function initApp() {
-        if (userName) {
+        if (userName && userAvatar) {
             displayUserName.textContent = userName;
+            displayUserAvatar.src = userAvatar;
             mainHeader.classList.remove('hidden');
             initLobby();
         } else {
+            renderAvatarSelector(); // Hiển thị danh sách avatar cho người dùng chọn
             showSection('login');
             mainHeader.classList.add('hidden');
         }
     }
 
-    // Xử lý Đăng nhập / Đổi tên
+    // Render danh sách Avatar
+    function renderAvatarSelector() {
+        const selector = document.getElementById('avatar-selector');
+        selector.innerHTML = '';
+        AVATAR_SEEDS.forEach((seed, index) => {
+            const url = `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = 'avatar-option';
+            
+            // Chọn mặc định cái đầu tiên nếu chưa có
+            if (index === 0 && !userAvatar) userAvatar = url; 
+            if (userAvatar === url) img.classList.add('selected');
+            
+            img.onclick = () => {
+                document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                img.classList.add('selected');
+                userAvatar = url;
+            };
+            selector.appendChild(img);
+        });
+    }
+
     function doLogin() {
         const inputName = usernameInput.value.trim();
         if (inputName.length < 2) {
@@ -69,28 +92,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         userName = inputName;
         localStorage.setItem('quiz_username', userName);
+        localStorage.setItem('quiz_avatar', userAvatar); // Lưu avatar
         initApp(); 
     }
 
     document.getElementById('start-app-btn').addEventListener('click', doLogin);
-
-    usernameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') doLogin();
-    });
+    usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') doLogin(); });
 
     document.getElementById('change-name-btn').addEventListener('click', () => {
         localStorage.removeItem('quiz_username');
+        localStorage.removeItem('quiz_avatar');
         userName = "";
+        userAvatar = "";
         usernameInput.value = "";
         initApp();
     });
 
-    // ==========================================
-    // SẢNH CHỜ (LOBBY)
-    // ==========================================
     function initLobby() {
         quizListContainer.innerHTML = '';
-        
         QUIZ_LIST.forEach(quiz => {
             const btn = document.createElement('div');
             btn.className = 'quiz-card-btn';
@@ -109,24 +128,15 @@ document.addEventListener("DOMContentLoaded", () => {
         timerDisplay.classList.add('hidden'); 
     }
 
-    // ==========================================
-    // ĐIỀU HƯỚNG GIAO DIỆN
-    // ==========================================
     function showSection(sectionId) {
-        // Ẩn tất cả
         ['login', 'lobby', 'loading', 'quiz', 'result', 'leaderboard'].forEach(id => {
             const el = document.getElementById(`${id}-section`);
             if (el) el.classList.add('hidden');
         });
-        
-        // Hiện section được yêu cầu
         const target = document.getElementById(`${sectionId}-section`);
         if (target) target.classList.remove('hidden');
     }
 
-    // ==========================================
-    // TẢI & CHẠY BÀI THI
-    // ==========================================
     async function selectQuiz(quizObj) {
         currentQuiz = quizObj;
         appTitle.textContent = quizObj.title;
@@ -138,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const cacheBuster = `?t=${new Date().getTime()}`;
             const response = await fetch(currentQuiz.file + cacheBuster);
             if (!response.ok) throw new Error(`Không tìm thấy file ${currentQuiz.file}`);
-            
             const rawData = await response.text();
             questions = parseData(rawData);
             startQuiz();
@@ -153,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let current = null;
 
         lines.forEach(line => {
-            // Xóa ký tự tàng hình và khoảng trắng thừa
             line = line.replace(/[\u200B-\u200D\uFEFF]/g, '').trim(); 
             if (!line) return;
 
@@ -245,9 +253,6 @@ document.addEventListener("DOMContentLoaded", () => {
         timerSpan.textContent = `${m}:${s}`;
     }
 
-    // ==========================================
-    // CHẤM ĐIỂM & ĐẨY LÊN BẢNG XẾP HẠNG (THUẬT TOÁN MỚI)
-    // ==========================================
     quizForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearInterval(timerInterval);
@@ -285,16 +290,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const accuracy = objectiveCount > 0 ? Math.round((correctCount / objectiveCount) * 100) : 0;
         const wrongCount = objectiveCount - correctCount;
 
-        // Cập nhật UI
         document.getElementById('score-display').textContent = `${correctCount}/${objectiveCount}`;
         document.getElementById('accuracy-display').textContent = `${accuracy}%`;
         document.getElementById('time-display').textContent = timeStr;
         showSection('result');
         window.scrollTo(0, 0);
 
-        // --- BẮT ĐẦU: LƯU LÊN BẢNG XẾP HẠNG VỚI CƠ CHẾ LỌC ---
+        // Lưu thông tin bao gồm cả Avatar lên Firebase
         const record = {
             name: userName,
+            avatar: userAvatar,
             correct: correctCount,
             wrong: wrongCount,
             total: objectiveCount,
@@ -306,8 +311,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const dbUrl = `${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}.json`;
-            
-            // 1. Tải BXH hiện tại về để kiểm tra
             const res = await fetch(dbUrl);
             const data = await res.json();
             
@@ -318,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 for (const [key, val] of Object.entries(data)) {
                     if (val.name.trim().toLowerCase() === userName.trim().toLowerCase()) {
                         existingKey = key; 
-                        
                         if (record.correct < val.correct) {
                             shouldUpdate = false; 
                         } else if (record.correct === val.correct && record.timeMs >= val.timeMs) {
@@ -332,19 +334,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (shouldUpdate) {
                 if (existingKey) {
                     await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${existingKey}.json`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(record)
+                        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record)
                     });
                 } else {
                     await fetch(dbUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(record)
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record)
                     });
                 }
             }
-
         } catch (error) { console.error("Lỗi lưu BXH", error); }
     }
 
@@ -352,19 +349,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const div = document.createElement('div');
         div.className = 'review-item';
         div.innerHTML = `<h4>Câu ${qIndex + 1}: ${q.questionText}</h4>`;
-
         q.images.forEach(src => {
             const img = document.createElement('img'); img.src = src; img.className = 'review-image'; div.appendChild(img);
         });
 
         if (q.type === 'essay') {
             div.classList.add('review-essay');
-            div.innerHTML += `<p class="feedback-text feedback-essay">Tự luận</p>
-                              <p><b>Bài làm:</b> ${formData.get(`q${qIndex}`) || "(Trống)"}</p><p><b>Gợi ý:</b> ${q.key}</p>`;
+            div.innerHTML += `<p class="feedback-text feedback-essay">Tự luận</p><p><b>Bài làm:</b> ${formData.get(`q${qIndex}`) || "(Trống)"}</p><p><b>Gợi ý:</b> ${q.key}</p>`;
         } else {
             div.classList.add(isCorrect ? 'review-correct' : 'review-incorrect');
             div.innerHTML += `<p class="feedback-text ${isCorrect?'feedback-correct':'feedback-incorrect'}">${isCorrect?'✓ Chính xác':'✗ Sai rồi'}</p>`;
-            
             if (q.type === 'single') div.innerHTML += `<p>Đáp án đúng: ${q.options[q.key - 1]}</p>`;
             else if (q.type === 'multi') {
                 const opts = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x);
@@ -376,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // TẢI VÀ HIỂN THỊ BẢNG XẾP HẠNG
+    // RENDER BẢNG XẾP HẠNG (THÊM AVATAR VÀ HIỆU ỨNG TOP 3)
     // ==========================================
     window.loadLeaderboard = async function(quizId, quizTitle) {
         appTitle.textContent = "Bảng Xếp Hạng";
@@ -401,8 +395,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             records = records.slice(0, 50);
-
             lbBody.innerHTML = '';
+
             records.forEach((rec, index) => {
                 const tr = document.createElement('tr');
                 const rank = index + 1;
@@ -410,12 +404,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(rank === 1) rankIcon = "🥇 1";
                 if(rank === 2) rankIcon = "🥈 2";
                 if(rank === 3) rankIcon = "🥉 3";
-                
                 if (rank <= 3) tr.className = `rank-${rank}`;
+
+                // Logic Gắn Vương Miện, Màu Chữ & Hiệu Ứng
+                let crownHtml = '';
+                let nameClass = '';
+                let sparklesHtml = '';
+                
+                if (rank === 1) { 
+                    crownHtml = '<div class="crown-icon">👑</div>'; 
+                    nameClass = 'gold-text'; 
+                    // Tạo 3 hạt lấp lánh (sparkles) xung quanh tên
+                    sparklesHtml = `
+                        <div class="sparkle" style="top: -5px; left: -10px; animation-delay: 0s;"></div>
+                        <div class="sparkle" style="bottom: 0px; right: -15px; animation-delay: 0.5s;"></div>
+                        <div class="sparkle" style="top: 50%; right: 50%; animation-delay: 1s;"></div>
+                    `;
+                } else if (rank === 2) { 
+                    nameClass = 'silver-text'; 
+                } else if (rank === 3) { 
+                    nameClass = 'bronze-text'; 
+                }
+
+                // Nếu người chơi cũ chưa có avatar, lấy avatar mặc định bằng tên của họ
+                let displayAvatar = rec.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${rec.name}`;
 
                 tr.innerHTML = `
                     <td>${rankIcon}</td>
-                    <td><b>${escapeHTML(rec.name)}</b></td>
+                    <td>
+                        <div class="player-info-container">
+                            <div class="avatar-wrapper">
+                                ${crownHtml}
+                                <img src="${displayAvatar}" class="lb-avatar">
+                            </div>
+                            <div class="sparkle-box">
+                                <span class="${nameClass}">${escapeHTML(rec.name)}</span>
+                                ${sparklesHtml}
+                            </div>
+                        </div>
+                    </td>
                     <td style="color:var(--primary-color); font-weight:bold;">${rec.correct}/${rec.total}</td>
                     <td>${rec.accuracy}%</td>
                     <td>${rec.timeStr}</td>
@@ -433,21 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag] || tag));
     }
 
-    // Gắn sự kiện nút bấm
-    document.getElementById('retake-btn').addEventListener('click', () => {
-        selectQuiz(currentQuiz); 
-    });
-
-    document.getElementById('view-leaderboard-btn').addEventListener('click', () => {
-        window.loadLeaderboard(currentQuiz.id, currentQuiz.title);
-    });
-
-    homeBtn.addEventListener('click', () => {
-        clearInterval(timerInterval);
-        initLobby();
-    });
-
-    document.getElementById('lb-back-btn').addEventListener('click', () => {
-        initLobby(); 
-    });
+    document.getElementById('retake-btn').addEventListener('click', () => { selectQuiz(currentQuiz); });
+    document.getElementById('view-leaderboard-btn').addEventListener('click', () => { window.loadLeaderboard(currentQuiz.id, currentQuiz.title); });
+    homeBtn.addEventListener('click', () => { clearInterval(timerInterval); initLobby(); });
+    document.getElementById('lb-back-btn').addEventListener('click', () => { initLobby(); });
 });
