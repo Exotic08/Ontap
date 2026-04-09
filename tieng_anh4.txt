@@ -133,35 +133,21 @@ Key: These study materials can be downloaded onto your computer at any time.
 ​Ask27: Viết lại câu gián tiếp: "Do you know the girl over there?" Tom said.
 Type: short
 Key: Tom asked if I knew the girl over there.
-​Ask28: [The environment we live in is facing many serious problems. We need to be aware
-
-of these problems so that we can find ways to protect nature. Global warming is the rise in the
-
-average temperature of the earth's atmosphere. It is one of the biggest issues facing humans
-
+​Ask28: [The environment we live in is facing many serious problems. We need to be aware
+of these problems so that we can find ways to protect nature. Global warming is the rise in the
+average temperature of the earth's atmosphere. It is one of the biggest issues facing humans
 today. It can have serious consequences such as rising sea levels, polar ice melting, and ( 1 )
-______ weather events like floods or heatwaves. Another environmental problem is the cutting
-
-and clearing of natural forests. The loss of forests can have a negative impact on the
-
-environment. It can damage the natural habitats of many animals and put wildlife in danger. It
-
-can also ( 2 ) ______ the natural soil and lead to climate change. Air pollution is also a serious
-
-problem. It is mainly caused by waste gases that come out of vehicles, machines, or factories.
-
-When these harmful gases combine with the water in the air, they come down as rain or snow, (
-
-3 ) ______ can damage all forms of life. ( 4 ) ______, this problem leads to global warming and
-
-climate change. It is also a major cause of respiratory diseases or even lung cancer. Around the
-
-world, the number of endangered animals is rising. ( 5 ) ______ of them disappear because of
-
-pollution and climate change. In addition, humans illegally hunt and kill animals, and catch too
-
-many fish at once. This is upsetting the natural balance of ecosystems, which can be harmful to
-
+______ weather events like floods or heatwaves. Another environmental problem is the cutting
+and clearing of natural forests. The loss of forests can have a negative impact on the
+environment. It can damage the natural habitats of many animals and put wildlife in danger. It
+can also ( 2 ) ______ the natural soil and lead to climate change. Air pollution is also a serious
+problem. It is mainly caused by waste gases that come out of vehicles, machines, or factories.
+When these harmful gases combine with the water in the air, they come down as rain or snow, (
+3 ) ______ can damage all forms of life. ( 4 ) ______, this problem leads to global warming and
+climate change. It is also a major cause of respiratory diseases or even lung cancer. Around the
+world, the number of endangered animals is rising. ( 5 ) ______ of them disappear because of
+pollution and climate change. In addition, humans illegally hunt and kill animals, and catch too
+many fish at once. This is upsetting the natural balance of ecosystems, which can be harmful to
 all living and non-living things.] Điền từ vào chỗ trống (1): ...and (1) ________ weather events like floods or heatwaves.
 answer1: extreme
 answer2: mild
@@ -192,38 +178,22 @@ answer2: Every
 answer3: Each
 answer4: Many
 Key: 4
-​Ask33: [There are many reasons for reducing the forest areas, and this causes many
-
-complicated problems for any nation without any exception. Due to the population explosion,
-
-many governments need more land for residents to live and develop the economy. They also
-
-clear forests to build dams for generating electricity or to develop resorts and recreational
-
-complexes. Besides, a huge number of trees are logged illegally to trade wood. All of these lead
-
-to serious issues as forests always have an important role in the ecosystem balance. It is
-
-undoubted that when a forest area is destroyed, the following results affect the other neighbor
-
-regions. The first negative effect of the loss of forest lands is flooding. Forests help to prevent
-
-erosion and flooding and without them, the downstream areas tend to be inundated frequently in
-
-rainy and hurricane seasons. Another problem is global warming. Forests are often considered
-
-as the lungs of the earth because they absorb the carbon dioxide and release the oxygen. This
-
-helps to refresh the atmosphere and lower the rate of the carbon dioxide in the air. If not, the
-
-average temperature will be higher and higher since the emission of the gas into the
-
-atmosphere increases every day. Consequently, the price we would pay for the flooding or for
-
-the increase of greenhouse gases is not only the damaged and polluted environment but also
-
-our deteriorated health and lives. To save ourselves, it is advisable to join hands in protecting
-
+​Ask33: [There are many reasons for reducing the forest areas, and this causes many
+complicated problems for any nation without any exception. Due to the population explosion,
+many governments need more land for residents to live and develop the economy. They also
+clear forests to build dams for generating electricity or to develop resorts and recreational
+complexes. Besides, a huge number of trees are logged illegally to trade wood. All of these lead
+to serious issues as forests always have an important role in the ecosystem balance. It is
+undoubted that when a forest area is destroyed, the following results affect the other neighbor
+regions. The first negative effect of the loss of forest lands is flooding. Forests help to prevent
+erosion and flooding and without them, the downstream areas tend to be inundated frequently in
+rainy and hurricane seasons. Another problem is global warming. Forests are often considered
+as the lungs of the earth because they absorb the carbon dioxide and release the oxygen. This
+helps to refresh the atmosphere and lower the rate of the carbon dioxide in the air. If not, the
+average temperature will be higher and higher since the emission of the gas into the
+atmosphere increases every day. Consequently, the price we would pay for the flooding or for
+the increase of greenhouse gases is not only the damaged and polluted environment but also
+our deteriorated health and lives. To save ourselves, it is advisable to join hands in protecting
 and growing more and more forests.] What is the passage mainly about?
 answer1: Some reasons of deforestation and its impacts on people's lives
 answer2: Why floods happen frequently
