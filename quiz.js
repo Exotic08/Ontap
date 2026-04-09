@@ -1,7 +1,10 @@
 /**
- * EdTech Quiz - Upload & Nén Avatar, Bộ Đếm Lượt Thi, Đồng bộ Full Firebase
+ * EdTech Quiz - Quản lý Avatar bằng Biến, Upload nén ảnh, Bộ đếm, Gacha, Giftcode
  */
 
+// ==========================================
+// CẤU HÌNH ĐỀ THI VÀ DATABASE
+// ==========================================
 const QUIZ_LIST = [
     { id: "tieng_anh1", title: "Đề 1 Tiếng Anh", file: "tieng_anh1.txt" },
     { id: "tieng_anh2", title: "Đề 2 Tiếng Anh", file: "tieng_anh2.txt" },
@@ -11,31 +14,56 @@ const QUIZ_LIST = [
 
 const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
 
-const AVATAR_SEEDS = ['Felix', 'Aneka', 'Nala', 'Oliver', 'Jack', 'Mimi', 'Loki', 'Garfield'];
+
+// ==========================================
+// QUẢN LÝ LINK AVATAR TẬP TRUNG (SỬA Ở ĐÂY)
+// ==========================================
+// Bạn có thể thay link "https://..." bằng link ảnh Imgur, Facebook, Drive của bạn tùy thích
+const AVATAR_LINKS = {
+    default: "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix",
+    aneka: "https://api.dicebear.com/9.x/adventurer/svg?seed=Aneka",
+    nala: "https://api.dicebear.com/9.x/adventurer/svg?seed=Nala",
+    oliver: "https://api.dicebear.com/9.x/adventurer/svg?seed=Oliver",
+    jack: "https://api.dicebear.com/9.x/adventurer/svg?seed=Jack",
+    mimi: "https://api.dicebear.com/9.x/adventurer/svg?seed=Mimi",
+    loki: "https://api.dicebear.com/9.x/adventurer/svg?seed=Loki",
+    garfield: "https://api.dicebear.com/9.x/adventurer/svg?seed=Garfield",
+    
+    // Avatar trong Vòng quay Gacha
+    dragon: "https://api.dicebear.com/9.x/adventurer/svg?seed=Dragon",
+    king: "https://api.dicebear.com/9.x/adventurer/svg?seed=King",
+    ninja: "https://api.dicebear.com/9.x/adventurer/svg?seed=Ninja",
+    cat: "https://api.dicebear.com/9.x/adventurer/svg?seed=Cat"
+};
+
+// Mảng hiển thị ở Sảnh Tân Thủ
+const AVATAR_SEEDS_ARRAY = [
+    AVATAR_LINKS.default, AVATAR_LINKS.aneka, AVATAR_LINKS.nala, AVATAR_LINKS.oliver, 
+    AVATAR_LINKS.jack, AVATAR_LINKS.mimi, AVATAR_LINKS.loki, AVATAR_LINKS.garfield
+];
 
 const GACHA_POOL = [
     { id: 'mythic-1', type: 'border', name: 'Viền Thần Thoại (Mythic)', chance: 1, class: 'border-mythic', icon: '✨', desc: 'Hiệu ứng cầu vồng lấp lánh cực hiếm (1%)!' },
-    { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Dragon', icon: '🐉', desc: 'Ảnh đại diện Rồng cơ khí siêu ngầu (3%).' },
+    { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: AVATAR_LINKS.dragon, icon: '🐉', desc: 'Ảnh đại diện Rồng cơ khí siêu ngầu (3%).' },
     { id: 'legendary-1', type: 'border', name: 'Viền Truyền Thuyết (Legendary)', chance: 6, class: 'border-legendary', icon: '🌟', desc: 'Viền vàng lấp lánh quyền lực (6%).' },
-    { id: 'avatar-king', type: 'avatar', name: 'Avatar Quân Vương', chance: 10, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=King', icon: '👑', desc: 'Phong thái của một vị vua (10%).' },
+    { id: 'avatar-king', type: 'avatar', name: 'Avatar Quân Vương', chance: 10, url: AVATAR_LINKS.king, icon: '👑', desc: 'Phong thái của một vị vua (10%).' },
     { id: 'epic-1', type: 'border', name: 'Viền Sử Thi (Epic)', chance: 15, class: 'border-epic', icon: '🔮', desc: 'Viền tím ma thuật huyền bí (15%).' },
-    { id: 'avatar-ninja', type: 'avatar', name: 'Avatar Nhẫn Giả', chance: 20, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Ninja', icon: '🥷', desc: 'Thoắt ẩn thoắt hiện (20%).' },
-    { id: 'avatar-cat', type: 'avatar', name: 'Avatar Hoàng Thượng', chance: 20, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Cat', icon: '🐱', desc: 'Dễ thương lạc lối (20%).' },
+    { id: 'avatar-ninja', type: 'avatar', name: 'Avatar Nhẫn Giả', chance: 20, url: AVATAR_LINKS.ninja, icon: '🥷', desc: 'Thoắt ẩn thoắt hiện (20%).' },
+    { id: 'avatar-cat', type: 'avatar', name: 'Avatar Hoàng Thượng', chance: 20, url: AVATAR_LINKS.cat, icon: '🐱', desc: 'Dễ thương lạc lối (20%).' },
     { id: 'rare-1', type: 'border', name: 'Viền Hiếm (Rare)', chance: 25, class: 'border-rare', icon: '💎', desc: 'Viền xanh dương nổi bật (25%).' }
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
     let currentQuiz = null; let questions = []; let startTime = null; let timerInterval = null;
-    let cropper = null; // Biến cho công cụ cắt ảnh
-    let quizStats = {}; // Lưu số lượt làm bài của từng đề
+    let cropper = null; let quizStats = {}; 
     
     // Khởi tạo state
     let userName = localStorage.getItem('quiz_username') || "";
-    let userAvatar = "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix";
-    let customAvatar = null; // Lưu ảnh tự tải lên riêng biệt để tránh làm phình mảng
+    let userAvatar = AVATAR_LINKS.default;
+    let customAvatar = null; 
     let userBorder = "border-none";
     let userKeys = 0;
-    let unlockedAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`);
+    let unlockedAvatars = [...AVATAR_SEEDS_ARRAY];
     let unlockedBorders = ['border-none'];
     let redeemedCodes = [];
 
@@ -69,7 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 customAvatar = data.customAvatar || null;
                 userBorder = data.border || userBorder;
                 userKeys = data.keys || 0;
-                unlockedAvatars = (data.unlockedAvatars || unlockedAvatars).map(url => fixBrokenAvatarURL(url));
+                
+                let loadedAvatars = data.unlockedAvatars || unlockedAvatars;
+                unlockedAvatars = loadedAvatars.map(url => fixBrokenAvatarURL(url));
+                
                 unlockedBorders = data.unlockedBorders || unlockedBorders;
                 redeemedCodes = data.redeemedCodes || [];
             } else {
@@ -78,9 +109,25 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.error("Lỗi đồng bộ:", e); }
     }
 
+    // TỰ ĐỘNG CHUYỂN LINK CŨ SANG LINK TRONG BIẾN NẾU BẠN SỬA BIẾN
     function fixBrokenAvatarURL(url) {
-        if(!url) return "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix";
-        if(url.startsWith('data:image')) return url; // Nếu là ảnh tự up thì bỏ qua
+        if(!url) return AVATAR_LINKS.default;
+        if(url.startsWith('data:image')) return url; // Ảnh tự up bỏ qua
+        
+        // Quét url cũ, nếu chứa từ khóa thì lập tức gắn bằng biến Link mới nhất
+        if (url.includes('Dragon')) return AVATAR_LINKS.dragon;
+        if (url.includes('King')) return AVATAR_LINKS.king;
+        if (url.includes('Ninja')) return AVATAR_LINKS.ninja;
+        if (url.includes('Cat')) return AVATAR_LINKS.cat;
+        if (url.includes('Felix')) return AVATAR_LINKS.default;
+        if (url.includes('Aneka')) return AVATAR_LINKS.aneka;
+        if (url.includes('Nala')) return AVATAR_LINKS.nala;
+        if (url.includes('Oliver')) return AVATAR_LINKS.oliver;
+        if (url.includes('Jack')) return AVATAR_LINKS.jack;
+        if (url.includes('Mimi')) return AVATAR_LINKS.mimi;
+        if (url.includes('Loki')) return AVATAR_LINKS.loki;
+        if (url.includes('Garfield')) return AVATAR_LINKS.garfield;
+
         return url.replace('7.x/bottts', '9.x/adventurer').replace('7.x/avataaars', '9.x/adventurer').replace('7.x/fun-emoji', '9.x/adventurer').replace('7.x', '9.x');
     }
 
@@ -106,16 +153,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function renderAvatarSelector() {
         const selector = document.getElementById('avatar-selector'); selector.innerHTML = '';
-        
-        // Thêm ảnh tự up vào đầu danh sách nếu có
         if(customAvatar) {
             const img = document.createElement('img'); img.src = customAvatar; img.className = 'avatar-option';
             if (userAvatar === customAvatar) img.classList.add('selected');
             img.onclick = () => { selectAvatarDOM(img, customAvatar); }; selector.appendChild(img);
         }
 
-        const tempAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`);
-        tempAvatars.forEach((url, index) => {
+        AVATAR_SEEDS_ARRAY.forEach((url, index) => {
             const img = document.createElement('img'); img.src = url; img.className = 'avatar-option';
             if (!customAvatar && index === 0 && !userAvatar) userAvatar = url; 
             if (userAvatar === url) img.classList.add('selected');
@@ -128,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imgElement.classList.add('selected'); userAvatar = url;
     }
 
-    // --- UPLOAD VÀ CẮT ẢNH BẰNG CROPPER.JS ---
+    // --- UPLOAD VÀ CẮT ẢNH ---
     document.getElementById('avatar-upload-input').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -137,38 +181,32 @@ document.addEventListener("DOMContentLoaded", () => {
         const reader = new FileReader();
         reader.onload = function(event) {
             document.getElementById('crop-image').src = event.target.result;
-            closeModals(); // Đóng các modal khác nếu có
+            closeModals(); 
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('crop-modal').classList.remove('hidden');
             
             if(cropper) cropper.destroy();
             cropper = new Cropper(document.getElementById('crop-image'), {
-                aspectRatio: 1, // Ép khung hình vuông
-                viewMode: 1, autoCropArea: 1
+                aspectRatio: 1, viewMode: 1, autoCropArea: 1
             });
         };
         reader.readAsDataURL(file);
-        e.target.value = ''; // Reset input để có thể up lại ảnh cũ
+        e.target.value = ''; 
     });
 
     document.getElementById('apply-crop-btn').addEventListener('click', async () => {
         if (!cropper) return;
-        // Cắt và nén ảnh về 150x150, chất lượng 70% (dung lượng sẽ siêu nhỏ ~10KB)
         const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 });
         const base64Avatar = canvas.toDataURL('image/jpeg', 0.7);
-        
-        customAvatar = base64Avatar;
-        userAvatar = base64Avatar; // Chọn luôn ảnh vừa up
+        customAvatar = base64Avatar; userAvatar = base64Avatar; 
 
         closeModals();
         if(cropper) { cropper.destroy(); cropper = null; }
 
         if (userName) {
-            await pushDataToFirebase();
-            updateUIHeader();
-            alert("Đã cập nhật ảnh đại diện thành công!");
+            await pushDataToFirebase(); updateUIHeader(); alert("Đã cập nhật ảnh đại diện thành công!");
         } else {
-            renderAvatarSelector(); // Nếu chưa đăng nhập thì chỉ update UI chọn
+            renderAvatarSelector(); 
         }
     });
 
@@ -176,7 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
         closeModals(); if(cropper) { cropper.destroy(); cropper = null; }
     });
 
-    // --- ĐĂNG NHẬP / ĐĂNG XUẤT ---
     document.getElementById('start-app-btn').addEventListener('click', async () => {
         const inputName = document.getElementById('username-input').value.trim();
         if (inputName.length < 2) return alert("Vui lòng nhập tên của bạn (ít nhất 2 ký tự)!");
@@ -189,11 +226,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('username-input').value = ""; initApp();
     });
 
-    // --- HIỂN THỊ SẢNH VÀ LẤY SỐ LƯỢT THI ---
     async function initLobby() {
         const quizListContainer = document.getElementById('quiz-list-container'); quizListContainer.innerHTML = '';
-        
-        // Fetch số lượt làm bài của tất cả các đề
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/quiz_stats.json`);
             quizStats = (await res.json()) || {};
@@ -310,12 +344,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('rates-modal').classList.remove('hidden');
     });
 
-    // --- TÚI ĐỒ ---
     document.getElementById('inventory-btn').addEventListener('click', () => {
         const avaGrid = document.getElementById('inventory-avatars'); const borderGrid = document.getElementById('inventory-borders');
         avaGrid.innerHTML = ''; borderGrid.innerHTML = '';
 
-        // Hiển thị ảnh tự tải lên (nếu có)
         if(customAvatar) {
             const cImg = document.createElement('img'); cImg.src = customAvatar; cImg.className = `inv-item avatar-with-border border-none ${userAvatar === customAvatar ? 'equipped' : ''}`;
             cImg.onclick = async () => { userAvatar = customAvatar; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; avaGrid.appendChild(cImg);
@@ -427,7 +459,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('time-display').textContent = timeStr;
         showSection('result'); window.scrollTo(0, 0);
 
-        // Tăng đếm số lượt thi (Lưu lên Firebase)
         try {
             const currentPlays = quizStats[currentQuiz.id] ? (quizStats[currentQuiz.id].plays || 0) : 0;
             await fetch(`${FIREBASE_BASE_URL}/quiz_stats/${currentQuiz.id}/plays.json`, { method: 'PUT', body: JSON.stringify(currentPlays + 1) });
