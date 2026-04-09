@@ -1,5 +1,5 @@
 /**
- * EdTech Quiz - Đồng bộ Chìa khóa, Túi đồ và Thành tích lên Firebase (BẢN FULL HOÀN CHỈNH)
+ * EdTech Quiz - Đồng bộ Chìa khóa, Túi đồ, Gacha phạt Trùng và Sửa lỗi API Ảnh
  */
 
 const QUIZ_LIST = [
@@ -13,15 +13,16 @@ const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
 
 const AVATAR_SEEDS = ['Felix', 'Aneka', 'Nala', 'Oliver', 'Jack', 'Mimi', 'Loki', 'Garfield'];
 
+// FIX: Cập nhật API ảnh lên bản 9.x mới nhất với bộ style chuẩn adventurer để 100% không bị trắng
 const GACHA_POOL = [
     { id: 'mythic-1', type: 'border', name: 'Viền Thần Thoại (Mythic)', chance: 1, class: 'border-mythic', icon: '✨', desc: 'Hiệu ứng cầu vồng lấp lánh cực hiếm (1%)!' },
-    { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dragon', icon: '🐉', desc: 'Ảnh đại diện Rồng cơ khí siêu ngầu (3%).' },
+    { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Dragon', icon: '🐉', desc: 'Ảnh đại diện Rồng cơ khí siêu ngầu (3%).' },
     { id: 'legendary-1', type: 'border', name: 'Viền Truyền Thuyết (Legendary)', chance: 6, class: 'border-legendary', icon: '🌟', desc: 'Viền vàng lấp lánh quyền lực (6%).' },
-    { id: 'avatar-king', type: 'avatar', name: 'Avatar Quân Vương', chance: 10, url: 'https://api.dicebear.com/7.x/adventurer/svg?seed=King', icon: '👑', desc: 'Phong thái của một vị vua (10%).' },
+    { id: 'avatar-king', type: 'avatar', name: 'Avatar Quân Vương', chance: 10, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=King', icon: '👑', desc: 'Phong thái của một vị vua (10%).' },
     { id: 'epic-1', type: 'border', name: 'Viền Sử Thi (Epic)', chance: 15, class: 'border-epic', icon: '🔮', desc: 'Viền tím ma thuật huyền bí (15%).' },
-    { id: 'avatar-ninja', type: 'avatar', name: 'Avatar Nhẫn Giả', chance: 20, url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ninja', icon: '🥷', desc: 'Thoắt ẩn thoắt hiện (20%).' },
-    { id: 'rare-1', type: 'border', name: 'Viền Hiếm (Rare)', chance: 25, class: 'border-rare', icon: '💎', desc: 'Viền xanh dương nổi bật (25%).' },
-    { id: 'avatar-cat', type: 'avatar', name: 'Avatar Hoàng Thượng', chance: 20, url: 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=Cat', icon: '🐱', desc: 'Dễ thương lạc lối (20%).' }
+    { id: 'avatar-ninja', type: 'avatar', name: 'Avatar Nhẫn Giả', chance: 20, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Ninja', icon: '🥷', desc: 'Thoắt ẩn thoắt hiện (20%).' },
+    { id: 'avatar-cat', type: 'avatar', name: 'Avatar Hoàng Thượng', chance: 20, url: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Cat', icon: '🐱', desc: 'Dễ thương lạc lối (20%).' },
+    { id: 'rare-1', type: 'border', name: 'Viền Hiếm (Rare)', chance: 25, class: 'border-rare', icon: '💎', desc: 'Viền xanh dương nổi bật (25%).' }
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,12 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let startTime = null; 
     let timerInterval = null;
     
-    // Khởi tạo state mặc định
     let userName = localStorage.getItem('quiz_username') || "";
-    let userAvatar = "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix";
+    let userAvatar = "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix";
     let userBorder = "border-none";
     let userKeys = 0;
-    let unlockedAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`);
+    let unlockedAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`);
     let unlockedBorders = ['border-none'];
 
     const displayUserAvatar = document.getElementById('display-user-avatar');
@@ -65,15 +65,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`);
             const data = await res.json();
             if (data) {
-                userAvatar = data.avatar || userAvatar;
+                userAvatar = fixBrokenAvatarURL(data.avatar || userAvatar);
                 userBorder = data.border || userBorder;
                 userKeys = data.keys || 0;
-                unlockedAvatars = data.unlockedAvatars || unlockedAvatars;
+                
+                let loadedAvatars = data.unlockedAvatars || unlockedAvatars;
+                // Sửa lỗi các link avatar bị trắng trước đây trong kho đồ của người dùng
+                unlockedAvatars = loadedAvatars.map(url => fixBrokenAvatarURL(url));
                 unlockedBorders = data.unlockedBorders || unlockedBorders;
             } else {
                 await pushDataToFirebase();
             }
         } catch (e) { console.error("Lỗi đồng bộ:", e); }
+    }
+
+    // Hàm tự động cập nhật link avatar cũ lên bản 9.x mới để ko bị màn hình trắng
+    function fixBrokenAvatarURL(url) {
+        if(!url) return "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix";
+        return url.replace('7.x/bottts', '9.x/adventurer')
+                  .replace('7.x/avataaars', '9.x/adventurer')
+                  .replace('7.x/fun-emoji', '9.x/adventurer')
+                  .replace('7.x', '9.x');
     }
 
     async function pushDataToFirebase() {
@@ -106,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderAvatarSelector() {
         const selector = document.getElementById('avatar-selector');
         selector.innerHTML = '';
-        const tempAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`);
+        const tempAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`);
         tempAvatars.forEach((url, index) => {
             const img = document.createElement('img');
             img.src = url; img.className = 'avatar-option';
@@ -167,8 +179,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (userKeys <= 0) return alert("Bạn không đủ chìa khóa! Hãy đạt 100% điểm bài thi để nhận thêm.");
         
         isSpinning = true;
-        userKeys--;
+        userKeys--; // Trừ Key ngay lập tức
         updateUIHeader();
+        
         const spinBtn = document.getElementById('spin-btn');
         spinBtn.disabled = true; spinBtn.textContent = "Đang quay...";
         
@@ -198,13 +211,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 else isDuplicate = true;
             }
             
+            // LOGIC MỚI: Không hoàn key nếu bị trùng
             if (isDuplicate) {
-                userKeys++; 
                 document.getElementById('gacha-result-title').textContent = "Trùng lặp! ♻️";
-                document.getElementById('gacha-item-desc').innerHTML = `Bạn đã có vật phẩm này rồi nên hệ thống <b>hoàn trả 1 🔑</b> cho bạn!`;
+                document.getElementById('gacha-item-desc').innerHTML = `Bạn nhận được <b>${wonItem.name}</b>. Tuy nhiên bạn đã sở hữu vật phẩm này rồi, <b>rất tiếc hệ thống sẽ không hoàn lại chìa khóa</b>. Chúc may mắn lần sau nhé!`;
+                document.getElementById('equip-gacha-btn').classList.add('hidden'); // Ẩn nút trang bị vì đã có
             } else {
                 document.getElementById('gacha-result-title').textContent = "🎉 Chúc Mừng! 🎉";
                 document.getElementById('gacha-item-desc').textContent = wonItem.desc;
+                document.getElementById('equip-gacha-btn').classList.remove('hidden');
             }
             
             await pushDataToFirebase();
@@ -226,7 +241,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1500);
     });
 
-    // --- TÚI ĐỒ ---
+    // --- BẢNG TỈ LỆ VÀ TÚI ĐỒ ---
+    document.getElementById('view-rates-btn').addEventListener('click', () => {
+        document.getElementById('modal-overlay').classList.remove('hidden');
+        document.getElementById('rates-modal').classList.remove('hidden');
+    });
+
     document.getElementById('inventory-btn').addEventListener('click', () => {
         const avaGrid = document.getElementById('inventory-avatars');
         const borderGrid = document.getElementById('inventory-borders');
@@ -262,9 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('modal-overlay').classList.add('hidden');
         document.getElementById('inventory-modal').classList.add('hidden');
         document.getElementById('gacha-result-modal').classList.add('hidden');
+        document.getElementById('rates-modal').classList.add('hidden');
     }
     document.getElementById('close-inventory-btn').onclick = closeModals;
     document.getElementById('close-gacha-btn').onclick = closeModals;
+    document.getElementById('close-rates-btn').onclick = closeModals;
 
     // --- TẢI BÀI THI & CHẤM ĐIỂM ---
     async function selectQuiz(quizObj) {
@@ -437,7 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else if (rank === 2) nameClass = 'silver-text'; 
                 else if (rank === 3) nameClass = 'bronze-text'; 
 
-                let displayAvatar = rec.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${rec.name}`;
+                let displayAvatar = fixBrokenAvatarURL(rec.avatar);
                 let displayBorder = rec.border || 'border-none';
 
                 tr.innerHTML = `
