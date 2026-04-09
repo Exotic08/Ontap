@@ -30,10 +30,10 @@ const AVATAR_LINKS = {
     garfield: "https://i.postimg.cc/NM8sNmp9/999f5c55e020fcee41e97b1036a6640b.jpg",
     
     // Avatar trong Vòng quay Gacha
-    dragon: "https://api.dicebear.com/9.x/adventurer/svg?seed=Dragon",
-    king: "https://api.dicebear.com/9.x/adventurer/svg?seed=King",
-    ninja: "https://api.dicebear.com/9.x/adventurer/svg?seed=Ninja",
-    cat: "https://api.dicebear.com/9.x/adventurer/svg?seed=Cat"
+    dragon: "https://i.postimg.cc/cJ2hD86z/485f964065a681bc5934c43411bca2cd.jpg",
+    king: "https://i.postimg.cc/FK8pPJ1n/4c6373c11fecb852b7b9a1c7c47ebed5.jpg",
+    ninja: "https://i.postimg.cc/Zq2Hfy0s/5aca1be41a9439084cae3862a2b49689.jpg",
+    cat: "https://i.postimg.cc/CKX7vfdQ/866679d7609c49c687c34b2bf0f22166.jpg"
 };
 
 // Mảng hiển thị ở Sảnh Tân Thủ
@@ -44,12 +44,12 @@ const AVATAR_SEEDS_ARRAY = [
 
 const GACHA_POOL = [
     { id: 'mythic-1', type: 'border', name: 'Viền Thần Thoại (Mythic)', chance: 1, class: 'border-mythic', icon: '✨', desc: 'Hiệu ứng cầu vồng lấp lánh cực hiếm (1%)!' },
-    { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: AVATAR_LINKS.dragon, icon: '🐉', desc: 'Ảnh đại diện Rồng cơ khí siêu ngầu (3%).' },
+    { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: AVATAR_LINKS.dragon, icon: '💜', desc: 'Ảnh đại diện Tel Thứ Nguyên Vệ Thần (3%).' },
     { id: 'legendary-1', type: 'border', name: 'Viền Truyền Thuyết (Legendary)', chance: 6, class: 'border-legendary', icon: '🌟', desc: 'Viền vàng lấp lánh quyền lực (6%).' },
-    { id: 'avatar-king', type: 'avatar', name: 'Avatar Quân Vương', chance: 10, url: AVATAR_LINKS.king, icon: '👑', desc: 'Phong thái của một vị vua (10%).' },
+    { id: 'avatar-king', type: 'avatar', name: 'Avatar Quân Vương', chance: 10, url: AVATAR_LINKS.king, icon: '👑', desc: 'Ricter Quang Vinh (10%).' },
     { id: 'epic-1', type: 'border', name: 'Viền Sử Thi (Epic)', chance: 15, class: 'border-epic', icon: '🔮', desc: 'Viền tím ma thuật huyền bí (15%).' },
-    { id: 'avatar-ninja', type: 'avatar', name: 'Avatar Nhẫn Giả', chance: 20, url: AVATAR_LINKS.ninja, icon: '🥷', desc: 'Thoắt ẩn thoắt hiện (20%).' },
-    { id: 'avatar-cat', type: 'avatar', name: 'Avatar Hoàng Thượng', chance: 20, url: AVATAR_LINKS.cat, icon: '🐱', desc: 'Dễ thương lạc lối (20%).' },
+    { id: 'avatar-ninja', type: 'avatar', name: 'Avatar Nhẫn Giả', chance: 20, url: AVATAR_LINKS.ninja, icon: '🔥', desc: 'Lorion Hoả Ngục (20%).' },
+    { id: 'avatar-cat', type: 'avatar', name: 'Avatar Hoàng Thượng', chance: 20, url: AVATAR_LINKS.cat, icon: '❄️', desc: 'Triêụ Vân Băng Tuyết (20%).' },
     { id: 'rare-1', type: 'border', name: 'Viền Hiếm (Rare)', chance: 25, class: 'border-rare', icon: '💎', desc: 'Viền xanh dương nổi bật (25%).' }
 ];
 
