@@ -1,5 +1,5 @@
 /**
- * EdTech Quiz - Tên người dùng, Avatar Cá nhân, Gacha & Bảng xếp hạng
+ * EdTech Quiz - Đồng bộ Chìa khóa, Túi đồ và Thành tích lên Firebase (BẢN FULL HOÀN CHỈNH)
  */
 
 const QUIZ_LIST = [
@@ -11,11 +11,9 @@ const QUIZ_LIST = [
 
 const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
 
-// --- DỮ LIỆU GACHA & AVATAR MẶC ĐỊNH ---
 const AVATAR_SEEDS = ['Felix', 'Aneka', 'Nala', 'Oliver', 'Jack', 'Mimi', 'Loki', 'Garfield'];
 
 const GACHA_POOL = [
-    // Tỉ lệ rớt tính theo tổng là 100%
     { id: 'mythic-1', type: 'border', name: 'Viền Thần Thoại (Mythic)', chance: 1, class: 'border-mythic', icon: '✨', desc: 'Hiệu ứng cầu vồng lấp lánh cực hiếm (1%)!' },
     { id: 'avatar-dragon', type: 'avatar', name: 'Avatar Rồng Thần', chance: 3, url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dragon', icon: '🐉', desc: 'Ảnh đại diện Rồng cơ khí siêu ngầu (3%).' },
     { id: 'legendary-1', type: 'border', name: 'Viền Truyền Thuyết (Legendary)', chance: 6, class: 'border-legendary', icon: '🌟', desc: 'Viền vàng lấp lánh quyền lực (6%).' },
@@ -27,40 +25,32 @@ const GACHA_POOL = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-    let currentQuiz = null; let questions = []; let startTime = null; let timerInterval = null;
+    let currentQuiz = null; 
+    let questions = []; 
+    let startTime = null; 
+    let timerInterval = null;
     
-    // --- STATE NGƯỜI DÙNG ---
+    // Khởi tạo state mặc định
     let userName = localStorage.getItem('quiz_username') || "";
-    let userAvatar = localStorage.getItem('quiz_avatar') || "";
-    let userBorder = localStorage.getItem('quiz_border') || "border-none";
-    let userKeys = parseInt(localStorage.getItem('quiz_keys')) || 0;
-    
-    // Khởi tạo túi đồ
-    let unlockedAvatars = JSON.parse(localStorage.getItem('quiz_unlocked_avatars')) || AVATAR_SEEDS.map(seed => `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`);
-    let unlockedBorders = JSON.parse(localStorage.getItem('quiz_unlocked_borders')) || ['border-none'];
+    let userAvatar = "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix";
+    let userBorder = "border-none";
+    let userKeys = 0;
+    let unlockedAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`);
+    let unlockedBorders = ['border-none'];
 
-    // DOM Elements
-    const mainHeader = document.getElementById('main-header');
-    const displayUserName = document.getElementById('display-user-name');
     const displayUserAvatar = document.getElementById('display-user-avatar');
+    const displayUserName = document.getElementById('display-user-name');
     const displayKeys = document.getElementById('display-keys');
+    const mainHeader = document.getElementById('main-header');
     const timerDisplay = document.getElementById('timer-display');
     const timerSpan = timerDisplay.querySelector('span');
-    const usernameInput = document.getElementById('username-input');
 
-    const modalOverlay = document.getElementById('modal-overlay');
-    const inventoryModal = document.getElementById('inventory-modal');
-    const gachaResultModal = document.getElementById('gacha-result-modal');
-    
     initApp();
 
-    function initApp() {
-        if (userName && userAvatar) {
-            displayUserName.textContent = userName;
-            displayUserAvatar.src = userAvatar;
-            displayUserAvatar.className = `header-avatar avatar-with-border ${userBorder}`;
-            displayKeys.textContent = userKeys;
-            mainHeader.classList.remove('hidden');
+    async function initApp() {
+        if (userName) {
+            await syncDataFromFirebase();
+            updateUIHeader();
             initLobby();
         } else {
             renderAvatarSelector(); 
@@ -69,28 +59,59 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function saveState() {
-        localStorage.setItem('quiz_username', userName);
-        localStorage.setItem('quiz_avatar', userAvatar);
-        localStorage.setItem('quiz_border', userBorder);
-        localStorage.setItem('quiz_keys', userKeys);
-        localStorage.setItem('quiz_unlocked_avatars', JSON.stringify(unlockedAvatars));
-        localStorage.setItem('quiz_unlocked_borders', JSON.stringify(unlockedBorders));
-        
+    // --- HÀM ĐỒNG BỘ DỮ LIỆU TỪ FIREBASE ---
+    async function syncDataFromFirebase() {
+        try {
+            const res = await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`);
+            const data = await res.json();
+            if (data) {
+                userAvatar = data.avatar || userAvatar;
+                userBorder = data.border || userBorder;
+                userKeys = data.keys || 0;
+                unlockedAvatars = data.unlockedAvatars || unlockedAvatars;
+                unlockedBorders = data.unlockedBorders || unlockedBorders;
+            } else {
+                await pushDataToFirebase();
+            }
+        } catch (e) { console.error("Lỗi đồng bộ:", e); }
+    }
+
+    async function pushDataToFirebase() {
+        if (!userName) return;
+        const userData = {
+            name: userName,
+            avatar: userAvatar,
+            border: userBorder,
+            keys: userKeys,
+            unlockedAvatars: unlockedAvatars,
+            unlockedBorders: unlockedBorders,
+            lastLogin: Date.now()
+        };
+        try {
+            await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`, {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            });
+        } catch (e) { console.error("Lỗi đẩy dữ liệu:", e); }
+    }
+
+    function updateUIHeader() {
+        displayUserName.textContent = userName;
         displayUserAvatar.src = userAvatar;
         displayUserAvatar.className = `header-avatar avatar-with-border ${userBorder}`;
         displayKeys.textContent = userKeys;
+        mainHeader.classList.remove('hidden');
     }
 
     function renderAvatarSelector() {
         const selector = document.getElementById('avatar-selector');
         selector.innerHTML = '';
-        unlockedAvatars.slice(0, 8).forEach((url, index) => {
+        const tempAvatars = AVATAR_SEEDS.map(seed => `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`);
+        tempAvatars.forEach((url, index) => {
             const img = document.createElement('img');
             img.src = url; img.className = 'avatar-option';
             if (index === 0 && !userAvatar) userAvatar = url; 
             if (userAvatar === url) img.classList.add('selected');
-            
             img.onclick = () => {
                 document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
                 img.classList.add('selected'); userAvatar = url;
@@ -99,16 +120,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    document.getElementById('start-app-btn').addEventListener('click', () => {
-        const inputName = usernameInput.value.trim();
+    document.getElementById('start-app-btn').addEventListener('click', async () => {
+        const inputName = document.getElementById('username-input').value.trim();
         if (inputName.length < 2) return alert("Vui lòng nhập tên của bạn (ít nhất 2 ký tự)!");
         userName = inputName;
-        saveState(); initApp(); 
+        localStorage.setItem('quiz_username', userName);
+        await syncDataFromFirebase();
+        initApp();
     });
 
     document.getElementById('change-name-btn').addEventListener('click', () => {
-        userName = ""; userAvatar = ""; usernameInput.value = "";
-        localStorage.removeItem('quiz_username');
+        userName = ""; localStorage.removeItem('quiz_username');
+        document.getElementById('username-input').value = "";
         initApp();
     });
 
@@ -137,95 +160,73 @@ document.addEventListener("DOMContentLoaded", () => {
         if (target) target.classList.remove('hidden');
     }
 
-    // ==========================================
-    // LOGIC VÒNG QUAY MAY MẮN (GACHA)
-    // ==========================================
-    const spinBtn = document.getElementById('spin-btn');
+    // --- XỬ LÝ VÒNG QUAY ---
     let isSpinning = false;
-    let wonItemCache = null;
-
-    spinBtn.addEventListener('click', () => {
+    document.getElementById('spin-btn').addEventListener('click', async () => {
         if (isSpinning) return;
         if (userKeys <= 0) return alert("Bạn không đủ chìa khóa! Hãy đạt 100% điểm bài thi để nhận thêm.");
         
         isSpinning = true;
         userKeys--;
-        saveState();
-        spinBtn.disabled = true;
-        spinBtn.textContent = "Đang quay...";
+        updateUIHeader();
+        const spinBtn = document.getElementById('spin-btn');
+        spinBtn.disabled = true; spinBtn.textContent = "Đang quay...";
         
         const wheel = document.getElementById('gacha-wheel');
         wheel.classList.add('spinning');
         document.getElementById('gacha-status').textContent = "Đang triệu hồi nhân phẩm...";
-
-        setTimeout(() => {
-            wheel.classList.remove('spinning');
-            spinBtn.disabled = false;
-            spinBtn.textContent = "Quay Ngay (1 🔑)";
-            document.getElementById('gacha-status').textContent = "";
-            isSpinning = false;
-            processGachaResult();
-        }, 1500); // Quay 1.5 giây
-    });
-
-    function processGachaResult() {
+        
         let rand = Math.random() * 100;
-        let sum = 0;
-        let wonItem = null;
+        let sum = 0; let wonItem = GACHA_POOL[GACHA_POOL.length - 1];
         for (let item of GACHA_POOL) {
             sum += item.chance;
             if (rand <= sum) { wonItem = item; break; }
         }
-        if (!wonItem) wonItem = GACHA_POOL[GACHA_POOL.length - 1]; // Fallback an toàn
-        wonItemCache = wonItem;
 
-        // Xử lý đồ trùng
-        let isDuplicate = false;
-        if (wonItem.type === 'avatar') {
-            if (!unlockedAvatars.includes(wonItem.url)) unlockedAvatars.push(wonItem.url);
-            else isDuplicate = true;
-        } else {
-            if (!unlockedBorders.includes(wonItem.class)) unlockedBorders.push(wonItem.class);
-            else isDuplicate = true;
-        }
-        
-        if (isDuplicate) {
-            userKeys++; // Đền bù khóa
-            document.getElementById('gacha-result-title').textContent = "Trùng lặp! ♻️";
-            document.getElementById('gacha-item-desc').innerHTML = `Bạn đã có vật phẩm này rồi nên hệ thống <b>hoàn trả 1 🔑</b> cho bạn!`;
-        } else {
-            document.getElementById('gacha-result-title').textContent = "🎉 Chúc Mừng! 🎉";
-            document.getElementById('gacha-item-desc').textContent = wonItem.desc;
-        }
-        saveState();
-
-        // Hiển thị Modal Kết quả
-        const displayBox = document.getElementById('gacha-item-display');
-        if (wonItem.type === 'avatar') {
-            displayBox.innerHTML = `<img src="${wonItem.url}" style="width:100%; border-radius:50%;">`;
-        } else {
-            displayBox.innerHTML = `<div class="avatar-with-border ${wonItem.class}" style="width:100%; height:100%; border-radius:50%; background-color:#f1f5f9;"></div>`;
-        }
-        document.getElementById('gacha-item-name').textContent = wonItem.name;
-        
-        modalOverlay.classList.remove('hidden');
-        gachaResultModal.classList.remove('hidden');
-    }
-
-    document.getElementById('equip-gacha-btn').addEventListener('click', () => {
-        if(wonItemCache) {
-            if (wonItemCache.type === 'avatar') userAvatar = wonItemCache.url;
-            else userBorder = wonItemCache.class;
-            saveState();
-        }
-        closeModals();
+        setTimeout(async () => {
+            wheel.classList.remove('spinning');
+            spinBtn.disabled = false; spinBtn.textContent = "Quay Ngay (1 🔑)";
+            document.getElementById('gacha-status').textContent = "";
+            isSpinning = false;
+            
+            let isDuplicate = false;
+            if (wonItem.type === 'avatar') {
+                if (!unlockedAvatars.includes(wonItem.url)) unlockedAvatars.push(wonItem.url);
+                else isDuplicate = true;
+            } else {
+                if (!unlockedBorders.includes(wonItem.class)) unlockedBorders.push(wonItem.class);
+                else isDuplicate = true;
+            }
+            
+            if (isDuplicate) {
+                userKeys++; 
+                document.getElementById('gacha-result-title').textContent = "Trùng lặp! ♻️";
+                document.getElementById('gacha-item-desc').innerHTML = `Bạn đã có vật phẩm này rồi nên hệ thống <b>hoàn trả 1 🔑</b> cho bạn!`;
+            } else {
+                document.getElementById('gacha-result-title').textContent = "🎉 Chúc Mừng! 🎉";
+                document.getElementById('gacha-item-desc').textContent = wonItem.desc;
+            }
+            
+            await pushDataToFirebase();
+            updateUIHeader();
+            
+            document.getElementById('gacha-item-name').textContent = wonItem.name;
+            const displayBox = document.getElementById('gacha-item-display');
+            displayBox.innerHTML = wonItem.type === 'avatar' ? `<img src="${wonItem.url}" style="width:100%; border-radius:50%;">` : `<div class="avatar-with-border ${wonItem.class}" style="width:100%;height:100%;background:#f1f5f9;border-radius:50%"></div>`;
+            
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById('gacha-result-modal').classList.remove('hidden');
+            
+            document.getElementById('equip-gacha-btn').onclick = async () => {
+                if (wonItem.type === 'avatar') userAvatar = wonItem.url; else userBorder = wonItem.class;
+                await pushDataToFirebase();
+                updateUIHeader();
+                closeModals();
+            };
+        }, 1500);
     });
 
-    document.getElementById('close-gacha-btn').addEventListener('click', closeModals);
-
-    // ==========================================
-    // LOGIC TÚI ĐỒ (INVENTORY)
-    // ==========================================
+    // --- TÚI ĐỒ ---
     document.getElementById('inventory-btn').addEventListener('click', () => {
         const avaGrid = document.getElementById('inventory-avatars');
         const borderGrid = document.getElementById('inventory-borders');
@@ -234,40 +235,38 @@ document.addEventListener("DOMContentLoaded", () => {
         unlockedAvatars.forEach(url => {
             const img = document.createElement('img');
             img.src = url; img.className = `inv-item avatar-with-border border-none ${userAvatar === url ? 'equipped' : ''}`;
-            img.onclick = () => { userAvatar = url; saveState(); closeModals(); };
+            img.onclick = async () => { userAvatar = url; await pushDataToFirebase(); updateUIHeader(); closeModals(); };
             avaGrid.appendChild(img);
         });
 
-        // Nút tháo viền
         const noBorder = document.createElement('div');
         noBorder.className = `inv-item avatar-with-border border-none ${userBorder === 'border-none' ? 'equipped' : ''}`;
         noBorder.style.display = 'flex'; noBorder.style.alignItems = 'center'; noBorder.style.justifyContent = 'center'; noBorder.style.fontSize = '12px'; noBorder.textContent = 'Bỏ viền';
-        noBorder.onclick = () => { userBorder = 'border-none'; saveState(); closeModals(); };
+        noBorder.onclick = async () => { userBorder = 'border-none'; await pushDataToFirebase(); updateUIHeader(); closeModals(); };
         borderGrid.appendChild(noBorder);
 
         unlockedBorders.forEach(bClass => {
             if(bClass === 'border-none') return;
             const div = document.createElement('div');
             div.className = `inv-item avatar-with-border ${bClass} ${userBorder === bClass ? 'equipped' : ''}`;
-            div.onclick = () => { userBorder = bClass; saveState(); closeModals(); };
+            div.style.background = "#eee";
+            div.onclick = async () => { userBorder = bClass; await pushDataToFirebase(); updateUIHeader(); closeModals(); };
             borderGrid.appendChild(div);
         });
 
-        modalOverlay.classList.remove('hidden');
-        inventoryModal.classList.remove('hidden');
+        document.getElementById('modal-overlay').classList.remove('hidden');
+        document.getElementById('inventory-modal').classList.remove('hidden');
     });
 
-    document.getElementById('close-inventory-btn').addEventListener('click', closeModals);
-
     function closeModals() {
-        modalOverlay.classList.add('hidden');
-        inventoryModal.classList.add('hidden');
-        gachaResultModal.classList.add('hidden');
+        document.getElementById('modal-overlay').classList.add('hidden');
+        document.getElementById('inventory-modal').classList.add('hidden');
+        document.getElementById('gacha-result-modal').classList.add('hidden');
     }
+    document.getElementById('close-inventory-btn').onclick = closeModals;
+    document.getElementById('close-gacha-btn').onclick = closeModals;
 
-    // ==========================================
-    // TẢI BÀI THI & LƯU KẾT QUẢ
-    // ==========================================
+    // --- TẢI BÀI THI & CHẤM ĐIỂM ---
     async function selectQuiz(quizObj) {
         currentQuiz = quizObj;
         document.getElementById('app-main-title').textContent = quizObj.title;
@@ -281,6 +280,56 @@ document.addEventListener("DOMContentLoaded", () => {
             startQuiz();
         } catch (error) { document.getElementById('loading-section').innerHTML = `<p style="color:red; text-align:center;">Lỗi: ${error.message}</p>`; }
     }
+
+    function parseData(text) {
+        const lines = text.split('\n'); const parsed = []; let current = null;
+        lines.forEach(line => {
+            line = line.replace(/[\u200B-\u200D\uFEFF]/g, '').trim(); 
+            if (!line) return;
+            let qMatch = line.match(/^Ask\d+:\s*(.*)/i);
+            if (qMatch) { if (current) parsed.push(current); current = { questionText: qMatch[1], options: [], images: [], type: 'single', rawKey: null }; return; }
+            let imgMatch = line.match(/^anh\d*:\s*(.*)/i);
+            if (imgMatch && current) { current.images.push(imgMatch[1]); return; }
+            let tMatch = line.match(/^Type:\s*(.*)/i);
+            if (tMatch && current) { current.type = tMatch[1].toLowerCase().trim(); return; }
+            let aMatch = line.match(/^answer\d+:\s*(.*)/i);
+            if (aMatch && current) { current.options.push(aMatch[1]); return; }
+            let kMatch = line.match(/^Key:\s*(.*)/i);
+            if (kMatch && current) { current.rawKey = kMatch[1]; }
+        });
+        if (current) parsed.push(current);
+        parsed.forEach(q => {
+             if (q.type === 'essay' || q.type === 'short') { q.key = q.rawKey; } 
+             else if (q.rawKey?.includes(',')) { q.type = 'multi'; q.key = q.rawKey.split(',').map(Number); } 
+             else { q.key = parseInt(q.rawKey, 10); }
+        }); return parsed;
+    }
+
+    function startQuiz() {
+        const questionsContainer = document.getElementById('questions-container'); questionsContainer.innerHTML = '';
+        questions.forEach((q, qIndex) => {
+            const block = document.createElement('div'); block.className = 'question-block';
+            const title = document.createElement('div'); title.className = 'question-text'; title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
+            if (q.type === 'multi') title.textContent += ' (Chọn nhiều)'; if (q.type === 'essay') title.textContent += ' (Tự luận)'; block.appendChild(title);
+            if (q.images.length > 0) { const imgCont = document.createElement('div'); imgCont.className = 'images-container'; q.images.forEach(src => { const img = document.createElement('img'); img.src = src; img.className = 'question-image'; img.onerror = () => img.style.display = 'none'; imgCont.appendChild(img); }); block.appendChild(imgCont); }
+            const optCont = document.createElement('div'); optCont.className = 'options-group';
+            if (q.type === 'essay') { optCont.innerHTML = `<textarea name="q${qIndex}" class="essay-input" placeholder="Nhập câu trả lời..."></textarea>`; } 
+            else if (q.type === 'short') { optCont.innerHTML = `<input type="text" name="q${qIndex}" class="short-input" placeholder="Nhập đáp án..." autocomplete="off">`; } 
+            else { q.options.forEach((opt, oIdx) => { optCont.innerHTML += `<label class="option-label"><input type="${q.type==='multi'?'checkbox':'radio'}" name="q${qIndex}" value="${oIdx+1}"> ${opt}</label>`; }); }
+            block.appendChild(optCont); questionsContainer.appendChild(block);
+        });
+        showSection('quiz'); document.getElementById('quiz-form').reset(); startTime = Date.now(); timerDisplay.classList.remove('hidden'); clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000); updateTimer();
+    }
+
+    function updateTimer() { const elapsed = Math.floor((Date.now() - startTime) / 1000); const m = String(Math.floor(elapsed / 60)).padStart(2, '0'); const s = String(elapsed % 60).padStart(2, '0'); timerSpan.textContent = `${m}:${s}`; }
+
+    document.getElementById('quiz-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearInterval(timerInterval);
+        const timeTakenMs = Date.now() - startTime;
+        const timeStr = timerSpan.textContent;
+        await evaluateAndSaveResults(timeTakenMs, timeStr);
+    });
 
     async function evaluateAndSaveResults(timeTakenMs, timeStr) {
         let correctCount = 0; let objectiveCount = 0; 
@@ -305,10 +354,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('time-display').textContent = timeStr;
         showSection('result'); window.scrollTo(0, 0);
 
-        // THƯỞNG CHÌA KHÓA KHI 100% ĐIỂM
         if (accuracy === 100) {
             userKeys++;
-            saveState();
+            await pushDataToFirebase();
+            updateUIHeader();
             setTimeout(() => alert("🎉 THIÊN TÀI LỘ DIỆN! Bạn đạt 100% điểm tuyệt đối và được thưởng 1 🔑 Vòng Quay Nhân Phẩm!"), 500);
         }
 
@@ -331,7 +380,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (record.correct < val.correct) shouldUpdate = false; 
                         else if (record.correct === val.correct && record.timeMs >= val.timeMs) shouldUpdate = false; 
                         
-                        // Luôn cập nhật Avatar và Viền mới nhất lên BXH dù điểm không đổi
                         if(!shouldUpdate && (val.avatar !== userAvatar || val.border !== userBorder)) {
                             await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${key}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({avatar: userAvatar, border: userBorder})});
                         }
@@ -344,12 +392,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (existingKey) await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${existingKey}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
                 else await fetch(dbUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
             }
-        } catch (error) { console.error(error); }
+        } catch (error) { console.error("Lỗi BXH:", error); }
     }
 
-    // ==========================================
-    // RENDER BXH (HIỆU ỨNG & AVATAR ĐỒNG BỘ)
-    // ==========================================
+    function buildReviewItem(q, qIndex, isCorrect, formData) {
+        const div = document.createElement('div'); div.className = 'review-item'; div.innerHTML = `<h4>Câu ${qIndex + 1}: ${q.questionText}</h4>`;
+        q.images.forEach(src => { const img = document.createElement('img'); img.src = src; img.className = 'review-image'; div.appendChild(img); });
+        if (q.type === 'essay') { div.classList.add('review-essay'); div.innerHTML += `<p class="feedback-text feedback-essay">Tự luận</p><p><b>Bài làm:</b> ${formData.get(`q${qIndex}`) || "(Trống)"}</p><p><b>Gợi ý:</b> ${q.key}</p>`; } 
+        else { div.classList.add(isCorrect ? 'review-correct' : 'review-incorrect'); div.innerHTML += `<p class="feedback-text ${isCorrect?'feedback-correct':'feedback-incorrect'}">${isCorrect?'✓ Chính xác':'✗ Sai rồi'}</p>`;
+            if (q.type === 'single') div.innerHTML += `<p>Đáp án đúng: ${q.options[q.key - 1]}</p>`;
+            else if (q.type === 'multi') { const opts = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x); div.innerHTML += `<p>Đáp án đúng: ${opts.join(', ')}</p>`; }
+            else if (q.type === 'short') div.innerHTML += `<p>Đáp án đúng: ${q.key} <br><span style="color:var(--text-muted)">Bạn nhập: ${formData.get(`q${qIndex}`)}</span></p>`; }
+        return div;
+    }
+
+    // --- RENDER BXH ---
     window.loadLeaderboard = async function(quizId, quizTitle) {
         document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng";
         document.getElementById('home-btn').classList.remove('hidden');
@@ -361,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/leaderboard_${quizId}.json`);
             const data = await res.json();
-            if (!data) return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có ai thi môn này!</td></tr>`;
+            if (!data) return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có ai thi môn này. Hãy là người đầu tiên!</td></tr>`;
 
             let records = Object.values(data).sort((a, b) => (b.correct !== a.correct) ? b.correct - a.correct : a.timeMs - b.timeMs).slice(0, 50);
             lbBody.innerHTML = '';
@@ -403,68 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag] || tag)); }
     
-    // Boilerplate code rút gọn do dài
-    function parseData(text) { /*...*/ }
-    function startQuiz() { /*...*/ }
-    function renderQuestions() { /*...*/ }
-    function updateTimer() { /*...*/ }
-    function buildReviewItem() { /*...*/ }
-    
-    // Nút điều hướng
     document.getElementById('retake-btn').addEventListener('click', () => { selectQuiz(currentQuiz); });
     document.getElementById('view-leaderboard-btn').addEventListener('click', () => { window.loadLeaderboard(currentQuiz.id, currentQuiz.title); });
     document.getElementById('home-btn').addEventListener('click', () => { clearInterval(timerInterval); initLobby(); });
     document.getElementById('lb-back-btn').addEventListener('click', () => { initLobby(); });
-    
-    // Import lại phần Parse, Render và Timer (đã thu gọn để tiết kiệm chỗ, bạn hãy CẦN CẨN THẬN khi copy chèn để không bị thiếu hàm).
-    // Tôi sẽ bổ sung lại các hàm đó dưới đây để bạn yên tâm copy full.
-    function parseData(text) {
-        const lines = text.split('\n'); const parsed = []; let current = null;
-        lines.forEach(line => {
-            line = line.replace(/[\u200B-\u200D\uFEFF]/g, '').trim(); 
-            if (!line) return;
-            let qMatch = line.match(/^Ask\d+:\s*(.*)/i);
-            if (qMatch) { if (current) parsed.push(current); current = { questionText: qMatch[1], options: [], images: [], type: 'single', rawKey: null }; return; }
-            let imgMatch = line.match(/^anh\d*:\s*(.*)/i);
-            if (imgMatch && current) { current.images.push(imgMatch[1]); return; }
-            let tMatch = line.match(/^Type:\s*(.*)/i);
-            if (tMatch && current) { current.type = tMatch[1].toLowerCase().trim(); return; }
-            let aMatch = line.match(/^answer\d+:\s*(.*)/i);
-            if (aMatch && current) { current.options.push(aMatch[1]); return; }
-            let kMatch = line.match(/^Key:\s*(.*)/i);
-            if (kMatch && current) { current.rawKey = kMatch[1]; }
-        });
-        if (current) parsed.push(current);
-        parsed.forEach(q => {
-             if (q.type === 'essay' || q.type === 'short') { q.key = q.rawKey; } 
-             else if (q.rawKey?.includes(',')) { q.type = 'multi'; q.key = q.rawKey.split(',').map(Number); } 
-             else { q.key = parseInt(q.rawKey, 10); }
-        }); return parsed;
-    }
-    function startQuiz() { renderQuestions(); showSection('quiz'); document.getElementById('quiz-form').reset(); startTime = Date.now(); timerDisplay.classList.remove('hidden'); clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000); updateTimer(); }
-    function renderQuestions() {
-        const questionsContainer = document.getElementById('questions-container'); questionsContainer.innerHTML = '';
-        questions.forEach((q, qIndex) => {
-            const block = document.createElement('div'); block.className = 'question-block';
-            const title = document.createElement('div'); title.className = 'question-text'; title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
-            if (q.type === 'multi') title.textContent += ' (Chọn nhiều)'; if (q.type === 'essay') title.textContent += ' (Tự luận)'; block.appendChild(title);
-            if (q.images.length > 0) { const imgCont = document.createElement('div'); imgCont.className = 'images-container'; q.images.forEach(src => { const img = document.createElement('img'); img.src = src; img.className = 'question-image'; img.onerror = () => img.style.display = 'none'; imgCont.appendChild(img); }); block.appendChild(imgCont); }
-            const optCont = document.createElement('div'); optCont.className = 'options-group';
-            if (q.type === 'essay') { optCont.innerHTML = `<textarea name="q${qIndex}" class="essay-input" placeholder="Nhập câu trả lời..."></textarea>`; } 
-            else if (q.type === 'short') { optCont.innerHTML = `<input type="text" name="q${qIndex}" class="short-input" placeholder="Nhập đáp án..." autocomplete="off">`; } 
-            else { q.options.forEach((opt, oIdx) => { optCont.innerHTML += `<label class="option-label"><input type="${q.type==='multi'?'checkbox':'radio'}" name="q${qIndex}" value="${oIdx+1}"> ${opt}</label>`; }); }
-            block.appendChild(optCont); questionsContainer.appendChild(block);
-        });
-    }
-    function updateTimer() { const elapsed = Math.floor((Date.now() - startTime) / 1000); const m = String(Math.floor(elapsed / 60)).padStart(2, '0'); const s = String(elapsed % 60).padStart(2, '0'); timerSpan.textContent = `${m}:${s}`; }
-    function buildReviewItem(q, qIndex, isCorrect, formData) {
-        const div = document.createElement('div'); div.className = 'review-item'; div.innerHTML = `<h4>Câu ${qIndex + 1}: ${q.questionText}</h4>`;
-        q.images.forEach(src => { const img = document.createElement('img'); img.src = src; img.className = 'review-image'; div.appendChild(img); });
-        if (q.type === 'essay') { div.classList.add('review-essay'); div.innerHTML += `<p class="feedback-text feedback-essay">Tự luận</p><p><b>Bài làm:</b> ${formData.get(`q${qIndex}`) || "(Trống)"}</p><p><b>Gợi ý:</b> ${q.key}</p>`; } 
-        else { div.classList.add(isCorrect ? 'review-correct' : 'review-incorrect'); div.innerHTML += `<p class="feedback-text ${isCorrect?'feedback-correct':'feedback-incorrect'}">${isCorrect?'✓ Chính xác':'✗ Sai rồi'}</p>`;
-            if (q.type === 'single') div.innerHTML += `<p>Đáp án đúng: ${q.options[q.key - 1]}</p>`;
-            else if (q.type === 'multi') { const opts = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x); div.innerHTML += `<p>Đáp án đúng: ${opts.join(', ')}</p>`; }
-            else if (q.type === 'short') div.innerHTML += `<p>Đáp án đúng: ${q.key} <br><span style="color:var(--text-muted)">Bạn nhập: ${formData.get(`q${qIndex}`)}</span></p>`; }
-        return div;
-    }
 });
