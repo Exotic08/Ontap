@@ -4,214 +4,225 @@ answer2: climate
 answer3: gorilla
 answer4: giant
 Key: 3
+
 Ask2: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: focus
 answer2: control
 answer3: role
 answer4: modern
 Key: 4
+
 Ask3: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: person
 answer2: fossil
 answer3: discuss
 answer4: preserve
 Key: 4
+
 Ask4: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: limitation
 answer2: inequality
 answer3: entertainment
 answer4: eliminate
 Key: 4
+
 Ask5: Chọn từ có phần gạch chân/trọng âm khác với các từ còn lại:
 answer1: according
 answer2: successful
 answer3: preference
 answer4: encourage
 Key: 3
+
 Ask6: The burning of fossil fuels by factories and motor vehicles has led to air pollution and resulted in acid rain, greenhouse effect and ________.
 answer1: global warming
 answer2: environmental problems
 answer3: endangered animals
 answer4: deforestion
 Key: 1
+
 Ask7: We should ________ the burning of fossil fuels, and encourage forestation to replace deforestation.
 answer1: control
 answer2: raise
 answer3: cause
 answer4: change
 Key: 1
+
 Ask8: Now, most students can ________ materials from the Internet for their studying purpose.
 answer1: write
 answer2: download
 answer3: send
 answer4: upload
 Key: 2
+
 Ask9: ________ learning allows us to communicate with teachers immediately and directly.
 answer1: Face-to-face
 answer2: Online
 answer3: Blended
 answer4: indirect
 Key: 1
+
 Ask10: Biodiversity is important because plants and animals depend on each other to ________.
 answer1: survival
 answer2: survive
 answer3: survivor
 answer4: surviving
 Key: 2
+
 Ask11: Their work involves protecting and create natural ________ for plants and animals.
 answer1: biodiversity
 answer2: habitat
 answer3: ecosystem
 answer4: wildlife
 Key: 2
+
 Ask12: Costa Rica is one of ________ eco-tourism destinations to visit in the world.
 answer1: good
 answer2: the better
 answer3: the best
 answer4: much better
 Key: 3
+
 Ask13: Andrew told me that they ________ fish two days ________.
 answer1: have not eaten / ago
 answer2: had eaten/ previous
 answer3: did not eat / before
 answer4: would not eat / last
 Key: 2
+
 Ask14: If I had enough money, I ________ abroad to improve my English.
 answer1: will go
 answer2: would go
 answer3: went
 answer4: goes
 Key: 2
+
 Ask15: Many kinds of people ________ come and work with us, so Let start your career at COFFEE BEANS today.
 answer1: who
 answer2: whose
 answer3: which
 answer4: that
 Key: 1
+
 Ask16: Life in the countryside is ________ than life in a big city.
 answer1: most peaceful
 answer2: as peaceful
 answer3: more peaceful
 answer4: the most peaceful
 Key: 3
+
 Ask17: In order to reduce gender inequality in South Korean society, women should ________ more opportunities by companies.
 answer1: providing
 answer2: provide
 answer3: provided
 answer4: be provided
 Key: 4
+
 Ask18: I asked Martha ________ to enter law school.
 answer1: are you planning
 answer2: is she planning
 answer3: was she planning
 answer4: if she was planning
 Key: 4
+
 Ask19: Chia từ trong ngoặc (INFORM): Laptops and wireless technologies allow students to access ________ relevant to class topics immediately.
 Type: short
 Key: information
+
 Ask20: Chia từ trong ngoặc (DIVERSE): Bac Lieu Bird Sanctuary Nature Reserve is a coastal rich and salt ________ forest floor with the natural salt-marsh ecosystem.
 Type: short
 Key: biodiverse
+
 Ask21: Chia từ trong ngoặc (DISPOSE): In areas with high concentrations of tourist activities and attractive natural attractions, waste ________ is a serious problem.
 Type: short
 Key: disposal
+
 Ask22: Chia từ trong ngoặc (HOSPITAL): The scenery in Ba Be National Park is magnificent and the locals are friendly and ________.
 Type: short
 Key: hospitable
+
 Ask23: Viết lại câu với câu điều kiện: "I don't see you very often because you live so far away."
 Type: short
 Key: If you didn't live so far away, I would see you more often.
+
 Ask24: Viết lại câu dùng mệnh đề quan hệ: "His grandmother had a great influence on his life. She was a hard working woman."
 Type: short
 Key: His grandmother, who was a hard-working woman, had a great influence on his life.
+
 Ask25: Viết lại câu so sánh nhất: "No other country is wealthier than Japan."
 Type: short
 Key: Japan is the wealthiest country in the world.
+
 Ask26: Viết lại câu bị động: "They must submit the assignment by next Monday."
 Type: short
 Key: The assignment must be submitted by next Monday.
+
 Ask27: Viết lại câu gián tiếp: "What language learning app are you using now?" Mary asked Mia.
 Type: short
 Key: Mary asked Mia what language learning app she was using then.
-Ask28: [Few people now question the reality of global warming and its effects on the world's
-climate. (1) _______ scientists put the blame for recent natural disasters on the increase in the
-world's (2) _______ and are convinced that, more than ever before, the Earth is at risk from the
-forces of the wind, rain and sun. According to them, global warming is making extreme weather
-events, such as hurricanes and droughts, even causing sea levels all around the world to rise.
-Environmental groups are putting pressure on governments to (3) _______ action to reduce the
-amount of carbon dioxide (4) _______ is given off by factories and power plants, thus attacking
-the problem at its source. They are in favor of more money being spent on research into solar,
-wind and wave energy devices, which could then replace existing power station. Some
-scientists; (5) _______, believe that even if we stopped releasing carbon dioxide and other
-gases into the atmosphere tomorrow, we would have to wait several hundred years to notice the
-results. Global warming, it seems, is to stay.] Điền từ vào chỗ trống (1): (1) ________ scientists put the blame for recent natural disasters...
+
+Ask28: [Few people now question the reality of global warming and its effects on the world's climate. (1) _______ scientists put the blame for recent natural disasters on the increase in the world's (2) _______ and are convinced that, more than ever before, the Earth is at risk from the forces of the wind, rain and sun. According to them, global warming is making extreme weather events, such as hurricanes and droughts, even causing sea levels all around the world to rise. Environmental groups are putting pressure on governments to (3) _______ action to reduce the amount of carbon dioxide (4) _______ is given off by factories and power plants, thus attacking the problem at its source. They are in favor of more money being spent on research into solar, wind and wave energy devices, which could then replace existing power station. Some scientists; (5) _______, believe that even if we stopped releasing carbon dioxide and other gases into the atmosphere tomorrow, we would have to wait several hundred years to notice the results. Global warming, it seems, is to stay.] Điền từ vào chỗ trống (1): (1) ________ scientists put the blame for recent natural disasters...
 answer1: each
 answer2: others
 answer3: every
 answer4: many
 Key: 4
+
 Ask29: [Bài đọc 1] Điền từ vào chỗ trống (2): ...increase in the world's (2) ________ and are convinced that...
 answer1: heat
 answer2: temperatures
 answer3: degree
 answer4: climate
 Key: 2
+
 Ask30: [Bài đọc 1] Điền từ vào chỗ trống (3): Environmental groups are putting pressure on governments to (3) ________ action to reduce...
 answer1: give
 answer2: put
 answer3: take
 answer4: have
 Key: 3
+
 Ask31: [Bài đọc 1] Điền từ vào chỗ trống (4): ...the amount of carbon dioxide (4) ________ is given off by factories...
 answer1: which
 answer2: whose
 answer3: when
 answer4: who
 Key: 1
+
 Ask32: [Bài đọc 1] Điền từ vào chỗ trống (5): Some scientists; (5) ________ believe that even if we stopped releasing...
 answer1: although
 answer2: but
 answer3: because
 answer4: however
 Key: 4
-Ask33: [Climate change is one of the most intuitive changes in global warming. As a result of
-a large amount of carbon dioxide emissions, there is a sharp rise in high-temperature weather,
-which has an irreversible impact on our environment and ecology. Scientists say, “Changing
-weather patterns linked to rising global temperatures have resulted in a dearth of wind across
-northern China, according to several recent studies, exacerbating a wave of severe pollution
-that has been blamed for millions of premature deaths”. However, when I returned home last
-Christmas, there was no snow on the street, instead, it was a warm winter with sunshine. The
-continuation of global warming may not only bring about changes in climate. The world may
-undergo more unpredictable changes due to global warming in the future. Global climate
-change has seriously affected the living environment of animals, the change of climate, the
-quality of human life, and the threat to human security. Global warming has become a very
-difficult trend to reverse. It and rising temperatures have caused very serious consequences for
-human beings, brought great impact on the Earth’s organisms and seriously affected people’s
-lives, but people didn’t realize the seriousness of the problem. It is urgent to protect the
-environment and people should take active measures to deal with it] What could be the best title for the passage?
+
+Ask33: [Climate change is one of the most intuitive changes in global warming. As a result of a large amount of carbon dioxide emissions, there is a sharp rise in high-temperature weather, which has an irreversible impact on our environment and ecology. Scientists say, “Changing weather patterns linked to rising global temperatures have resulted in a dearth of wind across northern China, according to several recent studies, exacerbating a wave of severe pollution that has been blamed for millions of premature deaths”. However, when I returned home last Christmas, there was no snow on the street, instead, it was a warm winter with sunshine. The continuation of global warming may not only bring about changes in climate. The world may undergo more unpredictable changes due to global warming in the future. Global climate change has seriously affected the living environment of animals, the change of climate, the quality of human life, and the threat to human security. Global warming has become a very difficult trend to reverse. It and rising temperatures have caused very serious consequences for human beings, brought great impact on the Earth’s organisms and seriously affected people’s lives, but people didn’t realize the seriousness of the problem. It is urgent to protect the environment and people should take active measures to deal with it.] What could be the best title for the passage?
 answer1: The Protection of Ozone Layer to Earth
 answer2: Climate Change and Global Warming
 answer3: The History of Ozone Development
 answer4: The Destruction if Animals' Habitat
 Key: 2
+
 Ask34: [Bài đọc 2] The word "which" in paragraph 1 refers to ________.
 answer1: a wave of severe pollution
 answer2: a sharp rise in high-temperature weather
 answer3: a large amount of carbon dioxide emissions
 answer4: a great impact on the earth's organism
 Key: 2
+
 Ask35: [Bài đọc 2] The word "reverse" in paragraph 2 is closest in meaning to ________.
 answer1: turn right
 answer2: reduce more
 answer3: change to opposite
 answer4: increasing sharply
 Key: 3
+
 Ask36: [Bài đọc 2] According to the passage, all of the following are the impacts of climate change and global warming EXCEPT ________.
 answer1: exacerbating a wave of severe pollution
 answer2: improving the quality of human life
 answer3: threatening human security
 answer4: bringing about serious changes in climate
 Key: 2
+
 Ask37: [Bài đọc 2] The word "protect" in the last paragraph opposite in meaning to ________.
 answer1: look after
 answer2: make sure
