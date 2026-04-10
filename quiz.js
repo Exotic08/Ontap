@@ -1,5 +1,5 @@
 /**
- * EdTech Quiz - Quản lý Avatar bằng Biến, Upload nén ảnh, Bộ đếm, Gacha, Giftcode
+ * EdTech Quiz - Tích hợp Chế độ Luyện Tập Từng Câu (Step-by-step), Quản lý Avatar, Upload, Đếm lượt, Gacha
  */
 
 // ==========================================
@@ -14,11 +14,6 @@ const QUIZ_LIST = [
 
 const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
 
-
-// ==========================================
-// QUẢN LÝ LINK AVATAR TẬP TRUNG (SỬA Ở ĐÂY)
-// ==========================================
-// Bạn có thể thay link "https://..." bằng link ảnh Imgur, Facebook, Drive của bạn tùy thích
 const AVATAR_LINKS = {
     default: "https://i.postimg.cc/hj8DCTpQ/01af2884a28422c9b0b74d770b7d49e0.jpg",
     aneka: "https://i.postimg.cc/nrHHNrPc/1aa831227f9ddd8af411d903c205e3bb.jpg",
@@ -36,7 +31,6 @@ const AVATAR_LINKS = {
     cat: "https://i.postimg.cc/CKX7vfdQ/866679d7609c49c687c34b2bf0f22166.jpg"
 };
 
-// Mảng hiển thị ở Sảnh Tân Thủ
 const AVATAR_SEEDS_ARRAY = [
     AVATAR_LINKS.default, AVATAR_LINKS.aneka, AVATAR_LINKS.nala, AVATAR_LINKS.oliver, 
     AVATAR_LINKS.jack, AVATAR_LINKS.mimi, AVATAR_LINKS.loki, AVATAR_LINKS.garfield
@@ -59,13 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Khởi tạo state
     let userName = localStorage.getItem('quiz_username') || "";
-    let userAvatar = AVATAR_LINKS.default;
-    let customAvatar = null; 
-    let userBorder = "border-none";
-    let userKeys = 0;
-    let unlockedAvatars = [...AVATAR_SEEDS_ARRAY];
-    let unlockedBorders = ['border-none'];
+    let userAvatar = AVATAR_LINKS.default; let customAvatar = null; 
+    let userBorder = "border-none"; let userKeys = 0;
+    let unlockedAvatars = [...AVATAR_SEEDS_ARRAY]; let unlockedBorders = ['border-none'];
     let redeemedCodes = [];
+
+    // STATE CHẾ ĐỘ LUYỆN TẬP
+    let isPracticeMode = false;
 
     const displayUserAvatar = document.getElementById('display-user-avatar');
     const displayUserName = document.getElementById('display-user-name');
@@ -74,17 +68,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById('timer-display');
     const timerSpan = timerDisplay.querySelector('span');
 
+    // Nút chuyển đổi chế độ Sảnh Chờ
+    const modeToggleBtn = document.getElementById('mode-toggle-btn');
+    modeToggleBtn.addEventListener('click', () => {
+        isPracticeMode = !isPracticeMode;
+        if (isPracticeMode) {
+            modeToggleBtn.innerHTML = '🔄 Chế độ: <b>Luyện tập (Từng câu)</b>';
+            modeToggleBtn.style.color = '#8b5cf6'; modeToggleBtn.style.borderColor = '#8b5cf6';
+        } else {
+            modeToggleBtn.innerHTML = '🔄 Chế độ: <b>Thi thử (Toàn bộ)</b>';
+            modeToggleBtn.style.color = 'var(--primary-color)'; modeToggleBtn.style.borderColor = 'var(--primary-color)';
+        }
+    });
+
     initApp();
 
     async function initApp() {
         if (userName) {
-            await syncDataFromFirebase();
-            updateUIHeader();
-            initLobby();
+            await syncDataFromFirebase(); updateUIHeader(); initLobby();
         } else {
-            renderAvatarSelector(); 
-            showSection('login');
-            mainHeader.classList.add('hidden');
+            renderAvatarSelector(); showSection('login'); mainHeader.classList.add('hidden');
         }
     }
 
@@ -93,41 +96,24 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`);
             const data = await res.json();
             if (data) {
-                userAvatar = fixBrokenAvatarURL(data.avatar || userAvatar);
-                customAvatar = data.customAvatar || null;
-                userBorder = data.border || userBorder;
-                userKeys = data.keys || 0;
-                
+                userAvatar = fixBrokenAvatarURL(data.avatar || userAvatar); customAvatar = data.customAvatar || null;
+                userBorder = data.border || userBorder; userKeys = data.keys || 0;
                 let loadedAvatars = data.unlockedAvatars || unlockedAvatars;
                 unlockedAvatars = loadedAvatars.map(url => fixBrokenAvatarURL(url));
-                
                 unlockedBorders = data.unlockedBorders || unlockedBorders;
                 redeemedCodes = data.redeemedCodes || [];
-            } else {
-                await pushDataToFirebase();
-            }
+            } else { await pushDataToFirebase(); }
         } catch (e) { console.error("Lỗi đồng bộ:", e); }
     }
 
-    // TỰ ĐỘNG CHUYỂN LINK CŨ SANG LINK TRONG BIẾN NẾU BẠN SỬA BIẾN
     function fixBrokenAvatarURL(url) {
-        if(!url) return AVATAR_LINKS.default;
-        if(url.startsWith('data:image')) return url; // Ảnh tự up bỏ qua
-        
-        // Quét url cũ, nếu chứa từ khóa thì lập tức gắn bằng biến Link mới nhất
-        if (url.includes('Dragon')) return AVATAR_LINKS.dragon;
-        if (url.includes('King')) return AVATAR_LINKS.king;
-        if (url.includes('Ninja')) return AVATAR_LINKS.ninja;
-        if (url.includes('Cat')) return AVATAR_LINKS.cat;
-        if (url.includes('Felix')) return AVATAR_LINKS.default;
-        if (url.includes('Aneka')) return AVATAR_LINKS.aneka;
-        if (url.includes('Nala')) return AVATAR_LINKS.nala;
-        if (url.includes('Oliver')) return AVATAR_LINKS.oliver;
-        if (url.includes('Jack')) return AVATAR_LINKS.jack;
-        if (url.includes('Mimi')) return AVATAR_LINKS.mimi;
-        if (url.includes('Loki')) return AVATAR_LINKS.loki;
-        if (url.includes('Garfield')) return AVATAR_LINKS.garfield;
-
+        if(!url) return AVATAR_LINKS.default; if(url.startsWith('data:image')) return url; 
+        if (url.includes('Dragon')) return AVATAR_LINKS.dragon; if (url.includes('King')) return AVATAR_LINKS.king;
+        if (url.includes('Ninja')) return AVATAR_LINKS.ninja; if (url.includes('Cat')) return AVATAR_LINKS.cat;
+        if (url.includes('Felix')) return AVATAR_LINKS.default; if (url.includes('Aneka')) return AVATAR_LINKS.aneka;
+        if (url.includes('Nala')) return AVATAR_LINKS.nala; if (url.includes('Oliver')) return AVATAR_LINKS.oliver;
+        if (url.includes('Jack')) return AVATAR_LINKS.jack; if (url.includes('Mimi')) return AVATAR_LINKS.mimi;
+        if (url.includes('Loki')) return AVATAR_LINKS.loki; if (url.includes('Garfield')) return AVATAR_LINKS.garfield;
         return url.replace('7.x/bottts', '9.x/adventurer').replace('7.x/avataaars', '9.x/adventurer').replace('7.x/fun-emoji', '9.x/adventurer').replace('7.x', '9.x');
     }
 
@@ -138,11 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
             keys: userKeys, unlockedAvatars: unlockedAvatars, unlockedBorders: unlockedBorders,
             redeemedCodes: redeemedCodes, lastLogin: Date.now()
         };
-        try {
-            await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`, {
-                method: 'PUT', body: JSON.stringify(userData)
-            });
-        } catch (e) { console.error("Lỗi đẩy dữ liệu:", e); }
+        try { await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`, { method: 'PUT', body: JSON.stringify(userData) }); } catch (e) { console.error("Lỗi đẩy dữ liệu:", e); }
     }
 
     function updateUIHeader() {
@@ -158,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (userAvatar === customAvatar) img.classList.add('selected');
             img.onclick = () => { selectAvatarDOM(img, customAvatar); }; selector.appendChild(img);
         }
-
         AVATAR_SEEDS_ARRAY.forEach((url, index) => {
             const img = document.createElement('img'); img.src = url; img.className = 'avatar-option';
             if (!customAvatar && index === 0 && !userAvatar) userAvatar = url; 
@@ -174,45 +155,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- UPLOAD VÀ CẮT ẢNH ---
     document.getElementById('avatar-upload-input').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+        const file = e.target.files[0]; if (!file) return;
         if (file.size > 2 * 1024 * 1024) { alert("Ảnh quá nặng! Vui lòng chọn ảnh dưới 2MB."); return; }
-        
         const reader = new FileReader();
         reader.onload = function(event) {
-            document.getElementById('crop-image').src = event.target.result;
-            closeModals(); 
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('crop-modal').classList.remove('hidden');
-            
-            if(cropper) cropper.destroy();
-            cropper = new Cropper(document.getElementById('crop-image'), {
-                aspectRatio: 1, viewMode: 1, autoCropArea: 1
-            });
-        };
-        reader.readAsDataURL(file);
-        e.target.value = ''; 
+            document.getElementById('crop-image').src = event.target.result; closeModals(); 
+            document.getElementById('modal-overlay').classList.remove('hidden'); document.getElementById('crop-modal').classList.remove('hidden');
+            if(cropper) cropper.destroy(); cropper = new Cropper(document.getElementById('crop-image'), { aspectRatio: 1, viewMode: 1, autoCropArea: 1 });
+        }; reader.readAsDataURL(file); e.target.value = ''; 
     });
 
     document.getElementById('apply-crop-btn').addEventListener('click', async () => {
-        if (!cropper) return;
-        const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 });
-        const base64Avatar = canvas.toDataURL('image/jpeg', 0.7);
-        customAvatar = base64Avatar; userAvatar = base64Avatar; 
-
-        closeModals();
-        if(cropper) { cropper.destroy(); cropper = null; }
-
-        if (userName) {
-            await pushDataToFirebase(); updateUIHeader(); alert("Đã cập nhật ảnh đại diện thành công!");
-        } else {
-            renderAvatarSelector(); 
-        }
-    });
-
-    document.getElementById('cancel-crop-btn').addEventListener('click', () => {
+        if (!cropper) return; const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 });
+        const base64Avatar = canvas.toDataURL('image/jpeg', 0.7); customAvatar = base64Avatar; userAvatar = base64Avatar; 
         closeModals(); if(cropper) { cropper.destroy(); cropper = null; }
+        if (userName) { await pushDataToFirebase(); updateUIHeader(); alert("Đã cập nhật ảnh đại diện thành công!"); } else { renderAvatarSelector(); }
     });
+
+    document.getElementById('cancel-crop-btn').addEventListener('click', () => { closeModals(); if(cropper) { cropper.destroy(); cropper = null; } });
 
     document.getElementById('start-app-btn').addEventListener('click', async () => {
         const inputName = document.getElementById('username-input').value.trim();
@@ -222,65 +182,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById('change-name-btn').addEventListener('click', () => {
-        userName = ""; localStorage.removeItem('quiz_username');
-        document.getElementById('username-input').value = ""; initApp();
+        userName = ""; localStorage.removeItem('quiz_username'); document.getElementById('username-input').value = ""; initApp();
     });
 
     async function initLobby() {
         const quizListContainer = document.getElementById('quiz-list-container'); quizListContainer.innerHTML = '';
-        try {
-            const res = await fetch(`${FIREBASE_BASE_URL}/quiz_stats.json`);
-            quizStats = (await res.json()) || {};
-        } catch(e) { console.error("Lỗi lấy stats", e); }
-
+        try { const res = await fetch(`${FIREBASE_BASE_URL}/quiz_stats.json`); quizStats = (await res.json()) || {}; } catch(e) { console.error("Lỗi lấy stats", e); }
         QUIZ_LIST.forEach(quiz => {
             const plays = quizStats[quiz.id] ? (quizStats[quiz.id].plays || 0) : 0;
             const btn = document.createElement('div'); btn.className = 'quiz-card-btn';
-            btn.innerHTML = `
-                <span>${quiz.title}</span>
-                <small>File: ${quiz.file}</small>
-                <div class="play-count-badge">📝 Đã thi: ${plays} lượt</div>
+            btn.innerHTML = `<span>${quiz.title}</span><small>File: ${quiz.file}</small><div class="play-count-badge">📝 Đã thi: ${plays} lượt</div>
                 <button class="btn-lb-small" onclick="event.stopPropagation(); loadLeaderboard('${quiz.id}', '${quiz.title}')">🏆 Xem BXH</button>`;
             btn.onclick = () => selectQuiz(quiz); quizListContainer.appendChild(btn);
         });
-        showSection('lobby');
-        document.getElementById('app-main-title').textContent = "Sảnh Chờ";
+        showSection('lobby'); document.getElementById('app-main-title').textContent = "Sảnh Chờ";
         document.getElementById('home-btn').classList.add('hidden'); timerDisplay.classList.add('hidden'); 
+        modeToggleBtn.classList.remove('hidden'); // Hiện nút chế độ ở Sảnh
     }
 
     function showSection(sectionId) {
-        ['login', 'lobby', 'loading', 'quiz', 'result', 'leaderboard'].forEach(id => {
-            const el = document.getElementById(`${id}-section`); if (el) el.classList.add('hidden');
-        });
+        ['login', 'lobby', 'loading', 'quiz', 'result', 'leaderboard'].forEach(id => { const el = document.getElementById(`${id}-section`); if (el) el.classList.add('hidden'); });
         const target = document.getElementById(`${sectionId}-section`); if (target) target.classList.remove('hidden');
     }
 
     // --- HỆ THỐNG GIFTCODE ---
     document.getElementById('redeem-btn').addEventListener('click', async () => {
-        const codeInput = document.getElementById('giftcode-input');
-        const statusText = document.getElementById('giftcode-status');
-        const code = codeInput.value.trim().toUpperCase(); 
-        const btn = document.getElementById('redeem-btn');
-
+        const codeInput = document.getElementById('giftcode-input'); const statusText = document.getElementById('giftcode-status');
+        const code = codeInput.value.trim().toUpperCase(); const btn = document.getElementById('redeem-btn');
         if (!code) { statusText.textContent = '❌ Bạn chưa nhập mã code!'; statusText.style.color = '#ef4444'; return; }
         if (redeemedCodes.includes(code)) { statusText.textContent = '❌ Mã này bạn đã sử dụng rồi!'; statusText.style.color = '#ef4444'; return; }
-
         btn.disabled = true; btn.textContent = 'Đang kiểm tra...'; statusText.textContent = '';
-
         try {
-            const res = await fetch(`${FIREBASE_BASE_URL}/codes/${code}.json`);
-            const data = await res.json();
-
-            if (!data) {
-                statusText.textContent = '❌ Mã code không tồn tại hoặc đã hết hạn!'; statusText.style.color = '#ef4444';
-            } else {
+            const res = await fetch(`${FIREBASE_BASE_URL}/codes/${code}.json`); const data = await res.json();
+            if (!data) { statusText.textContent = '❌ Mã code không tồn tại hoặc đã hết hạn!'; statusText.style.color = '#ef4444'; } else {
                 const reward = parseInt(data.rewardkey) || 0;
                 if (reward > 0) {
-                    userKeys += reward;
-                    redeemedCodes.push(code); 
-                    await pushDataToFirebase(); updateUIHeader();
-                    statusText.textContent = `🎉 Đổi thành công! Bạn nhận được ${reward} 🔑`;
-                    statusText.style.color = '#10b981'; codeInput.value = '';
+                    userKeys += reward; redeemedCodes.push(code); await pushDataToFirebase(); updateUIHeader();
+                    statusText.textContent = `🎉 Đổi thành công! Bạn nhận được ${reward} 🔑`; statusText.style.color = '#10b981'; codeInput.value = '';
                 } else { statusText.textContent = '❌ Mã code bị lỗi phần thưởng!'; statusText.style.color = '#ef4444'; }
             }
         } catch (error) { statusText.textContent = '❌ Lỗi kết nối mạng!'; statusText.style.color = '#ef4444'; }
@@ -290,103 +228,48 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- XỬ LÝ VÒNG QUAY ---
     let isSpinning = false;
     document.getElementById('spin-btn').addEventListener('click', async () => {
-        if (isSpinning) return;
-        if (userKeys <= 0) return alert("Bạn không đủ chìa khóa! Hãy đạt 100% điểm bài thi hoặc nhập Giftcode để nhận thêm.");
-        
+        if (isSpinning) return; if (userKeys <= 0) return alert("Bạn không đủ chìa khóa! Hãy đạt 100% điểm bài thi hoặc nhập Giftcode để nhận thêm.");
         isSpinning = true; userKeys--; updateUIHeader();
-        const spinBtn = document.getElementById('spin-btn');
-        spinBtn.disabled = true; spinBtn.textContent = "Đang quay...";
-        const wheel = document.getElementById('gacha-wheel'); wheel.classList.add('spinning');
-        document.getElementById('gacha-status').textContent = "Đang triệu hồi nhân phẩm...";
-        
+        const spinBtn = document.getElementById('spin-btn'); spinBtn.disabled = true; spinBtn.textContent = "Đang quay...";
+        const wheel = document.getElementById('gacha-wheel'); wheel.classList.add('spinning'); document.getElementById('gacha-status').textContent = "Đang triệu hồi nhân phẩm...";
         let rand = Math.random() * 100; let sum = 0; let wonItem = GACHA_POOL[GACHA_POOL.length - 1];
         for (let item of GACHA_POOL) { sum += item.chance; if (rand <= sum) { wonItem = item; break; } }
 
         setTimeout(async () => {
-            wheel.classList.remove('spinning');
-            spinBtn.disabled = false; spinBtn.textContent = "Quay Ngay (1 🔑)";
-            document.getElementById('gacha-status').textContent = ""; isSpinning = false;
-            
+            wheel.classList.remove('spinning'); spinBtn.disabled = false; spinBtn.textContent = "Quay Ngay (1 🔑)"; document.getElementById('gacha-status').textContent = ""; isSpinning = false;
             let isDuplicate = false;
-            if (wonItem.type === 'avatar') {
-                if (!unlockedAvatars.includes(wonItem.url)) unlockedAvatars.push(wonItem.url); else isDuplicate = true;
-            } else {
-                if (!unlockedBorders.includes(wonItem.class)) unlockedBorders.push(wonItem.class); else isDuplicate = true;
-            }
+            if (wonItem.type === 'avatar') { if (!unlockedAvatars.includes(wonItem.url)) unlockedAvatars.push(wonItem.url); else isDuplicate = true; } 
+            else { if (!unlockedBorders.includes(wonItem.class)) unlockedBorders.push(wonItem.class); else isDuplicate = true; }
             
-            if (isDuplicate) {
-                document.getElementById('gacha-result-title').textContent = "Trùng lặp! ♻️";
-                document.getElementById('gacha-item-desc').innerHTML = `Bạn nhận được <b>${wonItem.name}</b>. Tuy nhiên bạn đã sở hữu vật phẩm này rồi, <b>rất tiếc hệ thống sẽ không hoàn lại chìa khóa</b>.`;
-                document.getElementById('equip-gacha-btn').classList.add('hidden');
-            } else {
-                document.getElementById('gacha-result-title').textContent = "🎉 Chúc Mừng! 🎉";
-                document.getElementById('gacha-item-desc').textContent = wonItem.desc;
-                document.getElementById('equip-gacha-btn').classList.remove('hidden');
-            }
+            if (isDuplicate) { document.getElementById('gacha-result-title').textContent = "Trùng lặp! ♻️"; document.getElementById('gacha-item-desc').innerHTML = `Bạn nhận được <b>${wonItem.name}</b>. Tuy nhiên bạn đã sở hữu vật phẩm này rồi, <b>rất tiếc hệ thống sẽ không hoàn lại chìa khóa</b>.`; document.getElementById('equip-gacha-btn').classList.add('hidden'); } 
+            else { document.getElementById('gacha-result-title').textContent = "🎉 Chúc Mừng! 🎉"; document.getElementById('gacha-item-desc').textContent = wonItem.desc; document.getElementById('equip-gacha-btn').classList.remove('hidden'); }
             
-            await pushDataToFirebase(); updateUIHeader();
-            document.getElementById('gacha-item-name').textContent = wonItem.name;
+            await pushDataToFirebase(); updateUIHeader(); document.getElementById('gacha-item-name').textContent = wonItem.name;
             const displayBox = document.getElementById('gacha-item-display');
             displayBox.innerHTML = wonItem.type === 'avatar' ? `<img src="${wonItem.url}" style="width:100%; border-radius:50%;">` : `<div class="avatar-with-border ${wonItem.class}" style="width:100%;height:100%;background:#f1f5f9;border-radius:50%"></div>`;
-            
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('gacha-result-modal').classList.remove('hidden');
-            
-            document.getElementById('equip-gacha-btn').onclick = async () => {
-                if (wonItem.type === 'avatar') userAvatar = wonItem.url; else userBorder = wonItem.class;
-                await pushDataToFirebase(); updateUIHeader(); closeModals();
-            };
+            document.getElementById('modal-overlay').classList.remove('hidden'); document.getElementById('gacha-result-modal').classList.remove('hidden');
+            document.getElementById('equip-gacha-btn').onclick = async () => { if (wonItem.type === 'avatar') userAvatar = wonItem.url; else userBorder = wonItem.class; await pushDataToFirebase(); updateUIHeader(); closeModals(); };
         }, 1500);
     });
 
-    document.getElementById('view-rates-btn').addEventListener('click', () => {
-        document.getElementById('modal-overlay').classList.remove('hidden');
-        document.getElementById('rates-modal').classList.remove('hidden');
-    });
+    document.getElementById('view-rates-btn').addEventListener('click', () => { document.getElementById('modal-overlay').classList.remove('hidden'); document.getElementById('rates-modal').classList.remove('hidden'); });
 
     document.getElementById('inventory-btn').addEventListener('click', () => {
-        const avaGrid = document.getElementById('inventory-avatars'); const borderGrid = document.getElementById('inventory-borders');
-        avaGrid.innerHTML = ''; borderGrid.innerHTML = '';
-
-        if(customAvatar) {
-            const cImg = document.createElement('img'); cImg.src = customAvatar; cImg.className = `inv-item avatar-with-border border-none ${userAvatar === customAvatar ? 'equipped' : ''}`;
-            cImg.onclick = async () => { userAvatar = customAvatar; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; avaGrid.appendChild(cImg);
-        }
-
-        unlockedAvatars.forEach(url => {
-            const img = document.createElement('img'); img.src = url; img.className = `inv-item avatar-with-border border-none ${userAvatar === url ? 'equipped' : ''}`;
-            img.onclick = async () => { userAvatar = url; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; avaGrid.appendChild(img);
-        });
-
-        const noBorder = document.createElement('div'); noBorder.className = `inv-item avatar-with-border border-none ${userBorder === 'border-none' ? 'equipped' : ''}`;
-        noBorder.style.display = 'flex'; noBorder.style.alignItems = 'center'; noBorder.style.justifyContent = 'center'; noBorder.style.fontSize = '12px'; noBorder.textContent = 'Bỏ viền';
-        noBorder.onclick = async () => { userBorder = 'border-none'; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; borderGrid.appendChild(noBorder);
-
-        unlockedBorders.forEach(bClass => {
-            if(bClass === 'border-none') return;
-            const div = document.createElement('div'); div.className = `inv-item avatar-with-border ${bClass} ${userBorder === bClass ? 'equipped' : ''}`; div.style.background = "#eee";
-            div.onclick = async () => { userBorder = bClass; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; borderGrid.appendChild(div);
-        });
-
-        document.getElementById('modal-overlay').classList.remove('hidden');
-        document.getElementById('inventory-modal').classList.remove('hidden');
+        const avaGrid = document.getElementById('inventory-avatars'); const borderGrid = document.getElementById('inventory-borders'); avaGrid.innerHTML = ''; borderGrid.innerHTML = '';
+        if(customAvatar) { const cImg = document.createElement('img'); cImg.src = customAvatar; cImg.className = `inv-item avatar-with-border border-none ${userAvatar === customAvatar ? 'equipped' : ''}`; cImg.onclick = async () => { userAvatar = customAvatar; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; avaGrid.appendChild(cImg); }
+        unlockedAvatars.forEach(url => { const img = document.createElement('img'); img.src = url; img.className = `inv-item avatar-with-border border-none ${userAvatar === url ? 'equipped' : ''}`; img.onclick = async () => { userAvatar = url; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; avaGrid.appendChild(img); });
+        const noBorder = document.createElement('div'); noBorder.className = `inv-item avatar-with-border border-none ${userBorder === 'border-none' ? 'equipped' : ''}`; noBorder.style.display = 'flex'; noBorder.style.alignItems = 'center'; noBorder.style.justifyContent = 'center'; noBorder.style.fontSize = '12px'; noBorder.textContent = 'Bỏ viền'; noBorder.onclick = async () => { userBorder = 'border-none'; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; borderGrid.appendChild(noBorder);
+        unlockedBorders.forEach(bClass => { if(bClass === 'border-none') return; const div = document.createElement('div'); div.className = `inv-item avatar-with-border ${bClass} ${userBorder === bClass ? 'equipped' : ''}`; div.style.background = "#eee"; div.onclick = async () => { userBorder = bClass; await pushDataToFirebase(); updateUIHeader(); closeModals(); }; borderGrid.appendChild(div); });
+        document.getElementById('modal-overlay').classList.remove('hidden'); document.getElementById('inventory-modal').classList.remove('hidden');
     });
 
-    function closeModals() {
-        document.getElementById('modal-overlay').classList.add('hidden');
-        document.getElementById('inventory-modal').classList.add('hidden');
-        document.getElementById('gacha-result-modal').classList.add('hidden');
-        document.getElementById('rates-modal').classList.add('hidden');
-        document.getElementById('crop-modal').classList.add('hidden');
-    }
-    document.getElementById('close-inventory-btn').onclick = closeModals;
-    document.getElementById('close-gacha-btn').onclick = closeModals;
-    document.getElementById('close-rates-btn').onclick = closeModals;
+    function closeModals() { document.querySelectorAll('.modal-overlay, .modal-content').forEach(el => el.classList.add('hidden')); }
+    document.getElementById('close-inventory-btn').onclick = closeModals; document.getElementById('close-gacha-btn').onclick = closeModals; document.getElementById('close-rates-btn').onclick = closeModals;
 
     // --- TẢI BÀI THI & CHẤM ĐIỂM ---
     async function selectQuiz(quizObj) {
         currentQuiz = quizObj; document.getElementById('app-main-title').textContent = quizObj.title;
-        document.getElementById('home-btn').classList.remove('hidden'); timerDisplay.classList.remove('hidden'); showSection('loading');
+        document.getElementById('home-btn').classList.remove('hidden'); timerDisplay.classList.remove('hidden'); modeToggleBtn.classList.add('hidden'); showSection('loading');
         try {
             const response = await fetch(currentQuiz.file + `?t=${new Date().getTime()}`);
             if (!response.ok) throw new Error(`Không tìm thấy file ${currentQuiz.file}`);
@@ -415,24 +298,128 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function startQuiz() {
         const questionsContainer = document.getElementById('questions-container'); questionsContainer.innerHTML = '';
+        const bottomNav = document.getElementById('bottom-nav-container'); bottomNav.innerHTML = '';
+
         questions.forEach((q, qIndex) => {
             const block = document.createElement('div'); block.className = 'question-block';
+            block.id = `q-block-${qIndex}`; // ID để điều khiển chuyển câu
+
             const title = document.createElement('div'); title.className = 'question-text'; title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
             if (q.type === 'multi') title.textContent += ' (Chọn nhiều)'; if (q.type === 'essay') title.textContent += ' (Tự luận)'; block.appendChild(title);
             if (q.images.length > 0) { const imgCont = document.createElement('div'); imgCont.className = 'images-container'; q.images.forEach(src => { const img = document.createElement('img'); img.src = src; img.className = 'question-image'; img.onerror = () => img.style.display = 'none'; imgCont.appendChild(img); }); block.appendChild(imgCont); }
+            
             const optCont = document.createElement('div'); optCont.className = 'options-group';
             if (q.type === 'essay') { optCont.innerHTML = `<textarea name="q${qIndex}" class="essay-input" placeholder="Nhập câu trả lời..."></textarea>`; } 
             else if (q.type === 'short') { optCont.innerHTML = `<input type="text" name="q${qIndex}" class="short-input" placeholder="Nhập đáp án..." autocomplete="off">`; } 
             else { q.options.forEach((opt, oIdx) => { optCont.innerHTML += `<label class="option-label"><input type="${q.type==='multi'?'checkbox':'radio'}" name="q${qIndex}" value="${oIdx+1}"> ${opt}</label>`; }); }
-            block.appendChild(optCont); questionsContainer.appendChild(block);
+            block.appendChild(optCont); 
+
+            // NẾU LÀ CHẾ ĐỘ LUYỆN TẬP -> THÊM NÚT TRẢ LỜI NGAY DƯỚI CÂU
+            if (isPracticeMode) {
+                const actionsDiv = document.createElement('div'); actionsDiv.className = 'practice-actions';
+                
+                const checkBtn = document.createElement('button'); checkBtn.type = 'button'; checkBtn.className = 'btn btn-check-ans'; checkBtn.id = `btn-check-${qIndex}`; checkBtn.textContent = 'Trả lời & Kiểm tra';
+                checkBtn.onclick = () => checkSingleQuestion(qIndex);
+                
+                const nextBtn = document.createElement('button'); nextBtn.type = 'button'; nextBtn.className = 'btn btn-next-q hidden'; nextBtn.id = `btn-next-${qIndex}`; nextBtn.innerHTML = 'Câu tiếp theo ➡️';
+                nextBtn.onclick = () => goToStep(qIndex + 1);
+
+                actionsDiv.appendChild(checkBtn); actionsDiv.appendChild(nextBtn); block.appendChild(actionsDiv);
+
+                // Tạo bóng bóng số thứ tự ở thanh Menu
+                const bubble = document.createElement('div'); bubble.className = 'nav-bubble'; bubble.id = `nav-bubble-${qIndex}`; bubble.textContent = qIndex + 1;
+                bubble.onclick = () => goToStep(qIndex); bottomNav.appendChild(bubble);
+            }
+
+            questionsContainer.appendChild(block);
         });
+
+        if (isPracticeMode) {
+            document.getElementById('bottom-nav-wrapper').classList.remove('hidden');
+            goToStep(0); // Mặc định hiển thị câu 1
+        } else {
+            document.getElementById('bottom-nav-wrapper').classList.add('hidden');
+        }
+
         showSection('quiz'); document.getElementById('quiz-form').reset(); startTime = Date.now(); timerDisplay.classList.remove('hidden'); clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000); updateTimer();
+    }
+
+    // --- LOGIC LUYỆN TẬP TỪNG CÂU ---
+    window.goToStep = function(index) {
+        if (index >= questions.length) { alert("Đã hết câu hỏi! Hãy bấm nút Nộp bài bên dưới để lưu kết quả và nhận quà."); return; }
+        
+        // Ẩn tất cả, chỉ hiện câu đang chọn
+        document.querySelectorAll('.question-block').forEach((el, i) => { if (i === index) el.classList.remove('hidden-step'); else el.classList.add('hidden-step'); });
+        
+        // Cập nhật viền cho số ở dưới Menu
+        document.querySelectorAll('.nav-bubble').forEach((el, i) => { if (i === index) el.classList.add('active'); else el.classList.remove('active'); });
+    }
+
+    function checkSingleQuestion(qIndex) {
+        const q = questions[qIndex];
+        const block = document.getElementById(`q-block-${qIndex}`);
+        const inputs = block.querySelectorAll('input, textarea');
+        
+        let isAnswered = false; let isMatch = false;
+
+        if (q.type === 'single') {
+            const checked = block.querySelector(`input[name="q${qIndex}"]:checked`);
+            if (checked) { isAnswered = true; isMatch = parseInt(checked.value) === q.key; }
+        } else if (q.type === 'multi') {
+            const checked = block.querySelectorAll(`input[name="q${qIndex}"]:checked`);
+            const arr = Array.from(checked).map(cb => parseInt(cb.value));
+            if (arr.length > 0) isAnswered = true;
+            isMatch = q.key.every((v, i) => (v===1 && arr.includes(i+1)) || (v===0 && !arr.includes(i+1)));
+            if (arr.length !== q.key.filter(v=>v===1).length) isMatch = false; 
+        } else if (q.type === 'short') {
+            const input = block.querySelector(`input[name="q${qIndex}"]`);
+            if (input && input.value.trim() !== '') { isAnswered = true; isMatch = input.value.trim().toLowerCase() === q.key.trim().toLowerCase(); }
+        } else if (q.type === 'essay') {
+            const input = block.querySelector(`textarea[name="q${qIndex}"]`);
+            if (input && input.value.trim() !== '') isAnswered = true; isMatch = true; 
+        }
+
+        if (!isAnswered) { alert("Bạn chưa chọn hoặc nhập đáp án!"); return; }
+
+        // KHÓA CỨNG: Không cho phép sửa lại sau khi check
+        inputs.forEach(el => el.disabled = true);
+        block.style.opacity = "0.9";
+
+        // Đổi giao diện nút
+        document.getElementById(`btn-check-${qIndex}`).classList.add('hidden');
+        document.getElementById(`btn-next-${qIndex}`).classList.remove('hidden');
+
+        // Hiện đánh giá tức thì
+        const feedbackDiv = document.createElement('div');
+        if (q.type === 'essay') {
+            feedbackDiv.className = 'inline-feedback feedback-essay'; feedbackDiv.innerHTML = `<b>Gợi ý đáp án:</b> ${q.key}`;
+        } else {
+            feedbackDiv.className = `inline-feedback ${isMatch ? 'feedback-correct' : 'feedback-incorrect'}`;
+            let correctText = '';
+            if (q.type === 'single') correctText = q.options[q.key - 1];
+            else if (q.type === 'multi') correctText = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x).join(', ');
+            else if (q.type === 'short') correctText = q.key;
+            feedbackDiv.innerHTML = isMatch ? '✓ Chính xác hoàn toàn!' : `✗ Chưa chính xác! Đáp án đúng là: <b>${correctText}</b>`;
+        }
+        block.appendChild(feedbackDiv);
+
+        // Đổi màu bong bóng Menu dưới cùng (Xanh / Đỏ)
+        const navItem = document.getElementById(`nav-bubble-${qIndex}`);
+        if (q.type === 'essay') navItem.classList.add('nav-essay');
+        else navItem.classList.add(isMatch ? 'nav-correct' : 'nav-incorrect');
     }
 
     function updateTimer() { const elapsed = Math.floor((Date.now() - startTime) / 1000); const m = String(Math.floor(elapsed / 60)).padStart(2, '0'); const s = String(elapsed % 60).padStart(2, '0'); timerSpan.textContent = `${m}:${s}`; }
 
+    // --- NỘP BÀI TOÀN BỘ (Dùng chung cho cả 2 chế độ) ---
     document.getElementById('quiz-form').addEventListener('submit', async (e) => {
-        e.preventDefault(); clearInterval(timerInterval);
+        e.preventDefault(); 
+        
+        // CỰC KỲ QUAN TRỌNG: Phải mở khóa lại toàn bộ các ô đã bị "disable" ở chế độ luyện tập, 
+        // nếu không FormData sẽ không lấy được đáp án của những ô đó để gửi đi chấm điểm.
+        document.getElementById('quiz-form').querySelectorAll('input, textarea').forEach(el => el.disabled = false);
+
+        clearInterval(timerInterval);
         const timeTakenMs = Date.now() - startTime; const timeStr = timerSpan.textContent;
         await evaluateAndSaveResults(timeTakenMs, timeStr);
     });
@@ -514,7 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- RENDER BXH ---
     window.loadLeaderboard = async function(quizId, quizTitle) {
-        document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng"; document.getElementById('home-btn').classList.remove('hidden'); document.getElementById('lb-title').textContent = `Môn: ${quizTitle}`;
+        document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng"; document.getElementById('home-btn').classList.remove('hidden'); document.getElementById('lb-title').textContent = `Môn: ${quizTitle}`; modeToggleBtn.classList.add('hidden');
         const lbBody = document.getElementById('lb-body'); lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Đang tải dữ liệu...</td></tr>`; showSection('leaderboard');
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/leaderboard_${quizId}.json`); const data = await res.json();
