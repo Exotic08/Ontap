@@ -16,6 +16,10 @@
                 <h1 id="app-main-title">Sảnh Chờ</h1>
             </div>
             <div class="header-controls">
+                <button id="mode-toggle-btn" class="btn-text hidden" style="color: var(--primary-color); border: 1px solid var(--primary-color); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; margin-right: 5px;">
+                    🔄 Chế độ: <b>Hỏi Từng Câu</b>
+                </button>
+
                 <span class="badge" title="Chìa khóa vòng quay">🔑 <span id="display-keys">0</span></span>
                 <div class="user-profile">
                     <img id="display-user-avatar" src="" alt="Avatar" class="header-avatar avatar-with-border border-none">
@@ -76,7 +80,20 @@
         </main>
 
         <main id="loading-section" class="section hidden"><p style="text-align: center; font-weight: 600;">Đang tải dữ liệu bài thi...</p></main>
-        <main id="quiz-section" class="section hidden"><form id="quiz-form"><div id="questions-container"></div><button type="submit" class="btn btn-primary btn-large">Nộp bài ngay</button></form></main>
+        
+        <main id="quiz-section" class="section hidden">
+            <form id="quiz-form">
+                <div id="questions-container"></div>
+                
+                <div id="bottom-nav-wrapper" class="hidden">
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+                    <h4 style="text-align: center; color: var(--text-muted); margin-bottom: 15px;">Danh sách câu hỏi</h4>
+                    <div id="bottom-nav-container" class="bottom-nav-container"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large" style="margin-top: 20px;">Nộp bài ngay</button>
+            </form>
+        </main>
         
         <main id="result-section" class="section hidden">
             <div class="result-summary">
