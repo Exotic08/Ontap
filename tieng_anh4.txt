@@ -221,7 +221,7 @@ answer1: The increase of heat
 answer2: Severe environmental disasters
 answer3: Poor economic development
 answer4: The loss of animals' habitats
-Key: 2
+Key: 4
 
 Ask37: [Bài đọc 2] The word "inundated" in paragraph 2 is closest in meaning to ________.
 answer1: flooded
