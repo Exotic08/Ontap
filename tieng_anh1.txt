@@ -136,7 +136,7 @@ Ask21: Chia từ trong ngoặc (EFFECT): American teenagers send an average of 6
 Type: short
 Key: effective
 
-Ask22: Chia từ trong ngoặc (INVEST): Our economy will develop faster if we can attract more ________.
+Ask22: Chia từ trong ngoặc (INVEST): Our economy will develop faster if we can attract more ________. Investments/Investor
 Type: short
 Key: investments
 
