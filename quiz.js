@@ -1,5 +1,6 @@
 /**
  * EdTech Quiz - Nút Cảm Ơn Auto-Clicker Đua Top, Luyện Tập Từng Câu, Gacha
+ * FIX BẢNG XẾP HẠNG (CHỐNG LỖI DỮ LIỆU RÁC VÀ PERMISSION DENIED)
  */
 
 const QUIZ_LIST = [
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // BIẾN CHO CHỨC NĂNG "CẢM ƠN"
     let userThanks = 0;
     let globalThanks = 0;
-    let pendingThanksSync = 0; // Để gửi dữ liệu gộp, tránh lỗi ngẽn mạng Firebase khi spam click
+    let pendingThanksSync = 0;
 
     // STATE CHẾ ĐỘ LUYỆN TẬP
     let isPracticeMode = false;
@@ -69,7 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById('timer-display');
     const timerSpan = timerDisplay.querySelector('span');
 
-    // Nút chuyển đổi chế độ Sảnh Chờ
     const modeToggleBtn = document.getElementById('mode-toggle-btn');
     modeToggleBtn.addEventListener('click', () => {
         isPracticeMode = !isPracticeMode;
@@ -98,18 +98,18 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`);
             const data = await res.json();
-            if (data) {
+            if (data && !data.error) {
                 userAvatar = fixBrokenAvatarURL(data.avatar || userAvatar); customAvatar = data.customAvatar || null;
                 userBorder = data.border || userBorder; userKeys = data.keys || 0;
                 let loadedAvatars = data.unlockedAvatars || unlockedAvatars;
                 unlockedAvatars = loadedAvatars.map(url => fixBrokenAvatarURL(url));
                 unlockedBorders = data.unlockedBorders || unlockedBorders;
                 redeemedCodes = data.redeemedCodes || [];
-                
-                // Lấy số lượng Cảm ơn cá nhân
                 userThanks = data.thanks || 0;
                 document.getElementById('personal-thanks-count').textContent = userThanks;
-            } else { await pushDataToFirebase(); }
+            } else if (!data) { 
+                await pushDataToFirebase(); 
+            }
         } catch (e) { console.error("Lỗi đồng bộ:", e); }
     }
 
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
             name: userName, avatar: userAvatar, customAvatar: customAvatar, border: userBorder,
             keys: userKeys, unlockedAvatars: unlockedAvatars, unlockedBorders: unlockedBorders,
             redeemedCodes: redeemedCodes, lastLogin: Date.now(),
-            thanks: userThanks // Lưu số lượt cảm ơn vào DB
+            thanks: userThanks
         };
         try { await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`, { method: 'PUT', body: JSON.stringify(userData) }); } catch (e) {}
     }
@@ -196,14 +196,12 @@ document.addEventListener("DOMContentLoaded", () => {
     async function initLobby() {
         const quizListContainer = document.getElementById('quiz-list-container'); quizListContainer.innerHTML = '';
         
-        // Lấy số lượt làm bài
         try { const res = await fetch(`${FIREBASE_BASE_URL}/quiz_stats.json`); quizStats = (await res.json()) || {}; } catch(e) {}
         
-        // Lấy tổng số Cảm ơn toàn Server
         try {
             const resGlobal = await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`);
             globalThanks = (await resGlobal.json()) || 0;
-            if (globalThanks < userThanks) globalThanks = userThanks; // Đồng bộ nếu database global bị lệch
+            if (globalThanks < userThanks) globalThanks = userThanks; 
             document.getElementById('global-thanks-count').textContent = globalThanks;
         } catch(e){}
 
@@ -224,78 +222,55 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = document.getElementById(`${sectionId}-section`); if (target) target.classList.remove('hidden');
     }
 
-    // ==========================================
-    // LOGIC CHỨC NĂNG CẢM ƠN SPAM CLICKER
-    // ==========================================
+    // --- CẢM ƠN SPAM CLICKER ---
     document.getElementById('btn-spam-thanks').addEventListener('click', (e) => {
-        userThanks++;
-        globalThanks++;
-        pendingThanksSync++; // Đưa vào hàng chờ để 3 giây mới gửi DB 1 lần
-        
-        // Cập nhật giao diện lập tức
+        userThanks++; globalThanks++; pendingThanksSync++; 
         document.getElementById('personal-thanks-count').textContent = userThanks;
         document.getElementById('global-thanks-count').textContent = globalThanks;
         
-        // Hiệu ứng tạo Trái Tim bay lên ngay tại vị trí con trỏ chuột
         const heart = document.createElement('div');
-        heart.innerHTML = '❤️ +1';
-        heart.className = 'floating-heart';
-        
-        // Lấy toạ độ chuột để tim bay ra chính xác chỗ bấm
+        heart.innerHTML = '❤️ +1'; heart.className = 'floating-heart';
         const rect = e.target.getBoundingClientRect();
         const x = e.clientX || (rect.left + rect.width / 2);
         const y = e.clientY || rect.top;
-        
-        heart.style.left = (x - 20) + 'px';
-        heart.style.top = (y - 20) + 'px';
-        
+        heart.style.left = (x - 20) + 'px'; heart.style.top = (y - 20) + 'px';
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 800); // Xoá sau khi bay xong
+        setTimeout(() => heart.remove(), 800);
     });
 
-    // Chạy ngầm 3 giây 1 lần để đẩy tổng số nhấp lên Firebase (Chống lag)
     setInterval(async () => {
         if (pendingThanksSync > 0) {
-            const syncAmount = pendingThanksSync;
-            pendingThanksSync = 0; // Đặt lại về 0 ngay lập tức
-            
+            const syncAmount = pendingThanksSync; pendingThanksSync = 0; 
             try {
-                // Cập nhật điểm của người chơi
-                await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}/thanks.json`, {
-                    method: 'PUT', body: JSON.stringify(userThanks)
-                });
-                
-                // Cập nhật tổng của Server
+                await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}/thanks.json`, { method: 'PUT', body: JSON.stringify(userThanks) });
                 const res = await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`);
                 let currentGlobal = (await res.json()) || 0;
-                
-                await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`, {
-                    method: 'PUT', body: JSON.stringify(currentGlobal + syncAmount)
-                });
-            } catch (e) {
-                // Nếu lỗi mạng, cộng lại số lần chưa gửi để lần sau gửi bù
-                pendingThanksSync += syncAmount;
-            }
+                await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`, { method: 'PUT', body: JSON.stringify(currentGlobal + syncAmount) });
+            } catch (e) { pendingThanksSync += syncAmount; }
         }
     }, 3000);
 
-    // Mở Bảng xếp hạng Cảm ơn
+    // --- MỞ BẢNG XẾP HẠNG CẢM ƠN ---
     document.getElementById('btn-thanks-lb').addEventListener('click', async () => {
         const lbBody = document.getElementById('thanks-lb-body');
-        lbBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Đang quét toàn Server...</td></tr>`;
+        lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center;\">Đang tải dữ liệu toàn Server...</td></tr>`;
         document.getElementById('modal-overlay').classList.remove('hidden');
         document.getElementById('thanks-lb-modal').classList.remove('hidden');
         
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/users.json`);
             const data = await res.json();
-            if (!data) {
-                lbBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Chưa có dữ liệu!</td></tr>`;
-                return;
+            
+            // Lọc lỗi nếu quyền đọc Database bị khoá
+            if (data && data.error) {
+                return lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center; color:red;\">Firebase chặn quyền truy cập (Permission Denied).</td></tr>`;
             }
             
-            // Chuyển object thành mảng, lọc những ai có thanks > 0 và sắp xếp
-            let usersArray = Object.values(data).filter(u => u.thanks && u.thanks > 0);
+            if (!data) {
+                return lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center;\">Chưa có ai bấm cảm ơn!</td></tr>`;
+            }
+            
+            let usersArray = Object.values(data).filter(u => u && typeof u === 'object' && u.name && u.thanks && u.thanks > 0);
             usersArray.sort((a, b) => b.thanks - a.thanks);
             
             lbBody.innerHTML = '';
@@ -324,11 +299,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 lbBody.appendChild(tr);
             });
         } catch(e) {
-            lbBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red;">Lỗi tải dữ liệu.</td></tr>`;
+            lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center; color:red;\">Lỗi mạng hoặc tải dữ liệu.</td></tr>`;
         }
     });
 
-    // --- HỆ THỐNG GIFTCODE VÀ CÁC THỨ KHÁC GIỮ NGUYÊN BÊN DƯỚI ---
+    // --- HỆ THỐNG GIFTCODE (NHỚ SỬA CHỮ R THÀNH r TRONG FIREBASE NHÉ!) ---
     document.getElementById('redeem-btn').addEventListener('click', async () => {
         const codeInput = document.getElementById('giftcode-input'); const statusText = document.getElementById('giftcode-status');
         const code = codeInput.value.trim().toUpperCase(); const btn = document.getElementById('redeem-btn');
@@ -337,8 +312,8 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.disabled = true; btn.textContent = 'Đang kiểm tra...'; statusText.textContent = '';
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/codes/${code}.json`); const data = await res.json();
-            if (!data) { statusText.textContent = '❌ Mã code không tồn tại hoặc đã hết hạn!'; statusText.style.color = '#ef4444'; } else {
-                const reward = parseInt(data.rewardkey) || 0;
+            if (!data || data.error) { statusText.textContent = '❌ Mã code không tồn tại hoặc lỗi quyền đọc!'; statusText.style.color = '#ef4444'; } else {
+                const reward = parseInt(data.rewardkey) || parseInt(data.Rewardkey) || 0; // Fix tự động nhận cả Rewardkey nếu bạn quên đổi
                 if (reward > 0) {
                     userKeys += reward; redeemedCodes.push(code); await pushDataToFirebase(); updateUIHeader();
                     statusText.textContent = `🎉 Đổi thành công! Bạn nhận được ${reward} 🔑`; statusText.style.color = '#10b981'; codeInput.value = '';
@@ -389,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('close-inventory-btn').onclick = closeModals; 
     document.getElementById('close-gacha-btn').onclick = closeModals; 
     document.getElementById('close-rates-btn').onclick = closeModals;
-    document.getElementById('close-thanks-lb-btn').onclick = closeModals; // Nút đóng Modal BXH Cảm ơn
+    document.getElementById('close-thanks-lb-btn').onclick = closeModals;
 
     // --- TẢI BÀI THI & CHẤM ĐIỂM ---
     async function selectQuiz(quizObj) {
@@ -441,13 +416,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (isPracticeMode) {
                 const actionsDiv = document.createElement('div'); actionsDiv.className = 'practice-actions';
-                
                 const checkBtn = document.createElement('button'); checkBtn.type = 'button'; checkBtn.className = 'btn btn-check-ans'; checkBtn.id = `btn-check-${qIndex}`; checkBtn.textContent = 'Trả lời & Kiểm tra';
                 checkBtn.onclick = () => checkSingleQuestion(qIndex);
-                
                 const nextBtn = document.createElement('button'); nextBtn.type = 'button'; nextBtn.className = 'btn btn-next-q hidden'; nextBtn.id = `btn-next-${qIndex}`; nextBtn.innerHTML = 'Câu tiếp theo ➡️';
                 nextBtn.onclick = () => goToStep(qIndex + 1);
-
                 actionsDiv.appendChild(checkBtn); actionsDiv.appendChild(nextBtn); block.appendChild(actionsDiv);
 
                 const bubble = document.createElement('div'); bubble.className = 'nav-bubble'; bubble.id = `nav-bubble-${qIndex}`; bubble.textContent = qIndex + 1;
@@ -561,14 +533,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const dbUrl = `${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}.json`;
-            const res = await fetch(dbUrl); const data = await res.json();
+            const res = await fetch(dbUrl); 
+            const data = await res.json();
+            
             let existingKey = null; let shouldUpdate = true;
-            if (data) {
+            if (data && !data.error) {
                 for (const [key, val] of Object.entries(data)) {
-                    if (val.name.trim().toLowerCase() === userName.trim().toLowerCase()) {
+                    if (val && val.name && val.name.trim().toLowerCase() === userName.trim().toLowerCase()) {
                         existingKey = key; 
-                        if (record.correct < val.correct) shouldUpdate = false; 
-                        else if (record.correct === val.correct && record.timeMs >= val.timeMs) shouldUpdate = false; 
+                        if (record.correct < (val.correct || 0)) shouldUpdate = false; 
+                        else if (record.correct === (val.correct || 0) && record.timeMs >= (val.timeMs || 0)) shouldUpdate = false; 
                         if(!shouldUpdate && (val.avatar !== userAvatar || val.border !== userBorder)) {
                             await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${key}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({avatar: userAvatar, border: userBorder})});
                         } break; 
@@ -594,22 +568,54 @@ document.addEventListener("DOMContentLoaded", () => {
         return div;
     }
 
-    // --- RENDER BẢNG XẾP HẠNG MÔN HỌC ---
+    // --- RENDER BẢNG XẾP HẠNG MÔN HỌC (FIX LỖI DỮ LIỆU RÁC) ---
     window.loadLeaderboard = async function(quizId, quizTitle) {
-        document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng"; document.getElementById('home-btn').classList.remove('hidden'); document.getElementById('lb-title').textContent = `Môn: ${quizTitle}`; modeToggleBtn.classList.add('hidden');
-        const lbBody = document.getElementById('lb-body'); lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Đang tải dữ liệu...</td></tr>`; showSection('leaderboard');
+        document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng"; 
+        document.getElementById('home-btn').classList.remove('hidden'); 
+        document.getElementById('lb-title').textContent = `Môn: ${quizTitle}`; 
+        modeToggleBtn.classList.add('hidden');
+        
+        const lbBody = document.getElementById('lb-body'); 
+        lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Đang tải dữ liệu...</td></tr>`; 
+        showSection('leaderboard');
+        
         try {
-            const res = await fetch(`${FIREBASE_BASE_URL}/leaderboard_${quizId}.json`); const data = await res.json();
+            const res = await fetch(`${FIREBASE_BASE_URL}/leaderboard_${quizId}.json`); 
+            const data = await res.json();
+            
+            if (data && data.error) {
+                return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Lỗi phân quyền Database (Permission Denied). Bạn vui lòng kiểm tra lại Tab Rules trên Firebase!</td></tr>`;
+            }
+            
             if (!data) return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có ai thi môn này. Hãy là người đầu tiên!</td></tr>`;
-            let records = Object.values(data).sort((a, b) => (b.correct !== a.correct) ? b.correct - a.correct : a.timeMs - b.timeMs).slice(0, 50); lbBody.innerHTML = '';
+            
+            // Lọc dữ liệu rác (Những bản ghi không có tên)
+            let records = Object.values(data).filter(r => r && typeof r === 'object' && r.name);
+            
+            if (records.length === 0) return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có ai thi môn này. Hãy là người đầu tiên!</td></tr>`;
+
+            records = records.sort((a, b) => {
+                let scoreA = a.correct || 0;
+                let scoreB = b.correct || 0;
+                if (scoreB !== scoreA) return scoreB - scoreA;
+                return (a.timeMs || 0) - (b.timeMs || 0);
+            }).slice(0, 50); 
+            
+            lbBody.innerHTML = '';
             records.forEach((rec, index) => {
-                const tr = document.createElement('tr'); const rank = index + 1; let rankIcon = rank;
+                const tr = document.createElement('tr'); 
+                const rank = index + 1; 
+                let rankIcon = rank;
                 if(rank === 1) rankIcon = "🥇 1"; if(rank === 2) rankIcon = "🥈 2"; if(rank === 3) rankIcon = "🥉 3";
                 if (rank <= 3) tr.className = `rank-${rank}`;
+                
                 let crownHtml = ''; let nameClass = ''; let sparklesHtml = '';
                 if (rank === 1) { crownHtml = '<div class="crown-icon">👑</div>'; nameClass = 'gold-text'; sparklesHtml = `<div class="sparkle" style="top:-5px; left:-10px; animation-delay:0s;"></div><div class="sparkle" style="bottom:0px; right:-15px; animation-delay:0.5s;"></div><div class="sparkle" style="top:50%; right:50%; animation-delay:1s;"></div>`; } 
                 else if (rank === 2) nameClass = 'silver-text'; else if (rank === 3) nameClass = 'bronze-text'; 
-                let displayAvatar = fixBrokenAvatarURL(rec.avatar); let displayBorder = fixBorderClass(rec.border);
+                
+                let displayAvatar = fixBrokenAvatarURL(rec.avatar); 
+                let displayBorder = fixBorderClass(rec.border);
+                
                 tr.innerHTML = `
                     <td>${rankIcon}</td>
                     <td>
@@ -618,16 +624,23 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="sparkle-box"><span class="${nameClass}">${escapeHTML(rec.name)}</span>${sparklesHtml}</div>
                         </div>
                     </td>
-                    <td style="color:var(--primary-color); font-weight:bold;">${rec.correct}/${rec.total}</td>
-                    <td>${rec.accuracy}%</td>
-                    <td>${rec.timeStr}</td>
-                    <td><span style="color:green">✓${rec.correct}</span> / <span style="color:red">✗${rec.wrong}</span></td>
-                `; lbBody.appendChild(tr);
+                    <td style="color:var(--primary-color); font-weight:bold;">${rec.correct || 0}/${rec.total || 0}</td>
+                    <td>${rec.accuracy || 0}%</td>
+                    <td>${rec.timeStr || "00:00"}</td>
+                    <td><span style="color:green">✓${rec.correct || 0}</span> / <span style="color:red">✗${rec.wrong || 0}</span></td>
+                `; 
+                lbBody.appendChild(tr);
             });
-        } catch (error) { lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Lỗi tải dữ liệu.</td></tr>`; }
+        } catch (error) { 
+            console.error("Lỗi BXH:", error);
+            lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Lỗi tải dữ liệu.</td></tr>`; 
+        }
     };
 
-    function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag] || tag)); }
+    function escapeHTML(str) { 
+        return String(str || '').replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag] || tag)); 
+    }
+    
     document.getElementById('retake-btn').addEventListener('click', () => { selectQuiz(currentQuiz); });
     document.getElementById('view-leaderboard-btn').addEventListener('click', () => { window.loadLeaderboard(currentQuiz.id, currentQuiz.title); });
     document.getElementById('home-btn').addEventListener('click', () => { clearInterval(timerInterval); initLobby(); });
