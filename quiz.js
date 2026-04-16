@@ -1,10 +1,12 @@
 /**
- * EdTech Quiz - Nút Cảm Ơn Auto-Clicker Đua Top, Luyện Tập Từng Câu, Gacha
- * FIX BẢNG XẾP HẠNG (CHỐNG LỖI DỮ LIỆU RÁC VÀ PERMISSION DENIED)
+ * EdTech Quiz - Tích hợp Chế độ Luyện Tập Từng Câu (Step-by-step), Quản lý Avatar, Upload, Đếm lượt, Gacha
  */
 
+// ==========================================
+// CẤU HÌNH ĐỀ THI VÀ DATABASE
+// ==========================================
 const QUIZ_LIST = [
-    { id: "tieng_anh1", title: "Đề 1 Tiếng Anh KHÔNG ƯU TIÊN", file: "tieng_anh1.txt" },
+    { id: "tieng_anh1", title: "Đề 1 Tiếng Anh", file: "tieng_anh1.txt" },
     { id: "tieng_anh2", title: "Đề 2 Tiếng Anh", file: "tieng_anh2.txt" },
     { id: "tieng_anh3", title: "Đề 3 Tiếng Anh", file: "tieng_anh3.txt" },
     { id: "tieng_anh4", title: "Đề 4 Tiếng Anh", file: "tieng_anh4.txt" },
@@ -22,6 +24,8 @@ const AVATAR_LINKS = {
     mimi: "https://i.postimg.cc/63VWHnY8/805d935d7af9351a34ac6be41f078024.jpg",
     loki: "https://i.postimg.cc/vB7YPf3c/85fdab604c083ecb008d748e1e5bd9ef.jpg",
     garfield: "https://i.postimg.cc/NM8sNmp9/999f5c55e020fcee41e97b1036a6640b.jpg",
+    
+    // Avatar trong Vòng quay Gacha
     dragon: "https://i.postimg.cc/cJ2hD86z/485f964065a681bc5934c43411bca2cd.jpg",
     king: "https://i.postimg.cc/FK8pPJ1n/4c6373c11fecb852b7b9a1c7c47ebed5.jpg",
     ninja: "https://i.postimg.cc/Zq2Hfy0s/5aca1be41a9439084cae3862a2b49689.jpg",
@@ -48,17 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentQuiz = null; let questions = []; let startTime = null; let timerInterval = null;
     let cropper = null; let quizStats = {}; 
     
-    // STATE NGƯỜI DÙNG
+    // Khởi tạo state
     let userName = localStorage.getItem('quiz_username') || "";
     let userAvatar = AVATAR_LINKS.default; let customAvatar = null; 
     let userBorder = "border-none"; let userKeys = 0;
     let unlockedAvatars = [...AVATAR_SEEDS_ARRAY]; let unlockedBorders = ['border-none'];
     let redeemedCodes = [];
-
-    // BIẾN CHO CHỨC NĂNG "CẢM ƠN"
-    let userThanks = 0;
-    let globalThanks = 0;
-    let pendingThanksSync = 0;
 
     // STATE CHẾ ĐỘ LUYỆN TẬP
     let isPracticeMode = false;
@@ -70,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById('timer-display');
     const timerSpan = timerDisplay.querySelector('span');
 
+    // Nút chuyển đổi chế độ Sảnh Chờ
     const modeToggleBtn = document.getElementById('mode-toggle-btn');
     modeToggleBtn.addEventListener('click', () => {
         isPracticeMode = !isPracticeMode;
@@ -86,9 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function initApp() {
         if (userName) {
-            await syncDataFromFirebase(); 
-            updateUIHeader(); 
-            initLobby();
+            await syncDataFromFirebase(); updateUIHeader(); initLobby();
         } else {
             renderAvatarSelector(); showSection('login'); mainHeader.classList.add('hidden');
         }
@@ -98,18 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`);
             const data = await res.json();
-            if (data && !data.error) {
+            if (data) {
                 userAvatar = fixBrokenAvatarURL(data.avatar || userAvatar); customAvatar = data.customAvatar || null;
                 userBorder = data.border || userBorder; userKeys = data.keys || 0;
                 let loadedAvatars = data.unlockedAvatars || unlockedAvatars;
                 unlockedAvatars = loadedAvatars.map(url => fixBrokenAvatarURL(url));
                 unlockedBorders = data.unlockedBorders || unlockedBorders;
                 redeemedCodes = data.redeemedCodes || [];
-                userThanks = data.thanks || 0;
-                document.getElementById('personal-thanks-count').textContent = userThanks;
-            } else if (!data) { 
-                await pushDataToFirebase(); 
-            }
+            } else { await pushDataToFirebase(); }
         } catch (e) { console.error("Lỗi đồng bộ:", e); }
     }
 
@@ -129,10 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const userData = {
             name: userName, avatar: userAvatar, customAvatar: customAvatar, border: userBorder,
             keys: userKeys, unlockedAvatars: unlockedAvatars, unlockedBorders: unlockedBorders,
-            redeemedCodes: redeemedCodes, lastLogin: Date.now(),
-            thanks: userThanks
+            redeemedCodes: redeemedCodes, lastLogin: Date.now()
         };
-        try { await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`, { method: 'PUT', body: JSON.stringify(userData) }); } catch (e) {}
+        try { await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}.json`, { method: 'PUT', body: JSON.stringify(userData) }); } catch (e) { console.error("Lỗi đẩy dữ liệu:", e); }
     }
 
     function updateUIHeader() {
@@ -195,16 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function initLobby() {
         const quizListContainer = document.getElementById('quiz-list-container'); quizListContainer.innerHTML = '';
-        
-        try { const res = await fetch(`${FIREBASE_BASE_URL}/quiz_stats.json`); quizStats = (await res.json()) || {}; } catch(e) {}
-        
-        try {
-            const resGlobal = await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`);
-            globalThanks = (await resGlobal.json()) || 0;
-            if (globalThanks < userThanks) globalThanks = userThanks; 
-            document.getElementById('global-thanks-count').textContent = globalThanks;
-        } catch(e){}
-
+        try { const res = await fetch(`${FIREBASE_BASE_URL}/quiz_stats.json`); quizStats = (await res.json()) || {}; } catch(e) { console.error("Lỗi lấy stats", e); }
         QUIZ_LIST.forEach(quiz => {
             const plays = quizStats[quiz.id] ? (quizStats[quiz.id].plays || 0) : 0;
             const btn = document.createElement('div'); btn.className = 'quiz-card-btn';
@@ -214,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         showSection('lobby'); document.getElementById('app-main-title').textContent = "Sảnh Chờ";
         document.getElementById('home-btn').classList.add('hidden'); timerDisplay.classList.add('hidden'); 
-        modeToggleBtn.classList.remove('hidden'); 
+        modeToggleBtn.classList.remove('hidden'); // Hiện nút chế độ ở Sảnh
     }
 
     function showSection(sectionId) {
@@ -222,88 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = document.getElementById(`${sectionId}-section`); if (target) target.classList.remove('hidden');
     }
 
-    // --- CẢM ƠN SPAM CLICKER ---
-    document.getElementById('btn-spam-thanks').addEventListener('click', (e) => {
-        userThanks++; globalThanks++; pendingThanksSync++; 
-        document.getElementById('personal-thanks-count').textContent = userThanks;
-        document.getElementById('global-thanks-count').textContent = globalThanks;
-        
-        const heart = document.createElement('div');
-        heart.innerHTML = '❤️ +1'; heart.className = 'floating-heart';
-        const rect = e.target.getBoundingClientRect();
-        const x = e.clientX || (rect.left + rect.width / 2);
-        const y = e.clientY || rect.top;
-        heart.style.left = (x - 20) + 'px'; heart.style.top = (y - 20) + 'px';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 800);
-    });
-
-    setInterval(async () => {
-        if (pendingThanksSync > 0) {
-            const syncAmount = pendingThanksSync; pendingThanksSync = 0; 
-            try {
-                await fetch(`${FIREBASE_BASE_URL}/users/${userName.toLowerCase()}/thanks.json`, { method: 'PUT', body: JSON.stringify(userThanks) });
-                const res = await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`);
-                let currentGlobal = (await res.json()) || 0;
-                await fetch(`${FIREBASE_BASE_URL}/global_stats/total_thanks.json`, { method: 'PUT', body: JSON.stringify(currentGlobal + syncAmount) });
-            } catch (e) { pendingThanksSync += syncAmount; }
-        }
-    }, 3000);
-
-    // --- MỞ BẢNG XẾP HẠNG CẢM ƠN ---
-    document.getElementById('btn-thanks-lb').addEventListener('click', async () => {
-        const lbBody = document.getElementById('thanks-lb-body');
-        lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center;\">Đang tải dữ liệu toàn Server...</td></tr>`;
-        document.getElementById('modal-overlay').classList.remove('hidden');
-        document.getElementById('thanks-lb-modal').classList.remove('hidden');
-        
-        try {
-            const res = await fetch(`${FIREBASE_BASE_URL}/users.json`);
-            const data = await res.json();
-            
-            // Lọc lỗi nếu quyền đọc Database bị khoá
-            if (data && data.error) {
-                return lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center; color:red;\">Firebase chặn quyền truy cập (Permission Denied).</td></tr>`;
-            }
-            
-            if (!data) {
-                return lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center;\">Chưa có ai bấm cảm ơn!</td></tr>`;
-            }
-            
-            let usersArray = Object.values(data).filter(u => u && typeof u === 'object' && u.name && u.thanks && u.thanks > 0);
-            usersArray.sort((a, b) => b.thanks - a.thanks);
-            
-            lbBody.innerHTML = '';
-            usersArray.slice(0, 50).forEach((u, idx) => {
-                const tr = document.createElement('tr');
-                const rank = idx + 1;
-                let rankIcon = rank;
-                if(rank === 1) rankIcon = "🥇 1"; if(rank === 2) rankIcon = "🥈 2"; if(rank === 3) rankIcon = "🥉 3";
-                
-                let displayAvatar = fixBrokenAvatarURL(u.avatar); 
-                let displayBorder = u.border || 'border-none';
-                
-                let nameClass = rank === 1 ? 'gold-text' : (rank === 2 ? 'silver-text' : (rank === 3 ? 'bronze-text' : ''));
-                let crownHtml = rank === 1 ? '<div class="crown-icon">👑</div>' : '';
-                
-                tr.innerHTML = `
-                    <td style="font-weight:bold; font-size: 1.1rem; text-align: center;">${rankIcon}</td>
-                    <td>
-                        <div class="player-info-container">
-                            <div class="avatar-wrapper">${crownHtml}<img src="${displayAvatar}" class="lb-avatar avatar-with-border ${displayBorder}"></div>
-                            <div class="sparkle-box"><span class="${nameClass}">${escapeHTML(u.name)}</span></div>
-                        </div>
-                    </td>
-                    <td style="color:#e11d48; font-weight:900; font-size:1.2rem; text-align: center;">❤️ ${u.thanks.toLocaleString()}</td>
-                `;
-                lbBody.appendChild(tr);
-            });
-        } catch(e) {
-            lbBody.innerHTML = `<tr><td colspan=\"3\" style=\"text-align:center; color:red;\">Lỗi mạng hoặc tải dữ liệu.</td></tr>`;
-        }
-    });
-
-    // --- HỆ THỐNG GIFTCODE (NHỚ SỬA CHỮ R THÀNH r TRONG FIREBASE NHÉ!) ---
+    // --- HỆ THỐNG GIFTCODE ---
     document.getElementById('redeem-btn').addEventListener('click', async () => {
         const codeInput = document.getElementById('giftcode-input'); const statusText = document.getElementById('giftcode-status');
         const code = codeInput.value.trim().toUpperCase(); const btn = document.getElementById('redeem-btn');
@@ -312,8 +215,8 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.disabled = true; btn.textContent = 'Đang kiểm tra...'; statusText.textContent = '';
         try {
             const res = await fetch(`${FIREBASE_BASE_URL}/codes/${code}.json`); const data = await res.json();
-            if (!data || data.error) { statusText.textContent = '❌ Mã code không tồn tại hoặc lỗi quyền đọc!'; statusText.style.color = '#ef4444'; } else {
-                const reward = parseInt(data.rewardkey) || parseInt(data.Rewardkey) || 0; // Fix tự động nhận cả Rewardkey nếu bạn quên đổi
+            if (!data) { statusText.textContent = '❌ Mã code không tồn tại hoặc đã hết hạn!'; statusText.style.color = '#ef4444'; } else {
+                const reward = parseInt(data.rewardkey) || 0;
                 if (reward > 0) {
                     userKeys += reward; redeemedCodes.push(code); await pushDataToFirebase(); updateUIHeader();
                     statusText.textContent = `🎉 Đổi thành công! Bạn nhận được ${reward} 🔑`; statusText.style.color = '#10b981'; codeInput.value = '';
@@ -323,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.disabled = false; btn.textContent = 'Nhận Thưởng';
     });
 
+    // --- XỬ LÝ VÒNG QUAY ---
     let isSpinning = false;
     document.getElementById('spin-btn').addEventListener('click', async () => {
         if (isSpinning) return; if (userKeys <= 0) return alert("Bạn không đủ chìa khóa! Hãy đạt 100% điểm bài thi hoặc nhập Giftcode để nhận thêm.");
@@ -361,10 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function closeModals() { document.querySelectorAll('.modal-overlay, .modal-content').forEach(el => el.classList.add('hidden')); }
-    document.getElementById('close-inventory-btn').onclick = closeModals; 
-    document.getElementById('close-gacha-btn').onclick = closeModals; 
-    document.getElementById('close-rates-btn').onclick = closeModals;
-    document.getElementById('close-thanks-lb-btn').onclick = closeModals;
+    document.getElementById('close-inventory-btn').onclick = closeModals; document.getElementById('close-gacha-btn').onclick = closeModals; document.getElementById('close-rates-btn').onclick = closeModals;
 
     // --- TẢI BÀI THI & CHẤM ĐIỂM ---
     async function selectQuiz(quizObj) {
@@ -402,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         questions.forEach((q, qIndex) => {
             const block = document.createElement('div'); block.className = 'question-block';
-            block.id = `q-block-${qIndex}`;
+            block.id = `q-block-${qIndex}`; // ID để điều khiển chuyển câu
 
             const title = document.createElement('div'); title.className = 'question-text'; title.textContent = `Câu ${qIndex + 1}: ${q.questionText}`;
             if (q.type === 'multi') title.textContent += ' (Chọn nhiều)'; if (q.type === 'essay') title.textContent += ' (Tự luận)'; block.appendChild(title);
@@ -414,14 +315,19 @@ document.addEventListener("DOMContentLoaded", () => {
             else { q.options.forEach((opt, oIdx) => { optCont.innerHTML += `<label class="option-label"><input type="${q.type==='multi'?'checkbox':'radio'}" name="q${qIndex}" value="${oIdx+1}"> ${opt}</label>`; }); }
             block.appendChild(optCont); 
 
+            // NẾU LÀ CHẾ ĐỘ LUYỆN TẬP -> THÊM NÚT TRẢ LỜI NGAY DƯỚI CÂU
             if (isPracticeMode) {
                 const actionsDiv = document.createElement('div'); actionsDiv.className = 'practice-actions';
+                
                 const checkBtn = document.createElement('button'); checkBtn.type = 'button'; checkBtn.className = 'btn btn-check-ans'; checkBtn.id = `btn-check-${qIndex}`; checkBtn.textContent = 'Trả lời & Kiểm tra';
                 checkBtn.onclick = () => checkSingleQuestion(qIndex);
+                
                 const nextBtn = document.createElement('button'); nextBtn.type = 'button'; nextBtn.className = 'btn btn-next-q hidden'; nextBtn.id = `btn-next-${qIndex}`; nextBtn.innerHTML = 'Câu tiếp theo ➡️';
                 nextBtn.onclick = () => goToStep(qIndex + 1);
+
                 actionsDiv.appendChild(checkBtn); actionsDiv.appendChild(nextBtn); block.appendChild(actionsDiv);
 
+                // Tạo bóng bóng số thứ tự ở thanh Menu
                 const bubble = document.createElement('div'); bubble.className = 'nav-bubble'; bubble.id = `nav-bubble-${qIndex}`; bubble.textContent = qIndex + 1;
                 bubble.onclick = () => goToStep(qIndex); bottomNav.appendChild(bubble);
             }
@@ -430,7 +336,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (isPracticeMode) {
-            document.getElementById('bottom-nav-wrapper').classList.remove('hidden'); goToStep(0); 
+            document.getElementById('bottom-nav-wrapper').classList.remove('hidden');
+            goToStep(0); // Mặc định hiển thị câu 1
         } else {
             document.getElementById('bottom-nav-wrapper').classList.add('hidden');
         }
@@ -438,21 +345,30 @@ document.addEventListener("DOMContentLoaded", () => {
         showSection('quiz'); document.getElementById('quiz-form').reset(); startTime = Date.now(); timerDisplay.classList.remove('hidden'); clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000); updateTimer();
     }
 
+    // --- LOGIC LUYỆN TẬP TỪNG CÂU ---
     window.goToStep = function(index) {
         if (index >= questions.length) { alert("Đã hết câu hỏi! Hãy bấm nút Nộp bài bên dưới để lưu kết quả và nhận quà."); return; }
+        
+        // Ẩn tất cả, chỉ hiện câu đang chọn
         document.querySelectorAll('.question-block').forEach((el, i) => { if (i === index) el.classList.remove('hidden-step'); else el.classList.add('hidden-step'); });
+        
+        // Cập nhật viền cho số ở dưới Menu
         document.querySelectorAll('.nav-bubble').forEach((el, i) => { if (i === index) el.classList.add('active'); else el.classList.remove('active'); });
     }
 
     function checkSingleQuestion(qIndex) {
-        const q = questions[qIndex]; const block = document.getElementById(`q-block-${qIndex}`); const inputs = block.querySelectorAll('input, textarea');
+        const q = questions[qIndex];
+        const block = document.getElementById(`q-block-${qIndex}`);
+        const inputs = block.querySelectorAll('input, textarea');
+        
         let isAnswered = false; let isMatch = false;
 
         if (q.type === 'single') {
             const checked = block.querySelector(`input[name="q${qIndex}"]:checked`);
             if (checked) { isAnswered = true; isMatch = parseInt(checked.value) === q.key; }
         } else if (q.type === 'multi') {
-            const checked = block.querySelectorAll(`input[name="q${qIndex}"]:checked`); const arr = Array.from(checked).map(cb => parseInt(cb.value));
+            const checked = block.querySelectorAll(`input[name="q${qIndex}"]:checked`);
+            const arr = Array.from(checked).map(cb => parseInt(cb.value));
             if (arr.length > 0) isAnswered = true;
             isMatch = q.key.every((v, i) => (v===1 && arr.includes(i+1)) || (v===0 && !arr.includes(i+1)));
             if (arr.length !== q.key.filter(v=>v===1).length) isMatch = false; 
@@ -460,33 +376,50 @@ document.addEventListener("DOMContentLoaded", () => {
             const input = block.querySelector(`input[name="q${qIndex}"]`);
             if (input && input.value.trim() !== '') { isAnswered = true; isMatch = input.value.trim().toLowerCase() === q.key.trim().toLowerCase(); }
         } else if (q.type === 'essay') {
-            const input = block.querySelector(`textarea[name="q${qIndex}"]`); if (input && input.value.trim() !== '') { isAnswered = true; isMatch = true; }
+            const input = block.querySelector(`textarea[name="q${qIndex}"]`);
+            if (input && input.value.trim() !== '') isAnswered = true; isMatch = true; 
         }
 
         if (!isAnswered) { alert("Bạn chưa chọn hoặc nhập đáp án!"); return; }
 
-        inputs.forEach(el => el.disabled = true); block.style.opacity = "0.9";
-        document.getElementById(`btn-check-${qIndex}`).classList.add('hidden'); document.getElementById(`btn-next-${qIndex}`).classList.remove('hidden');
+        // KHÓA CỨNG: Không cho phép sửa lại sau khi check
+        inputs.forEach(el => el.disabled = true);
+        block.style.opacity = "0.9";
 
+        // Đổi giao diện nút
+        document.getElementById(`btn-check-${qIndex}`).classList.add('hidden');
+        document.getElementById(`btn-next-${qIndex}`).classList.remove('hidden');
+
+        // Hiện đánh giá tức thì
         const feedbackDiv = document.createElement('div');
         if (q.type === 'essay') {
             feedbackDiv.className = 'inline-feedback feedback-essay'; feedbackDiv.innerHTML = `<b>Gợi ý đáp án:</b> ${q.key}`;
         } else {
             feedbackDiv.className = `inline-feedback ${isMatch ? 'feedback-correct' : 'feedback-incorrect'}`;
             let correctText = '';
-            if (q.type === 'single') correctText = q.options[q.key - 1]; else if (q.type === 'multi') correctText = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x).join(', '); else if (q.type === 'short') correctText = q.key;
+            if (q.type === 'single') correctText = q.options[q.key - 1];
+            else if (q.type === 'multi') correctText = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x).join(', ');
+            else if (q.type === 'short') correctText = q.key;
             feedbackDiv.innerHTML = isMatch ? '✓ Chính xác hoàn toàn!' : `✗ Chưa chính xác! Đáp án đúng là: <b>${correctText}</b>`;
         }
         block.appendChild(feedbackDiv);
+
+        // Đổi màu bong bóng Menu dưới cùng (Xanh / Đỏ)
         const navItem = document.getElementById(`nav-bubble-${qIndex}`);
-        if (q.type === 'essay') navItem.classList.add('nav-essay'); else navItem.classList.add(isMatch ? 'nav-correct' : 'nav-incorrect');
+        if (q.type === 'essay') navItem.classList.add('nav-essay');
+        else navItem.classList.add(isMatch ? 'nav-correct' : 'nav-incorrect');
     }
 
     function updateTimer() { const elapsed = Math.floor((Date.now() - startTime) / 1000); const m = String(Math.floor(elapsed / 60)).padStart(2, '0'); const s = String(elapsed % 60).padStart(2, '0'); timerSpan.textContent = `${m}:${s}`; }
 
+    // --- NỘP BÀI TOÀN BỘ (Dùng chung cho cả 2 chế độ) ---
     document.getElementById('quiz-form').addEventListener('submit', async (e) => {
         e.preventDefault(); 
+        
+        // CỰC KỲ QUAN TRỌNG: Phải mở khóa lại toàn bộ các ô đã bị "disable" ở chế độ luyện tập, 
+        // nếu không FormData sẽ không lấy được đáp án của những ô đó để gửi đi chấm điểm.
         document.getElementById('quiz-form').querySelectorAll('input, textarea').forEach(el => el.disabled = false);
+
         clearInterval(timerInterval);
         const timeTakenMs = Date.now() - startTime; const timeStr = timerSpan.textContent;
         await evaluateAndSaveResults(timeTakenMs, timeStr);
@@ -501,13 +434,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (q.type === 'essay') { reviewContainer.appendChild(buildReviewItem(q, qIndex, null, formData)); } 
             else {
                 objectiveCount++; let isMatch = false;
-                if (q.type === 'single') { isMatch = parseInt(formData.get(`q${qIndex}`)) === q.key; } 
-                else if (q.type === 'short') { isMatch = (formData.get(`q${qIndex}`)||'').trim().toLowerCase() === q.key.trim().toLowerCase(); } 
-                else if (q.type === 'multi') { 
-                    const arr = formData.getAll(`q${qIndex}`).map(Number);
-                    isMatch = q.key.every((v, i) => (v===1 && arr.includes(i+1)) || (v===0 && !arr.includes(i+1)));
-                    if (arr.length !== q.key.filter(v=>v===1).length) isMatch = false;
-                }
+                if (q.type === 'single') isMatch = parseInt(formData.get(`q${qIndex}`)) === q.key; 
+                else if (q.type === 'short') isMatch = (formData.get(`q${qIndex}`)||'').trim().toLowerCase() === q.key.trim().toLowerCase();
                 if (isMatch) correctCount++;
                 reviewContainer.appendChild(buildReviewItem(q, qIndex, isMatch, formData));
             }
@@ -529,29 +457,34 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => alert("🎉 THIÊN TÀI LỘ DIỆN! Bạn đạt 100% điểm tuyệt đối và được thưởng 1 🔑 Vòng Quay Nhân Phẩm!"), 500);
         }
 
-        const record = { name: userName, avatar: userAvatar, border: userBorder, correct: correctCount, wrong: objectiveCount - correctCount, total: objectiveCount, accuracy: accuracy, timeStr: timeStr, timeMs: timeTakenMs, timestamp: Date.now() };
+        const record = {
+            name: userName, avatar: userAvatar, border: userBorder,
+            correct: correctCount, wrong: objectiveCount - correctCount,
+            total: objectiveCount, accuracy: accuracy, timeStr: timeStr, timeMs: timeTakenMs, timestamp: Date.now()
+        };
 
         try {
             const dbUrl = `${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}.json`;
-            const res = await fetch(dbUrl); 
-            const data = await res.json();
-            
+            const res = await fetch(dbUrl); const data = await res.json();
             let existingKey = null; let shouldUpdate = true;
-            if (data && !data.error) {
+
+            if (data) {
                 for (const [key, val] of Object.entries(data)) {
-                    if (val && val.name && val.name.trim().toLowerCase() === userName.trim().toLowerCase()) {
+                    if (val.name.trim().toLowerCase() === userName.trim().toLowerCase()) {
                         existingKey = key; 
-                        if (record.correct < (val.correct || 0)) shouldUpdate = false; 
-                        else if (record.correct === (val.correct || 0) && record.timeMs >= (val.timeMs || 0)) shouldUpdate = false; 
+                        if (record.correct < val.correct) shouldUpdate = false; 
+                        else if (record.correct === val.correct && record.timeMs >= val.timeMs) shouldUpdate = false; 
+                        
                         if(!shouldUpdate && (val.avatar !== userAvatar || val.border !== userBorder)) {
                             await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${key}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({avatar: userAvatar, border: userBorder})});
-                        } break; 
+                        }
+                        break; 
                     }
                 }
             }
             if (shouldUpdate) {
-                if (existingKey) { await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${existingKey}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) }); } 
-                else { await fetch(dbUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) }); }
+                if (existingKey) await fetch(`${FIREBASE_BASE_URL}/leaderboard_${currentQuiz.id}/${existingKey}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
+                else await fetch(dbUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
             }
         } catch (error) { console.error("Lỗi BXH:", error); }
     }
@@ -563,59 +496,26 @@ document.addEventListener("DOMContentLoaded", () => {
         else { div.classList.add(isCorrect ? 'review-correct' : 'review-incorrect'); div.innerHTML += `<p class="feedback-text ${isCorrect?'feedback-correct':'feedback-incorrect'}">${isCorrect?'✓ Chính xác':'✗ Sai rồi'}</p>`;
             if (q.type === 'single') div.innerHTML += `<p>Đáp án đúng: ${q.options[q.key - 1]}</p>`;
             else if (q.type === 'multi') { const opts = q.key.map((v, i) => v===1 ? q.options[i] : null).filter(x=>x); div.innerHTML += `<p>Đáp án đúng: ${opts.join(', ')}</p>`; }
-            else if (q.type === 'short') { div.innerHTML += `<p>Đáp án đúng: ${q.key} <br><span style="color:var(--text-muted)">Bạn nhập: ${formData.get(`q${qIndex}`)}</span></p>`; }
-        }
+            else if (q.type === 'short') div.innerHTML += `<p>Đáp án đúng: ${q.key} <br><span style="color:var(--text-muted)">Bạn nhập: ${formData.get(`q${qIndex}`)}</span></p>`; }
         return div;
     }
 
-    // --- RENDER BẢNG XẾP HẠNG MÔN HỌC (FIX LỖI DỮ LIỆU RÁC) ---
+    // --- RENDER BXH ---
     window.loadLeaderboard = async function(quizId, quizTitle) {
-        document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng"; 
-        document.getElementById('home-btn').classList.remove('hidden'); 
-        document.getElementById('lb-title').textContent = `Môn: ${quizTitle}`; 
-        modeToggleBtn.classList.add('hidden');
-        
-        const lbBody = document.getElementById('lb-body'); 
-        lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Đang tải dữ liệu...</td></tr>`; 
-        showSection('leaderboard');
-        
+        document.getElementById('app-main-title').textContent = "Bảng Xếp Hạng"; document.getElementById('home-btn').classList.remove('hidden'); document.getElementById('lb-title').textContent = `Môn: ${quizTitle}`; modeToggleBtn.classList.add('hidden');
+        const lbBody = document.getElementById('lb-body'); lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Đang tải dữ liệu...</td></tr>`; showSection('leaderboard');
         try {
-            const res = await fetch(`${FIREBASE_BASE_URL}/leaderboard_${quizId}.json`); 
-            const data = await res.json();
-            
-            if (data && data.error) {
-                return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Lỗi phân quyền Database (Permission Denied). Bạn vui lòng kiểm tra lại Tab Rules trên Firebase!</td></tr>`;
-            }
-            
+            const res = await fetch(`${FIREBASE_BASE_URL}/leaderboard_${quizId}.json`); const data = await res.json();
             if (!data) return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có ai thi môn này. Hãy là người đầu tiên!</td></tr>`;
-            
-            // Lọc dữ liệu rác (Những bản ghi không có tên)
-            let records = Object.values(data).filter(r => r && typeof r === 'object' && r.name);
-            
-            if (records.length === 0) return lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có ai thi môn này. Hãy là người đầu tiên!</td></tr>`;
-
-            records = records.sort((a, b) => {
-                let scoreA = a.correct || 0;
-                let scoreB = b.correct || 0;
-                if (scoreB !== scoreA) return scoreB - scoreA;
-                return (a.timeMs || 0) - (b.timeMs || 0);
-            }).slice(0, 50); 
-            
-            lbBody.innerHTML = '';
+            let records = Object.values(data).sort((a, b) => (b.correct !== a.correct) ? b.correct - a.correct : a.timeMs - b.timeMs).slice(0, 50); lbBody.innerHTML = '';
             records.forEach((rec, index) => {
-                const tr = document.createElement('tr'); 
-                const rank = index + 1; 
-                let rankIcon = rank;
+                const tr = document.createElement('tr'); const rank = index + 1; let rankIcon = rank;
                 if(rank === 1) rankIcon = "🥇 1"; if(rank === 2) rankIcon = "🥈 2"; if(rank === 3) rankIcon = "🥉 3";
                 if (rank <= 3) tr.className = `rank-${rank}`;
-                
                 let crownHtml = ''; let nameClass = ''; let sparklesHtml = '';
                 if (rank === 1) { crownHtml = '<div class="crown-icon">👑</div>'; nameClass = 'gold-text'; sparklesHtml = `<div class="sparkle" style="top:-5px; left:-10px; animation-delay:0s;"></div><div class="sparkle" style="bottom:0px; right:-15px; animation-delay:0.5s;"></div><div class="sparkle" style="top:50%; right:50%; animation-delay:1s;"></div>`; } 
                 else if (rank === 2) nameClass = 'silver-text'; else if (rank === 3) nameClass = 'bronze-text'; 
-                
-                let displayAvatar = fixBrokenAvatarURL(rec.avatar); 
-                let displayBorder = fixBorderClass(rec.border);
-                
+                let displayAvatar = fixBrokenAvatarURL(rec.avatar); let displayBorder = rec.border || 'border-none';
                 tr.innerHTML = `
                     <td>${rankIcon}</td>
                     <td>
@@ -624,23 +524,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="sparkle-box"><span class="${nameClass}">${escapeHTML(rec.name)}</span>${sparklesHtml}</div>
                         </div>
                     </td>
-                    <td style="color:var(--primary-color); font-weight:bold;">${rec.correct || 0}/${rec.total || 0}</td>
-                    <td>${rec.accuracy || 0}%</td>
-                    <td>${rec.timeStr || "00:00"}</td>
-                    <td><span style="color:green">✓${rec.correct || 0}</span> / <span style="color:red">✗${rec.wrong || 0}</span></td>
-                `; 
-                lbBody.appendChild(tr);
+                    <td style="color:var(--primary-color); font-weight:bold;">${rec.correct}/${rec.total}</td>
+                    <td>${rec.accuracy}%</td>
+                    <td>${rec.timeStr}</td>
+                    <td><span style="color:green">✓${rec.correct}</span> / <span style="color:red">✗${rec.wrong}</span></td>
+                `; lbBody.appendChild(tr);
             });
-        } catch (error) { 
-            console.error("Lỗi BXH:", error);
-            lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Lỗi tải dữ liệu.</td></tr>`; 
-        }
+        } catch (error) { lbBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Lỗi tải dữ liệu.</td></tr>`; }
     };
 
-    function escapeHTML(str) { 
-        return String(str || '').replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag] || tag)); 
-    }
-    
+    function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag] || tag)); }
     document.getElementById('retake-btn').addEventListener('click', () => { selectQuiz(currentQuiz); });
     document.getElementById('view-leaderboard-btn').addEventListener('click', () => { window.loadLeaderboard(currentQuiz.id, currentQuiz.title); });
     document.getElementById('home-btn').addEventListener('click', () => { clearInterval(timerInterval); initLobby(); });
