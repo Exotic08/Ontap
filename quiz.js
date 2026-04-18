@@ -10,7 +10,8 @@ const QUIZ_LIST = [
     { id: "tieng_anh2", title: "Đề 2 Tiếng Anh", file: "tieng_anh2.txt" },
     { id: "tieng_anh3", title: "Đề 3 Tiếng Anh", file: "tieng_anh3.txt" },
     { id: "tieng_anh4", title: "Đề 4 Tiếng Anh", file: "tieng_anh4.txt" },
-    { id: "gdqpan", title: "Giáo Dục Quốc Phòng An Ninh", file: "gdqpan.txt" }
+    { id: "gdqpan", title: "Giáo Dục Quốc Phòng An Ninh", file: "gdqpan.txt" },
+    { id: "vat_ly", title: "Đề Vật Lý", file: "vat_ly.txt" }
 ];
 
 const FIREBASE_BASE_URL = "https://ontap-59972-default-rtdb.firebaseio.com";
