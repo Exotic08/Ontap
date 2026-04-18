@@ -1,0 +1,160 @@
+Ask1: Trường hợp công của lực bằng không khi
+answer1: lực hợp với phương chuyển động một góc lớn hơn 90 độ.
+answer2: lực hợp với phương chuyển động một góc nhỏ hơn 90 độ.
+answer3: lực cùng phương với phương chuyển động của vật.
+answer4: lực vuông góc với phương chuyển động của vật.
+Key: 4
+
+Ask2: Trong máy phát điện gió, dạng năng lượng nào đã được chuyển hóa thành điện năng?
+answer1: Cơ năng.
+answer2: Nhiệt năng.
+answer3: Hóa năng.
+answer4: Quang năng.
+Key: 1
+
+Ask3: Công suất tiêu thụ của một thiết bị tiêu thụ năng lượng
+answer1: là đại lượng đo bằng năng lượng tiêu thụ của thiết bị đó trong một đơn vị thời gian.
+answer2: luôn đo bằng mã lực (HP).
+answer3: chính là lực thực hiện công trong thiết bị đó lớn hay nhỏ.
+answer4: là độ lớn của công do thiết bị sinh ra.
+Key: 1
+
+Ask4: Đơn vị nào không phải đơn vị của công suất?
+answer1: N.m/s.
+answer2: W.
+answer3: J.s.
+answer4: HP.
+Key: 3
+
+Ask5: Một vật chịu tác dụng của một lực F = 8 N, phương hợp với chuyển động góc 60°. Trong 4 giây vật đi được 2 m. Công suất trung bình bằng:
+answer1: 2 W.
+answer2: 2,5 W.
+answer3: 3 W.
+answer4: 3,5 W.
+Key: 1
+
+Ask6: Độ biến thiên động năng của một vật chuyển động bằng
+answer1: công của lực ma sát tác dụng lên vật.
+answer2: công của lực thế tác dụng lên vật.
+answer3: công của trọng lực tác dụng lên vật.
+answer4: công của ngoại lực tác dụng lên vật.
+Key: 4
+
+Ask7: Dạng năng lượng tương tác giữa Trái đất và vật là
+answer1: Thế năng đàn hồi.
+answer2: Động năng.
+answer3: Cơ năng.
+answer4: Thế năng trọng trường.
+Key: 4
+
+Ask8: Cơ năng của vật được bảo toàn trong trường hợp
+answer1: vật rơi trong không khí.
+answer2: vật trượt có ma sát.
+answer3: vật rơi tự do.
+answer4: vật rơi trong chất lỏng nhớt.
+Key: 3
+
+Ask9: Cơ năng của vật sẽ không được bảo toàn khi vật
+answer1: chỉ chịu tác dụng của lực đàn hồi của lò xo.
+answer2: chỉ chịu tác dụng của trọng lực.
+answer3: chịu tác dụng của lực cản, lực ma sát.
+answer4: không chịu tác dụng của lực ma sát, lực cản.
+Key: 3
+
+Ask10: Hiệu suất là tỉ số giữa
+answer1: năng lượng hao phí và năng lượng có ích.
+answer2: năng lượng có ích và năng lượng hao phí.
+answer3: năng lượng hao phí và năng lượng toàn phần.
+answer4: năng lượng có ích và năng lượng toàn phần.
+Key: 4
+
+Ask11: Phát biểu nào sau đây đúng?
+answer1: Máy có công suất lớn thì hiệu suất của máy đó cao.
+answer2: Hiệu suất của một máy có thể lớn hơn 1.
+answer3: Máy có hiệu suất càng cao thì năng lượng hao phí càng ít.
+answer4: Máy có hiệu suất càng cao thì năng lượng hao phí càng nhiều.
+Key: 3
+
+Ask12: Động lượng của một vật bằng
+answer1: tích khối lượng và vận tốc của vật.
+answer2: tích khối lượng và gia tốc của vật.
+answer3: tích khối lượng và gia tốc trọng trường.
+answer4: tích khối lượng và độ biến thiên vận tốc.
+Key: 1
+
+Ask13: Đơn vị của động lượng là
+answer1: N/m.
+answer2: kg.m.s.
+answer3: kg.m/s.
+answer4: N/m^2.
+Key: 3
+
+Ask14: Định luật bảo toàn động lượng tương đương với
+answer1: định luật I Niu-tơn.
+answer2: định luật II Niu-tơn.
+answer3: định luật III Niu-tơn.
+answer4: định luật bảo toàn cơ năng.
+Key: 3
+
+Ask15: Định luật bảo toàn động lượng chỉ đúng trong trường hợp
+answer1: hệ có ma sát.
+answer2: hệ không có ma sát.
+answer3: hệ kín có ma sát.
+answer4: hệ cô lập.
+Key: 4
+
+Ask16: Chuyển động của vật nào dưới đây không phải là chuyển động tròn đều?
+answer1: Chiếc đu quay khi đang hoạt động ổn định.
+answer2: Một điểm trên cánh quạt điện khi đang hoạt động ổn định.
+answer3: Bánh xe máy khi đang hãm phanh.
+answer4: Đầu kim giờ của đồng hồ.
+Key: 3
+
+Ask17: Tìm cặp công thức đúng liên hệ giữa tốc độ góc ω với chu kì T và tần số f:
+answer1: ω = 2π/T và ω = 2πf.
+answer2: ω = T/2π và ω = f/2π.
+answer3: ω = 2πT và ω = 2π/f.
+answer4: ω = 2π/T và ω = 2π/f.
+Key: 1
+
+Ask18: Lực hay hợp lực tác dụng vào vật làm vật chuyển động tròn đều gọi là lực:
+answer1: hướng tâm.
+answer2: nâng.
+answer3: ma sát trượt.
+answer4: hấp dẫn.
+Key: 1
+
+Ask19: Lực hướng tâm tác dụng vào vật (khối lượng m, tốc độ góc ω, bán kính r) được tính bằng:
+answer1: Fht = m.ω^2.r
+answer2: Fht = m.ω.r
+answer3: Fht = m.ω^2.r^2
+answer4: Fht = m.ω.r^2
+Key: 1
+
+Ask20: Dưới tác dụng của lực F = 50 N (hợp hướng chuyển động góc 60°), vật v = 20 m/s thẳng đều. Công của lực F thực hiện trong 2 phút bằng bao nhiêu kJ?
+Type: short
+Key: 60
+
+Ask21: Một ôtô 2 tấn khởi hành không vận tốc ban đầu với gia tốc 2,5 m/s^2. Động năng của ôtô khi đi được 10m là bao nhiêu kJ?
+Type: short
+Key: 50
+
+Ask22: Một xe con có khối lượng 650 kg, vận tốc 36 km/h (10 m/s). Độ lớn động lượng của xe con là bao nhiêu kg.m/s?
+Type: short
+Key: 6500
+
+Ask23: Quay tạ tròn đều bán kính r=4m, tốc độ dài v=1,5m/s với lực giữ dây F=20N. Khối lượng của tạ bằng bao nhiêu kg?
+Type: short
+Key: 35.6
+
+Ask24: Electron quay tròn đều 8 vòng hết 8.10^-7 s. Tốc độ góc bằng x.10^7 rad/s. Giá trị của x bằng bao nhiêu?
+Type: short
+Key: 6.28
+
+Ask25: Lò xo l0=80cm, k=160N/m. Nén lò xo bằng lực 12N. Chiều dài lò xo lúc này bằng bao nhiêu cm?
+Type: short
+Key: 72.5
+
+  Ask26: Vật 0,6 kg ném thẳng đứng từ đất với v=20 m/s. g=10 m/s^2. Tính vị trí cao nhất (m) và động năng (J) khi vật đi được quãng đường 30m. (cách trả lời: ví dụ đáp án là 12m và 21J thì điền là 12 21)
+Type: short
+Key: 20 60
