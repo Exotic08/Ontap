@@ -1,0 +1,391 @@
+Ask1: Địa bàn cư trú chủ yếu của cư dân Việt cổ thuộc khu vực nào trên lãnh thổ Việt Nam ngày nay?
+answer1: Khu vực Bắc bộ và Bắc Trung bộ
+answer2: Khu vực Trung bộ ngày nay.
+answer3: Khu vực Nam bộ ngày nay.
+answer4: Cư trú rải rác trên toàn lãnh thổ Việt Nam.
+Key: 1
+
+Ask2: Bộ máy nhà nước Văn Lang - Âu Lạc được tổ chức theo 3 cấp từ trên xuống đứng đầu lần lượt là
+answer1: Vua - Quan văn, quan võ - Lạc dân.
+answer2: Vua - Lạc hầu, Lạc tướng – Tù trưởng.
+answer3: Vua – Qúy tộc, vương hầu – Bồ chính.
+answer4: Vua – Lạc hầu, Lạc tướng – Bồ chính.
+Key: 4
+
+Ask3: Hiện vật nào sau đây tiêu biểu cho trình độ chế tác của cư dân Văn Lang Âu Lạc?
+answer1: Trống đồng Đông Sơn.
+answer2: Tiền đồng Óc Eo.
+answer3: Phù điêu Khương Mỹ.
+answer4: Tượng phật Đồng Dương.
+Key: 1
+
+Ask4: Nền văn minh Chămpa được phát triển dựa trên nền văn hóa
+answer1: văn hóa Đồng Nai.
+answer2: văn hóa Đông Sơn.
+answer3: văn hóa Sa Huỳnh.
+answer4: văn hóa Óc Eo.
+Key: 3
+
+Ask5: Địa bàn cư trú chủ yếu của cư dân Phù Nam thuộc khu vực nào trên đất nước Việt Nam ngày nay?
+answer1: Bắc bộ và Bắc Trung bộ
+answer2: Khu vực Nam bộ.
+answer3: Đồng bằng Sông Hồng.
+answer4: Trung bộ và Nam bộ.
+Key: 2
+
+Ask6: Văn minh Đại Việt có nguồn gốc sâu xa từ
+answer1: văn minh Chăm-pa.
+answer2: văn minh Phù Nam.
+answer3: văn minh Trung Hoa.
+answer4: văn minh Văn Lang - Âu Lạc.
+Key: 4
+
+Ask7: Nội dung nào sau đây là cơ sở quan trọng nhất dẫn đến sự hình thành và phát triển rực rỡ của văn minh Đại Việt?
+answer1: Kế thừa các nền văn minh cổ đại.
+answer2: Nền độc lập, tự chủ của đất nước.
+answer3: Tiếp thu thành tựu văn minh Ấn Độ.
+answer4: Tiếp thu thành tựu văn minh Trung Hoa.
+Key: 2
+
+Ask8: Người Việt đã tiếp thu có chọn lọc các thành tựu về thể chế chính trị, luật pháp từ nền văn minh nào sau đây?
+answer1: Văn minh Ấn Độ.
+answer2: Văn minh Trung Hoa.
+answer3: Văn minh Ai Cập.
+answer4: Văn minh La Mã.
+Key: 2
+
+Ask9: Bộ máy nhà nước quân chủ chuyên chế trung ương tập quyền của Đại Việt được hoàn chỉnh dưới triều đại nào sau đây?
+answer1: Lê sơ.
+answer2: Tây Sơn.
+answer3: Tiền Lê.
+answer4: Tiền Lý.
+Key: 1
+
+Ask10: Các triều đại phong kiến Việt Nam đều chú trọng phát triển ngành kinh tế nào sau đây?
+answer1: Thương nghiệp
+answer2: Nông nghiệp.
+answer3: Thủ công nghiệp
+answer4: Hàng hải
+Key: 2
+
+Ask11: Lễ Tịch điền được các vua thời Tiền Lê và Lý tổ chức hàng năm nhằm khuyến khích
+answer1: sản xuất nông nghiệp.
+answer2: sản xuất thủ công nghiệp.
+answer3: bảo vệ, tôn tạo đê điều.
+answer4: sự phát triển của giáo dục.
+Key: 1
+
+Ask12: Ở Việt Nam hiện nay có bao nhiêu dân tộc thiểu số?
+answer1: 54
+answer2: 53
+answer3: 35
+answer4: 23
+Key: 2
+
+Ask13: Các dân tộc ở Việt Nam hiện nay được xếp vào mấy nhóm ngữ hệ?
+answer1: 5 nhóm ngữ hệ.
+answer2: 6 nhóm ngữ hệ.
+answer3: 7 nhóm ngữ hệ.
+answer4: 8 nhóm ngữ hệ.
+Key: 4
+
+Ask14: Điều kiện tự nhiên nào sau đây tạo thuận lợi cho cư dân Văn Lang - Âu Lạc phát triển ngành nông nghiệp lúa nước?
+answer1: Tài nguyên khoáng sản phong phú.
+answer2: Khí hậu khô hạn, lượng nhiệt lớn.
+answer3: Hệ thống đất phù sa màu mỡ.
+answer4: Tiếp giáp với các nền văn minh lớn.
+Key: 3
+
+Ask15: Cư dân Văn Lang - Âu Lạc sớm phát triển nghề luyện kim nhờ điều kiện tự nhiên thuận lợi nào sau đây?
+answer1: Tài nguyên khoáng sản phong phú.
+answer2: Khí hậu nhiệt đới ẩm gió mùa.
+answer3: Các vùng đồng bằng phù sa màu mỡ.
+answer4: Hệ thống sông ngòi chằng chịt.
+Key: 1
+
+Ask16: Nền văn minh Văn Lang - Âu Lạc được hình thành ở khu vực nào sau đây của Việt Nam?
+answer1: Khu vực Bắc Bộ và Bắc Trung Bộ Việt Nam ngày nay.
+answer2: Vùng duyên hải và cao nguyên miền Trung Việt Nam.
+answer3: Lưu vực sông Hồng, sông Thu Bồn và sông Cửu Long.
+answer4: Vùng ven biên Nam Trung Bộ và Nam Bộ Việt Nam.
+Key: 1
+
+Ask17: Nền văn minh Chăm-pa được hình thành ở khu vực nào của Việt Nam hiện nay?
+answer1: Vùng duyên hải và một phần cao nguyên miền Trung.
+answer2: Các tỉnh vùng đồng bằng Bắc Bộ và Bắc Trung Bộ.
+answer3: Các tỉnh vùng duyên hải miền Trung và Tây Nguyên.
+answer4: Vùng ven biên Nam Trung Bộ và các tỉnh Nam Bộ.
+Key: 1
+
+Ask18: Nền văn minh Phù Nam được hình thành trên lưu vực con sông nào sau đây?
+answer1: Sông Cửu Long.
+answer2: Sông Thu Bồn
+answer3: Sông Hồng
+answer4: Sông Mã
+Key: 1
+
+Ask19: Văn minh Đại Việt đã kế thừa và phát triển yếu tố nào sau đây từ nền văn minh Văn Lang Âu Lạc?
+answer1: Tín ngưỡng tốt đẹp.
+answer2: Trình độ lập pháp.
+answer3: Kĩ thuật làm giấy.
+answer4: Kĩ thuật in tranh.
+Key: 1
+
+Ask20: Nội dung nào sau đây là cơ sở quan trọng nhất dẫn đến sự hình thành và phát triển rực rỡ của văn minh Đại Việt?
+answer1: Kế thừa các nền văn minh cổ đại.
+answer2: Nền độc lập, tự chủ của đất nước.
+answer3: Tiếp thu thành tựu văn minh Ấn Độ.
+answer4: Tiếp thu thành tựu văn minh Trung Hoa.
+Key: 2
+
+Ask21: Văn minh Đại Việt có nguồn gốc sâu xa từ
+answer1: văn minh Chăm-pa.
+answer2: văn minh Phù Nam.
+answer3: văn minh Trung Hoa.
+answer4: văn minh Văn Lang - Âu Lạc.
+Key: 4
+
+Ask22: Trung tâm chính trị - văn hóa và đô thị lớn nhất Đại Việt trong các thế kỷ X-XV là
+answer1: Phố Hiến.
+answer2: Thanh Hà.
+answer3: Thăng Long.
+answer4: Hội An.
+Key: 3
+
+Ask23: Dưới triều đại nhà Lê (thế kỉ XV), bộ luật thành văn nào sau đây được ban hành?
+answer1: Hình luật.
+answer2: Hình thư.
+answer3: Quốc triều hình luật.
+answer4: Hoàng Việt luật lệ.
+Key: 3
+
+Ask24: Hai loại hình văn học chính của Đại Việt dưới các triều đại phong kiến là
+answer1: văn học nhà nước và văn học dân gian.
+answer2: văn học viết và văn học truyền miệng.
+answer3: văn học nhà nước và văn học tự do.
+answer4: văn học dân gian và văn học viết.
+Key: 4
+
+Ask25: Hiện nay, ngôn ngữ quốc gia của nước ta là
+answer1: tiếng Hán.
+answer2: tiếng Việt.
+answer3: tiếng Khơ me.
+answer4: tiếng Anh.
+Key: 2
+
+Ask26: Ở Việt Nam hiện nay có bao nhiêu dân tộc?
+answer1: 60
+answer2: 63
+answer3: 54
+answer4: 53
+Key: 3
+
+Ask27: Nền văn minh Văn Lang - Âu Lạc chủ yếu được hình thành trên lưu vực con sông nào sau đây?
+answer1: Sông Hằng.
+answer2: Sông Ấn.
+answer3: Sông Hồng.
+answer4: Sông Nin.
+Key: 3
+
+Ask28: Thành tựu tiêu biểu nhất về kĩ thuật luyện kim của cư dân Văn Lang - Âu Lạc là
+answer1: trống đồng Đông Sơn.
+answer2: thạp đồng Đào Thịnh.
+answer3: kĩ thuật rèn sắt.
+answer4: kĩ thuật đúc tiền đồng.
+Key: 1
+
+Ask29: Đứng đầu bộ máy nhà nước Văn Lang là
+answer1: Lạc hầu.
+answer2: Lạc tướng.
+answer3: Hùng Vương.
+answer4: An Dương Vương.
+Key: 3
+
+Ask30: Nền văn minh Chăm-pa được hình thành trên cơ sở của nền văn hóa nào sau đây?
+answer1: Văn hóa Đông Sơn.
+answer2: Văn hóa Sa Huỳnh.
+answer3: Văn hóa Óc Eo.
+answer4: Văn hóa Phùng Nguyên.
+Key: 2
+
+Ask31: Tôn giáo nào có ảnh hưởng sâu sắc nhất đến văn minh Phù Nam trong thời kì đầu?
+answer1: Nho giáo.
+answer2: Đạo giáo.
+answer3: Ấn Độ giáo.
+answer4: Hồi giáo.
+Key: 3
+
+Ask32: Nền văn minh Đại Việt được hình thành trên cơ sở kế thừa trực tiếp từ nền văn minh nào?
+answer1: Văn minh Chăm-pa.
+answer2: Văn minh Phù Nam.
+answer3: Văn minh Văn Lang - Âu Lạc.
+answer4: Văn minh sông Hồng.
+Key: 3
+
+Ask33: Văn minh Đại Việt còn có tên gọi nào khác dưới đây?
+answer1: Văn minh Chăm-pa.
+answer2: Văn minh Thăng Long.
+answer3: Văn minh Sông Hồng.
+answer4: Văn minh sông Ân.
+Key: 2
+
+Ask34: Trong các thế kỉ XVI - XVII, văn minh Đại Việt
+answer1: bước đầu được định hình.
+answer2: phát triển mạnh mẽ và toàn diện.
+answer3: có sự giao lưu với văn minh phương Tây.
+answer4: có những dấu hiệu trì trệ và lạc hậu.
+Key: 3
+
+Ask35: Bộ luật thành văn đầu tiên của nước ta được ban hành dưới thời Lý có tên là gì?
+answer1: Hình thư.
+answer2: Quốc triều hình luật.
+answer3: Hoàng Việt luật lệ.
+answer4: Luật Hồng Đức.
+Key: 1
+
+Ask36: Tác phẩm sử học nổi tiếng do Lê Văn Hưu biên soạn dưới thời Trần là
+answer1: Đại Việt sử ký toàn thư.
+answer2: Đại Việt sử ký.
+answer3: Khâm định Việt sử thông giám cương mục.
+answer4: Việt Nam sử lược.
+Key: 2
+
+Ask37: Ở Đại Việt, Phật giáo phát triển mạnh mẽ nhất dưới thời kì nào?
+answer1: Ngô - Đinh.
+answer2: Đinh - Tiền Lê.
+answer3: Lý - Trần.
+answer4: Lê - Nguyễn.
+Key: 3
+
+Ask38: Hiện nay, quốc gia Việt Nam là một cộng đồng bao gồm bao nhiêu dân tộc anh em?
+answer1: 50 dân tộc.
+answer2: 52 dân tộc.
+answer3: 54 dân tộc.
+answer4: 56 dân tộc.
+Key: 3
+
+Ask39: Trong cộng đồng các dân tộc Việt Nam, dân tộc nào chiếm số lượng dân số đông nhất?
+answer1: Dân tộc Tày.
+answer2: Dân tộc Thái.
+answer3: Dân tộc Mường.
+answer4: Dân tộc Kinh.
+Key: 4
+
+Ask40: Nội dung nào sau đây không phải là cơ sở hình thành nền văn minh Đại Việt?
+answer1: Có cội nguồn từ các nền văn minh cổ xưa trên đất nước Việt Nam.
+answer2: Tiếp thu chọn lọc từ thành tựu của các nền văn minh bên ngoài.
+answer3: Nho giáo là tư tưởng chính thống trong suốt các triều đại phong kiến.
+answer4: Trải qua quá trình đấu tranh, củng cố độc lập dân tộc của quân và dân ta.
+Key: 3
+
+Ask41: Nội dung nào sau đây không phải là nguyên nhân dẫn đến sự phát triển của thủ công nghiệp nước ta dưới thời kì văn minh Đại Việt?
+answer1: Đất nước độc lập và thống nhất
+answer2: Sự phát triển của ngành nông nghiệp.
+answer3: Chính sách tích cực của nhà nước
+answer4: Tư tưởng Nho giáo giữ địa vị độc tôn
+Key: 4
+
+Ask42: Nội dung nào sau đây là nguyên nhân dẫn đến sự khác biệt về hình thức sản xuất nông nghiệp giữa dân tộc Kinh với các dân tộc thiểu số ở Việt Nam?
+answer1: Địa bàn cư trú
+answer2: Điều kiện khí hậu
+answer3: Cơ cấu cây trồng
+answer4: Chính sách nhà nước
+Key: 1
+
+Ask43: Nội dung nào dưới đây không phản ánh đúng cơ sở hình thành và phát triển của nền văn minh Đại Việt?
+answer1: Kế thừa nền văn minh Văn Lang - Âu Lạc.
+answer2: Nền độc lập, tự chủ của quốc gia Đại Việt.
+answer3: Quá trình xâm lược và mở rộng lãnh thổ.
+answer4: Tiếp thu các thành tựu văn minh bên ngoài.
+Key: 3
+
+Ask44: Nội dung nào sau đây phản ánh đúng vai trò của “Quan xưởng” trong thủ công nghiệp nhà nước?
+answer1: Tạo ra sản phẩm chất lượng cao để trao đổi buôn bán ngoài nước.
+answer2: Huy động lực lượng thợ thủ công tay nghề cao phục vụ chế tác.
+answer3: Tạo ra sản phẩm chất lượng cao phục vụ nhu cầu của triều đình.
+answer4: Tạo ra các hình mẫu hỗ trợ thủ công nghiệp cả nước phát triển.
+Key: 3
+
+Ask45: Nội dung nào sau đây phản ánh điểm tương đồng về sản xuất nông nghiệp của người Kinh và các dân tộc thiểu số ở Việt Nam?
+answer1: Canh tác lúa và các cây lương thực.
+answer2: Chủ yếu canh tác ở nương rẫy.
+answer3: Canh tác lúa bằng ruộng bậc thang.
+answer4: Chủ yếu canh tác ở đồng bằng.
+Key: 1
+
+Ask46: Yếu tố cốt lõi nào là cơ sở quan trọng nhất để bảo tồn và phát triển nền văn minh Đại Việt qua các triều đại?
+answer1: Sự tiếp thu văn hóa phương Tây.
+answer2: Tinh thần yêu nước và ý thức độc lập dân tộc.
+answer3: Sự mở rộng lãnh thổ về phía Nam.
+answer4: Sự phát triển của thương nghiệp ngoại thương.
+Key: 2
+
+Ask47: Nội dung nào dưới đây không phản ánh đúng ý nghĩa của văn minh Đại Việt?
+answer1: Thể hiện sức sáng tạo, sự lao động bền bỉ của các thế hệ người Việt.
+answer2: Tạo nên sức mạnh dân tộc trọng các cuộc đấu tranh bảo vệ Tổ quốc.
+answer3: Góp phần bảo tồn, giữ gìn và phát huy thành tựu của văn minh Việt cổ.
+answer4: Có sức lan tỏa và ảnh hưởng lớn đến sự phát triển của văn minh Hy Lạp.
+Key: 4
+
+Ask48: Đặc điểm nổi bật trong sự phân bố dân cư của các dân tộc thiểu số ở Việt Nam là gì?
+answer1: Cư trú tập trung ở các vùng đồng bằng.
+answer2: Cư trú đan xen, không có ranh giới lãnh thổ rõ rệt.
+answer3: Mỗi dân tộc sống biệt lập ở một tỉnh riêng.
+answer4: Chỉ tập trung sinh sống ở khu vực Tây Nguyên.
+Key: 2
+
+Ask49: Đọc đoạn tư liệu và CHỌN CÁC Ý ĐÚNG: “Nền giáo dục Nho học ở Đại Việt phát triển mạnh từ thời Lý – Trần, đặc biệt dưới thời Lê sơ với hệ thống khoa cử hoàn chỉnh, góp phần đào tạo đội ngũ quan lại và trí thức cho bộ máy nhà nước.”
+answer1: a) Giáo dục Nho học ở Đại Việt phát triển mạnh từ thời Lý – Trần.
+answer2: b) Hệ thống khoa cử dưới thời Lê sơ chưa hoàn chỉnh.
+answer3: c) Sự phát triển của giáo dục và khoa cử góp phần xây dựng đội ngũ quan lại cho nhà nước.
+answer4: d) Giáo dục Nho học phát triển mạnh làm cho các lĩnh vực văn hóa khác của Đại Việt không phát triển.
+Type: multi
+Key: 1,0,1,0
+
+Ask50: Đọc đoạn tư liệu và CHỌN CÁC Ý ĐÚNG: "Với 54 dân tộc ở Việt Nam, có 4 dân tộc là Kinh (Việt), Hoa, Chăm và Khmer có truyền thống sống ở vùng đồng bằng... Một trong những đặc điểm cư trú nổi bật của các dân tộc ở Việt Nam là sự xen cư. Việc xen cư đã diễn ra từ lâu đời và đặc biệt phát triển trong những thập kỉ gần đây..."
+answer1: a) Việt Nam có 54 dân tộc anh em, trong đó có 4 dân tộc Kinh, Hoa, Chăm và Khmer thuộc nhóm dân tộc đa số.
+answer2: b) Địa bàn cư trú của 4 dân tộc Kinh, Hoa, Chăm và Khmer có sự khác biệt so với địa bàn cư trú của các dân tộc còn lại trên lãnh thổ Việt Nam.
+answer3: c) Trong những thập kỉ gần đây, do sự tác động của nhiều yếu tố, việc cư trú đan xen giữa các dân tộc đã bắt đầu xuất hiện và phát triển.
+answer4: d) Bản chất của việc cư trú đan xen hiện nay là sự chuyển đổi địa bàn sinh sống giữa các dân tộc sinh sống ở đồng bằng với các dân tộc sinh sống ở khu vực trung du, miền núi.
+Type: multi
+Key: 0,1,0,0
+
+Ask51: Đọc đoạn tư liệu và CHỌN CÁC Ý ĐÚNG: “Phù Nam là một trong những quốc gia cổ sớm ở Đông Nam Á, phát triển mạnh nhờ vị trí nằm trên các tuyến giao thương quốc tế. Nền kinh tế kết hợp giữa nông nghiệp, thủ công nghiệp và thương mại."
+answer1: a) Phù Nam là một quốc gia cổ hình thành sớm ở Đông Nam Á.
+answer2: b) Kinh tế Phù Nam chỉ dựa vào nông nghiệp, không có vai trò của thương mại.
+answer3: c) Vị trí địa lí thuận lợi giúp Phù Nam trở thành trung tâm giao thương quan trọng.
+answer4: d) Sự phát triển của Phù Nam hoàn toàn không phụ thuộc vào yếu tố vị trí địa lí.
+Type: multi
+Key: 1,0,1,0
+
+Ask52: Đọc đoạn tư liệu và CHỌN CÁC Ý ĐÚNG: “Kiến trúc và nghệ thuật Đại Việt đạt nhiều thành tựu tiêu biểu như chùa Một Cột, tháp Phổ Minh; cùng với đó là những tiến bộ trong kỹ thuật quân sự và thủ công nghiệp, phản ánh trình độ phát triển của xã hội.”
+answer1: a) Chùa Một Cột và tháp Phổ Minh là những công trình kiến trúc tiêu biểu của Đại Việt.
+answer2: b) Thành tựu kiến trúc của Đại Việt không phản ánh trình độ phát triển của xã hội.
+answer3: c) Sự phát triển của thủ công nghiệp và kỹ thuật quân sự góp phần nâng cao sức mạnh quốc gia.
+answer4: d) Thành tựu kiến trúc Đại Việt chỉ mang yếu tố bản địa, không chịu ảnh hưởng bên ngoài.
+Type: multi
+Key: 1,0,1,0
+
+Ask53: Đọc đoạn tư liệu và CHỌN CÁC Ý ĐÚNG: “Hình thành trên một không gian tương đối rộng lớn với cả ba vùng cảnh quan... các di tích văn hóa Chăm tìm được ở miền Trung trải dọc từ Quảng Bình ở phía bắc đến Ninh Thuận, Bình Thuận, Đồng Nai ở phía nam. Dấu tích văn hóa Chăm còn được phát hiện trên vùng cao nguyên hiện nay như các tỉnh: Gia Lai, Kon Tum, Đắk Lắk, Lâm Đồng..."
+answer1: a) Theo đoạn tư liệu, vương quốc Chăm-pa là một quốc gia rộng lớn có lãnh thổ trải rộng từ Quảng Ninh đến Đồng Nai.
+answer2: b) Việc di tích văn hoá Chăm-pa phân bố ở cả rừng núi, châu thổ và duyên hải cho thấy nền văn hoá này có sự thích ứng linh hoạt với nhiều không gian sinh thái khác nhau.
+answer3: c) Trong lịch sử khu vực, văn hóa Chăm phát triển trong bối cảnh giao lưu xã hội và văn hoá rộng lớn.
+answer4: d) Hiện nay, các di tích văn hóa Chăm chỉ được tìm thấy ở các tỉnh miền Trung Việt Nam.
+Type: multi
+Key: 0,1,1,0
+
+Ask54: Đọc đoạn tư liệu và CHỌN CÁC Ý ĐÚNG: “Nhâm Ngọ, năm thứ tư [1042]... Ban Hình thư... Vua lấy làm thương xót, sai Trung tư san định luật lệnh, châm chước cho thích dụng với thời thế, chia ra môn loại, biên thành điều khoản, làm thành sách “Hình thư” của một triều đại, để cho người xem dễ hiểu. Sách làm xong, xuống chiếu ban hành, dân lấy làm tiện”.
+answer1: a) Theo đoạn tư liệu, luật Hình thư ra đời để thích ứng với thời thế và để cho dân dễ hiểu.
+answer2: b) Bộ luật Hình thư được ban hành vào thế kỉ XI dưới thời vương triều Trần.
+answer3: c) Việc ban hành luật Hình thư cho thấy triều đình chú trọng xây dựng nhà nước pháp quyền và coi trọng quyền lợi của nhân dân.
+answer4: d) Hình thư là bộ luật thành văn đầu tiên của nước ta và còn được lưu giữ nguyên vẹn đến ngày nay.
+Type: multi
+Key: 1,0,1,0
+
+Ask55: Dựa vào bảng sự kiện về thành tựu đời sống vật chất, tinh thần của các dân tộc Việt Nam, CHỌN CÁC Ý ĐÚNG:
+answer1: a) Bảng trên cho thấy các nghề thủ công cổ truyền của các dân tộc Việt Nam tiếp tục phát triển.
+answer2: b) Các phong tục, tập quán của cộng đồng các dân tộc Việt Nam đa dạng, phong phú.
+answer3: c) Các làng nghề thủ công cổ truyền của dân tộc Kinh ngày nay đã không còn.
+answer4: d) Các lễ hội của các dân tộc thiểu số ngày nay đã bị mai một hết và không được tổ chức hằng năm nữa.
+Type: multi
+Key: 1,1,0,0
