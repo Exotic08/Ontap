@@ -176,6 +176,14 @@ Ask28: Lò xo l0=80cm, k=160N/m. Nén lò xo bằng lực 12N. Chiều dài lò 
 Type: short
 Key: 72.5
 
-  Ask29: Vật 0,6 kg ném thẳng đứng từ đất với v=20 m/s. g=10 m/s^2. Tính vị trí cao nhất (m) và động năng (J) khi vật đi được quãng đường 30m. (cách trả lời: ví dụ đáp án là 12m và 21J thì điền là 12 21)
+Ask29: Vật 0,6 kg ném thẳng đứng từ đất với v=20 m/s. g=10 m/s^2. Tính vị trí cao nhất (m) và động năng (J) khi vật đi được quãng đường 30m. (cách trả lời: ví dụ đáp án là 12m và 21J thì điền là 12 21)
 Type: short
 Key: 20 60
+
+Ask30: Viên đạn khối lượng 50 g đang bay với vận tốc 800 m/s thì gặp một cánh cửa thép. Đạn xuyên qua cửa trong thời gian 0,006 s. Sau khi xuyên qua cánh cửa vận tốc của đạn còn 500 m/s. Lực cản trung bình của cửa tác dụng lên đạn có độ lớn bằng bao nhiêu Newton?
+Type: short
+Key: 25000
+
+Ask31: Một chiếc xe đua chạy với tốc độ lớn nhất (mà không bị trượt) theo đường tròn nằm ngang có bán kính 15 m được một vòng sau khoảng thời gian 40s. Lấy g = 10 m/s^2. Tính gia tốc hướng tâm của xe (Kết quả làm tròn đến hàng phần trăm).
+Type: short 
+Key: 0.37
