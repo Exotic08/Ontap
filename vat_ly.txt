@@ -131,30 +131,51 @@ answer3: Fht = m.ω^2.r^2
 answer4: Fht = m.ω.r^2
 Key: 1
 
-Ask20: Dưới tác dụng của lực F = 50 N (hợp hướng chuyển động góc 60°), vật v = 20 m/s thẳng đều. Công của lực F thực hiện trong 2 phút bằng bao nhiêu kJ?
+Ask20: Chuyển động của vật nào dưới đây là chuyển động tròn đều?
+answer1: Chuyển động của pittông trong động cơ đốt trong.
+answer2: Chuyển động của một mắt xích xe đạp.
+answer3: Chuyển động của đầu kim phút.
+answer4: Chuyển động của con lắc đồng hồ.
+Key: 3
+
+Ask21: Một vật chuyển động tròn đều với chu kì T, tần số góc ω, số vòng mà vật đi được trong một giây là f. Hệ thức nào sau đây là đúng?
+answer1: w = 2π/T
+answer2: w = 2π/f
+answer3: w = 2πf
+answer4: T = 1/f^2
+Key: 3
+
+Ask22: Trong chuyển động tròn đều:
+answer1: vectơ vận tốc luôn không đổi, do đó gia tốc bằng 0.
+answer2: gia tốc hướng vào tâm quỹ đạo, độ lớn tỉ lệ nghịch với bình phương tốc độ.
+answer3: phương, chiều và độ lớn của vận tốc luôn thay đổi.
+answer4: gia tốc hướng vào tâm quỹ đạo, độ lớn tỉ lệ với bình phương tốc độ góc.
+Key: 4
+
+Ask23: Dưới tác dụng của lực F = 50 N (hợp hướng chuyển động góc 60°), vật v = 20 m/s thẳng đều. Công của lực F thực hiện trong 2 phút bằng bao nhiêu kJ?
 Type: short
 Key: 60
 
-Ask21: Một ôtô 2 tấn khởi hành không vận tốc ban đầu với gia tốc 2,5 m/s^2. Động năng của ôtô khi đi được 10m là bao nhiêu kJ?
+Ask24: Một ôtô 2 tấn khởi hành không vận tốc ban đầu với gia tốc 2,5 m/s^2. Động năng của ôtô khi đi được 10m là bao nhiêu kJ?
 Type: short
 Key: 50
 
-Ask22: Một xe con có khối lượng 650 kg, vận tốc 36 km/h (10 m/s). Độ lớn động lượng của xe con là bao nhiêu kg.m/s?
+Ask25: Một xe con có khối lượng 650 kg, vận tốc 36 km/h (10 m/s). Độ lớn động lượng của xe con là bao nhiêu kg.m/s?
 Type: short
 Key: 6500
 
-Ask23: Quay tạ tròn đều bán kính r=4m, tốc độ dài v=1,5m/s với lực giữ dây F=20N. Khối lượng của tạ bằng bao nhiêu kg?
+Ask26: Quay tạ tròn đều bán kính r=4m, tốc độ dài v=1,5m/s với lực giữ dây F=20N. Khối lượng của tạ bằng bao nhiêu kg?
 Type: short
 Key: 35.6
 
-Ask24: Electron quay tròn đều 8 vòng hết 8.10^-7 s. Tốc độ góc bằng x.10^7 rad/s. Giá trị của x bằng bao nhiêu?
+Ask27: Electron quay tròn đều 8 vòng hết 8.10^-7 s. Tốc độ góc bằng x.10^7 rad/s. Giá trị của x bằng bao nhiêu?
 Type: short
 Key: 6.28
 
-Ask25: Lò xo l0=80cm, k=160N/m. Nén lò xo bằng lực 12N. Chiều dài lò xo lúc này bằng bao nhiêu cm?
+Ask28: Lò xo l0=80cm, k=160N/m. Nén lò xo bằng lực 12N. Chiều dài lò xo lúc này bằng bao nhiêu cm?
 Type: short
 Key: 72.5
 
-  Ask26: Vật 0,6 kg ném thẳng đứng từ đất với v=20 m/s. g=10 m/s^2. Tính vị trí cao nhất (m) và động năng (J) khi vật đi được quãng đường 30m. (cách trả lời: ví dụ đáp án là 12m và 21J thì điền là 12 21)
+  Ask29: Vật 0,6 kg ném thẳng đứng từ đất với v=20 m/s. g=10 m/s^2. Tính vị trí cao nhất (m) và động năng (J) khi vật đi được quãng đường 30m. (cách trả lời: ví dụ đáp án là 12m và 21J thì điền là 12 21)
 Type: short
 Key: 20 60
