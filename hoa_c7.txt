@@ -1,0 +1,75 @@
+Ask1: Halogen tồn tại ở thể lỏng ở điều kiện thường là
+answer1: fluorine
+answer2: bromine
+answer3: iodine
+answer4: chlorine
+Key: 2
+
+Ask2: Đơn chất halogen tồn tại ở thể khí, màu vàng lục là
+answer1: chlorine
+answer2: Iodine
+answer3: bromine
+answer4: fluorine
+Key: 1
+
+Ask3: Hydrohalic acid có tính acid mạnh nhất là
+answer1: HI
+answer2: HCl
+answer3: HBr
+answer4: HF
+Key: 1
+
+Ask4: Khí HCl khi tan trong nước tạo thành dung dịch hydrochloric acid. Hydrochloric acid khi tiếp xúc với quỳ tím làm quỳ tím
+answer1: chuyển sang màu đỏ
+answer2: chuyển sang màu xanh
+answer3: không chuyển màu
+answer4: chuyển sang không màu
+Key: 1
+
+Ask5: Hydrohalic acid có tính ăn mòn thủy tinh là
+answer1: HI
+answer2: HCl
+answer3: HBr
+answer4: HF
+Key: 4
+
+Ask6: Dung dịch nào sau đây có thể phân biệt hai dung dịch NaF và NaCl?
+answer1: HCl
+answer2: HF
+answer3: AgNO3
+answer4: Br2
+Key: 3
+
+Ask7: Nhỏ vài giọt dung dịch nào sau đây vào dung dịch AgNO3 thu được kết tủa màu vàng nhạt?
+answer1: HCl
+answer2: NaBr
+answer3: NaCl
+answer4: HF
+Key: 2
+
+Ask8: Nhỏ vài giọt dung dịch nào sau đây vào dung dịch AgNO3 thu được kết tủa màu trắng?
+answer1: HI
+answer2: NaBr
+answer3: NaCl
+answer4: HF
+Key: 3
+
+Ask9: Cho các hydrohalic acid: (1) HBr, (2) HCl, (3) HI, (4) HF. Thứ tự tính acid giảm dần là:
+Type: short
+Key: 3124
+
+Ask10: Số cặp electron dùng chung trong phân tử HX (X là halogen) bằng bao nhiêu?
+Type: short
+Key: 1
+
+Ask11: Cho các chất: (1) NaOH, (2) KF, (3) NaBr, (4) H2O, (5) Fe. Các chất tác dụng trực tiếp được với khí chlorine gồm:
+Type: short
+Key: 1345
+
+Ask12: Cho các đơn chất: (1) F2, (2) I2, (3) Br2, (4) Cl2. Thứ tự tính oxi hóa tăng dần là:
+Type: short
+Key: 2341
+
+Ask13: Cho các hợp chất: HCl, HClO, NaClO, KCl, HClO2, KClO3, HClO4. Có bao nhiêu hợp chất trong đó nguyên tố Cl có số oxi hóa dương?
+Type: short
+Key: 5
