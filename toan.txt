@@ -258,3 +258,11 @@ Key: 0.65
 Ask41: Đường cao tốc ∆: 3x - 4y + 10 = 0. Tính góc giữa lộ trình d (qua B(4; 2), VTCP u(1; 7)) và ∆.
 Type: short
 Key: 45
+
+Ask42: Đường cao tốc ∆: 3x - 4y + 10 = 0. Khoảng cách từ A(1; 1) đến ∆ bằng bao nhiêu km? (Chỉ nhập số)
+Type: short
+Key: 1.8
+
+Ask43: Góc giữa đường cao tốc ∆: 3x - 4y + 10 = 0 và lộ trình d (qua B(4; 2), VTCP u(1; 7)) bằng bao nhiêu độ? (Chỉ nhập số)
+Type: short
+Key: 45
