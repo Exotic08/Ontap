@@ -253,7 +253,7 @@ Key: 2.91
 
 Ask40: Điểm Ngữ văn lớp 10D: 7 8 7.5 7 6 6.5 8 7. Tính độ lệch chuẩn (làm tròn hàng phần trăm).
 Type: short
-Key: 0.70
+Key: 0.65
 
 Ask41: Đường cao tốc ∆: 3x - 4y + 10 = 0. Tính góc giữa lộ trình d (qua B(4; 2), VTCP u(1; 7)) và ∆.
 Type: short
