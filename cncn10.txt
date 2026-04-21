@@ -1,0 +1,326 @@
+Ask1: Hình cắt của ngôi nhà khi dùng mặt phẳng cắt song song với mặt phẳng chiếu đứng hay mặt phẳng chiếu cạnh là
+answer1: mặt cạnh.
+answer2: mặt cắt.
+answer3: mặt bằng.
+answer4: mặt đứng.
+Key: 2
+
+Ask2: Thường là hình chiếu mặt trước, biểu diễn mặt ngoài của ngôi nhà là
+answer1: mặt cắt.
+answer2: mặt bằng.
+answer3: mặt cạnh.
+answer4: mặt đứng.
+Key: 4
+
+Ask3: Bản vẽ hình chiếu bằng của các công trình trên khu đất xây dựng là
+answer1: bản vẽ mặt đứng.
+answer2: bản vẽ mặt cắt.
+answer3: bản vẽ mặt bằng.
+answer4: bản vẽ mặt bằng tổng thể.
+Key: 4
+
+Ask4: Bản vẽ mặt bằng tổng thể là bản vẽ gì?
+answer1: Hình chiếu đứng của các công trình trên khu đất xây dựng.
+answer2: Hình chiếu cạnh của các công trình trên khu đất xây dựng.
+answer3: Hình chiếu bằng của các công trình trên khu đất xây dựng.
+answer4: Hình chiếu phối cảnh của các công trình trên khu đất xây dựng.
+Key: 3
+
+Ask5: Bản vẽ nhà thể hiện những nội dung gì?
+answer1: Chỉ thể hiện kích thước của ngôi nhà.
+answer2: Chỉ thể hiện hình dáng của ngôi nhà.
+answer3: Chỉ thể hiện cấu tạo của ngôi nhà.
+answer4: Cấu tạo, hình dáng, kích thước của ngôi nhà.
+Key: 4
+
+Ask6: Hình cắt bằng của các tầng ngôi nhà với mặt phẳng cắt nằm ngang cách sàn khoảng 1,5m là
+answer1: mặt cắt.
+answer2: mặt đứng.
+answer3: mặt cạnh.
+answer4: mặt bằng.
+Key: 4
+
+Ask7: Khi đọc bản vẽ chi tiết, việc đọc khung tên giúp người đọc biết điều gì?
+answer1: Các yêu cầu về gia công, xử lí bề mặt chi tiết.
+answer2: Tên gọi chi tiết, vật liệu chế tạo, tỉ lệ bản vẽ.
+answer3: Các hình biểu diễn chính của chi tiết.
+answer4: Hình dạng, kích thước chi tiết.
+Key: 2
+
+Ask8: Khung tên trong bản vẽ lắp thể hiện nội dung gì?
+answer1: Số thứ tự, tên gọi, số lượng chi tiết, vật liệu.
+answer2: Tên gọi hình chiếu, hình cắt.
+answer3: Tên sản phẩm, tỉ lệ, cơ sở thiết kế.
+answer4: Trình tự tháo lắp sản phẩm.
+Key: 3
+
+Ask9: Khi đọc bản vẽ chi tiết để biết các yêu cầu về gia công, xử lí bề mặt sau khi gia công, cần đọc phần nào của bản vẽ?
+answer1: Kích thước.
+answer2: Khung tên.
+answer3: Hình biểu diễn.
+answer4: Yêu cầu kĩ thuật.
+Key: 4
+
+Ask10: Kích thước trong bản vẽ lắp thể hiện nội dung gì?
+answer1: Kích thước của từng chi tiết và kích thước lắp ghép của các chi tiết.
+answer2: Kích thước chung và kích thước từng bộ phận của chi tiết.
+answer3: Kích thước chung và kích thước lắp ghép của các chi tiết.
+answer4: Kích thước chung và kích thước của tất cả các chi tiết.
+Key: 3
+
+Ask11: Trình tự đúng để đọc bản vẽ chi tiết là:
+answer1: 2-3-1-4.
+answer2: 4-3-2-1.
+answer3: 1-2-3-4.
+answer4: 3-2-4-1.
+Key: 4
+
+Ask12: Bảng kê trong bản vẽ lắp thể hiện nội dung gì?
+answer1: Hình dạng, kích thước từng chi tiết.
+answer2: Tên gọi các hình chiếu, hình cắt.
+answer3: Trình tự tháo lắp sản phẩm.
+answer4: Số thứ tự, tên gọi, số lượng chi tiết, vật liệu.
+Key: 4
+
+Ask13: Cho bản vẽ kĩ thuật của sản phẩm BỘ GIÁ ĐỠ, chọn các nhận định ĐÚNG:
+answer1: a) Bản vẽ này được gọi là bản vẽ lắp.
+answer2: b) Tất cả các chi tiết đều được làm bằng thép.
+answer3: c) Hình biểu diễn thể hiện ba hình chiếu trục đo của vật thể.
+answer4: d) Đường kính lớn nhất của con lăn là 78 (mm).
+Type: multi
+Key: 1,1,0,1
+
+Ask14: Cho bản vẽ kĩ thuật của sản phẩm BỘ VÒNG ĐAI, chọn các nhận định ĐÚNG:
+answer1: a) Bản vẽ này được gọi là bản vẽ chi tiết.
+answer2: b) Chiều rộng của vòng đai là 50mm.
+answer3: c) Mỗi vòng đai có bán kính ngoài là 78mm.
+answer4: d) Mỗi bu lông lắp một vòng đệm.
+Type: multi
+Key: 0,1,0,1
+
+Ask15: Cho bản vẽ kĩ thuật của một NGÔI NHÀ, chọn các nhận định ĐÚNG:
+answer1: a) Đây là bản vẽ mặt bằng của ngôi nhà chỉ có một tầng.
+answer2: b) Ngôi nhà có tổng số 7 phòng.
+answer3: c) Chiều dài ngôi nhà xấp xỉ 11,7m.
+answer4: d) Trong nhà có tổng số 3 phòng ngủ.
+Type: multi
+Key: 0,1,1,1
+
+Ask16: Kết quả của thiết kế kĩ thuật là gì?
+answer1: Bản mô tả kết cấu, hình dạng sản phẩm.
+answer2: Bản vẽ kĩ thuật kèm theo bản thuyết minh liên quan.
+answer3: Sản phẩm được chế tạo hoàn thiện.
+answer4: Bản mô tả hướng dẫn sử dụng sản phẩm.
+Key: 2
+
+Ask17: Hoạt động xác định chức năng, hình dạng, kết cấu, vật liệu; tính toán, lựa chọn các thông số của sản phẩm theo nhu cầu sử dụng là
+answer1: chế tạo kĩ thuật.
+answer2: đánh giá kĩ thuật.
+answer3: lắp ráp kĩ thuật.
+answer4: thiết kế kĩ thuật.
+Key: 4
+
+Ask18: Việc thiết kế và sản xuất túi giấy, túi cói thay thế cho túi nilon là đảm bảo nguyên tắc thiết kế kĩ thuật nào?
+answer1: Nguyên tắc đơn giản hóa.
+answer2: Nguyên tắc bảo vệ môi trường.
+answer3: Nguyên tắc tiết kiệm tài nguyên.
+answer4: Nguyên tắc tối thiểu tài chính.
+Key: 2
+
+Ask19: Nguyên tắc nào dưới đây không phải nguyên tắc tối ưu?
+answer1: Tiết kiệm tài nguyên.
+answer2: Giải pháp tối ưu.
+answer3: Tối thiểu tài chính.
+answer4: Đơn giản hóa.
+Key: 1
+
+Ask20: Nguyên tắc đưa ra giải pháp đáp ứng được nhiều tiêu chí thiết kế nhất là
+answer1: nguyên tắc tiết kiệm tài nguyên.
+answer2: nguyên tắc tối thiểu tài chính.
+answer3: nguyên tắc đơn giản hóa.
+answer4: nguyên tắc giải pháp tối ưu.
+Key: 4
+
+Ask21: Thiết kế kĩ thuật có vai trò, ý nghĩa lớn trong sản xuất cũng như phát triển
+answer1: sản phẩm.
+answer2: kĩ thuật.
+answer3: thương hiệu.
+answer4: vật liệu.
+Key: 1
+
+Ask22: Nguyên tắc đưa ra giải pháp thiết kế sản phẩm có kết cấu càng đơn giản càng tốt để giảm chi phí là
+answer1: Đơn giản hóa.
+answer2: Tối thiểu tài chính.
+answer3: Giải pháp tối ưu.
+answer4: Tiết kiệm tài nguyên.
+Key: 1
+
+Ask23: Nguyên tắc thiết kế kĩ thuật nào dưới đây thuộc nguyên tắc phát triển bền vững?
+answer1: nguyên tắc tối thiểu tài chính.
+answer2: nguyên tắc đơn giản hóa.
+answer3: nguyên tắc giải pháp tối ưu.
+answer4: nguyên tắc tiết kiệm tài nguyên.
+Key: 4
+
+Ask24: Trong thiết kế kĩ thuật, có mấy nguyên tắc phát triển bền vững?
+answer1: 5.
+answer2: 4.
+answer3: 3.
+answer4: 2.
+Key: 4
+
+Ask25: Có mấy loại nguyên tắc thiết kế kĩ thuật chính?
+answer1: 3.
+answer2: 4.
+answer3: 2.
+answer4: 5.
+Key: 3
+
+Ask26: Trong thiết kế kĩ thuật, có mấy nguyên tắc tối ưu?
+answer1: 5.
+answer2: 3.
+answer3: 4.
+answer4: 2.
+Key: 2
+
+Ask27: Phương pháp quan sát được sử dụng cho bước nào trong quy trình thiết thế kĩ thuật?
+answer1: Bước 4 và bước 5.
+answer2: Bước 1 và bước 4.
+answer3: Bước 3 và bước 4.
+answer4: Bước 2 và bước 4.
+Key: 2
+
+Ask28: Phương pháp phân tích và tổng hợp được sử dụng cho các bước nào?
+answer1: Bước 2 và bước 4.
+answer2: Bước 1 và bước 4.
+answer3: Bước 4 và bước 5.
+answer4: Bước 3 và bước 4.
+Key: 4
+
+Ask29: Trong các bước của quy trình thiết kế kĩ thuật, bước nào quan trọng nhất?
+answer1: Xác định yêu cầu sản phẩm.
+answer2: Kiểm tra, đánh giá.
+answer3: Thiết kế sản phẩm.
+answer4: Lập hồ sơ kĩ thuật.
+Key: 3
+
+Ask30: Bước đầu tiên của quy trình thiết kế kĩ thuật là gì?
+answer1: Xác định yêu cầu sản phẩm.
+answer2: Tìm hiểu thông tin, đề xuất lựa chọn.
+answer3: Lập hồ sơ kĩ thuật.
+answer4: Thiết kế sản phẩm.
+Key: 1
+
+Ask31: Phương pháp thăm dò, điều tra được sử dụng cho bước nào trong quy trình thiết thế kĩ thuật?
+answer1: Bước 4.
+answer2: Bước 5.
+answer3: Bước 3.
+answer4: Bước 1.
+Key: 4
+
+Ask32: Quy trình thiết kế kĩ thuật gồm bao nhiêu bước?
+answer1: 3.
+answer2: 4.
+answer3: 5.
+answer4: 6.
+Key: 3
+
+Ask33: Yếu tố về sản phẩm nào ảnh hưởng đến việc lựa chọn vật liệu, kết cấu, thiết bị che chắn?
+answer1: Nhân trắc.
+answer2: Thẩm mĩ.
+answer3: Năng lượng.
+answer4: An toàn.
+Key: 4
+
+Ask34: Vòng đời của sản phẩm phụ thuộc vào yếu tố nào?
+answer1: Vòng đời thương mại và vòng đời sản xuất.
+answer2: Vòng đời công nghệ và vòng đời thương mại.
+answer3: Vòng đời công nghệ và vòng đời sản xuất.
+answer4: Vòng đời công nghệ và vòng đời kĩ thuật.
+Key: 2
+
+Ask35: Yếu tố về sản phẩm nào ảnh hưởng đến việc tính toán kích thước của sản phẩm?
+answer1: Nhân trắc.
+answer2: Năng lượng.
+answer3: Thẩm mĩ.
+answer4: An toàn.
+Key: 1
+
+Ask36: Có mấy yếu tố chính (nhóm chính) ảnh hưởng trong quá trình thiết kế kĩ thuật?
+answer1: 2.
+answer2: 4.
+answer3: 5.
+answer4: 3.
+Key: 1
+
+Ask37: Yếu tố nhân trắc được hiểu là
+answer1: số đo của cơ thể, đặc điểm tâm sinh lí và hành vi của con người.
+answer2: những vật liệu mới, công nghệ mới để đảm bảo sản phẩm tiêu thụ ít năng lượng.
+answer3: sử dụng các công nghệ đảm bảo thân thiện với môi trường.
+answer4: nhu cầu về thẩm mĩ hay nhu cầu về cái đẹp của con người.
+Key: 1
+
+Ask38: Vòng đời thương mại của sản phẩm thường trải qua bao nhiêu giai đoạn?
+answer1: 2.
+answer2: 4.
+answer3: 3.
+answer4: 5.
+Key: 2
+
+Ask39: Các nguồn tiền hoặc tài sản để phục vụ cho thiết kế là
+answer1: nguồn lực tài chính.
+answer2: vòng đời sản phẩm.
+answer3: nguồn lực công nghệ.
+answer4: yếu tố an toàn.
+Key: 1
+
+Ask40: Khi kiểm tra, đánh giá sản phẩm, nếu giải pháp thiết kế ĐƯỢC CHẤP NHẬN, người thiết kế thực hiện bước tiếp theo là:
+answer1: Bước 2.
+answer2: Bước 3.
+answer3: Bước 1.
+answer4: Bước 5 (Lập hồ sơ kĩ thuật).
+Key: 4
+
+Ask41: Trong quy trình thiết kế kĩ thuật, việc điều tra yêu cầu của thị trường được thực hiện ở bước nào?
+answer1: lập hồ sơ kĩ thuật.
+answer2: tìm hiểu thông tin, đề xuất lựa chọn.
+answer3: thiết kế sản phẩm.
+answer4: xác định yêu cầu sản phẩm.
+Key: 4
+
+Ask42: Khi kiểm tra, đánh giá sản phẩm, nếu giải pháp thiết kế KHÔNG ĐƯỢC CHẤP NHẬN, cần thực hiện lại bước nào?
+answer1: Bước 1.
+answer2: Bước 3 (Thiết kế sản phẩm).
+answer3: Bước 5.
+answer4: Bước 2.
+Key: 2
+
+Ask43: Mẫu thử được sử dụng trong bước nào của quy trình thiết kế kĩ thuật?
+answer1: Kiểm tra, đánh giá.
+answer2: Lập hồ sơ kĩ thuật.
+answer3: Tìm hiểu thông tin, đề xuất lựa chọn.
+answer4: Thiết kế sản phẩm.
+Key: 1
+
+Ask44: Việc hoàn thiện các bản vẽ kĩ thuật, thuyết minh tính toán được thực hiện ở bước nào?
+answer1: Kiểm tra, đánh giá.
+answer2: Thiết kế sản phẩm.
+answer3: Xác định yêu cầu sản phẩm.
+answer4: Lập hồ sơ kĩ thuật.
+Key: 4
+
+Ask45: Một nhóm học sinh thiết kế giá để điện thoại sau khi thực hiện bước “Xác định yêu cầu sản phẩm”, chọn các nhận định ĐÚNG:
+answer1: a) Giá để điện thoại cần có số lượng ngăn phù hợp với số học sinh trong lớp.
+answer2: b) Thực hiện xác định màu sắc của giá trước khi xác định chức năng của giá là hợp lý.
+answer3: c) Sản phẩm cần đảm bảo để vừa chiếc điện thoại có kích thước lớn nhất.
+answer4: d) Nếu sản phẩm đẹp mắt thì không cần đặt ra các yêu cầu kỹ thuật ban đầu.
+Type: multi
+Key: 1,0,1,0
+
+Ask46: Nhóm học sinh thực hiện bước “Kiểm tra, đánh giá” giá đựng sách, chọn các nhận định ĐÚNG:
+answer1: a) Sản phẩm đã được chế tạo phải đúng với bản thiết kế ban đầu.
+answer2: b) Việc kiểm tra có thể bỏ qua nếu sản phẩm đã được lắp ráp cẩn thận.
+answer3: c) Nếu phát hiện điểm chưa hợp lý, nhóm có thể đề xuất điều chỉnh vật liệu.
+answer4: d) Chỉ cần đánh giá hình thức, không cần thử nghiệm chức năng sản phẩm.
+Type: multi
+Key: 1,0,1,0
