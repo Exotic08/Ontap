@@ -241,11 +241,11 @@ Key: 108
 
 Ask37: Tính xác suất để bạn An đạt được 8 điểm (làm đúng 7 câu đầu, 3 câu cuối theo sơ đồ cây). (Nhập dưới dạng số thập phân làm tròn hàng phần trăm)
 Type: short
-Key: 0.08
+Key: 0.42
 
 Ask38: Lấy ngẫu nhiên một thẻ từ 30 thẻ. Tính xác suất để thẻ được lấy ghi một số không chia hết cho 5.
 Type: short
-Key: 0.42
+Key: 0.8
 
 Ask39: Điểm Toán nhóm 6 bạn: 7 6 8 5 9 10. Tính phương sai (làm tròn hàng phần trăm).
 Type: short
