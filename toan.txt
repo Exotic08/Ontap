@@ -266,3 +266,11 @@ Key: 1.8
 Ask43: Góc giữa đường cao tốc ∆: 3x - 4y + 10 = 0 và lộ trình d (qua B(4; 2), VTCP u(1; 7)) bằng bao nhiêu độ? (Chỉ nhập số)
 Type: short
 Key: 45
+
+Ask44: Tìm giao điểm thứ nhất của đường tròn (C): x^2 + y^2 - 7x - y = 0 và đường thẳng ∆: x - y - 3 = 0. Nhập tọa độ dưới dạng số viết liền (ví dụ: x;y).
+Type: short
+Key: 1;-2
+
+Ask45: Tìm giao điểm thứ hai của đường tròn (C): x^2 + y^2 - 7x - y = 0 và đường thẳng ∆: x - y - 3 = 0. Nhập tọa độ dưới dạng số viết liền (ví dụ: x;y).
+Type: short
+Key: 6;3
