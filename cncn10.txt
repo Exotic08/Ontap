@@ -219,7 +219,7 @@ answer1: Bước 2 và bước 4.
 answer2: Bước 1 và bước 4.
 answer3: Bước 4 và bước 5.
 answer4: Bước 3 và bước 4.
-Key: 4
+Key: 1
 
 Ask32: Trong các bước của quy trình thiết kế kĩ thuật, bước nào quan trọng nhất?
 answer1: Xác định yêu cầu sản phẩm.
