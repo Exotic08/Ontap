@@ -237,7 +237,7 @@ Key: -96
 
 Ask36: Tìm hệ số của x^2 trong khai triển (x + √2)^4.
 Type: short
-Key: 108
+Key: 12
 
 Ask37: Tính xác suất để bạn An đạt được 8 điểm (làm đúng 7 câu đầu, 3 câu cuối theo sơ đồ cây). (Nhập dưới dạng số thập phân làm tròn hàng phần trăm)
 Type: short
