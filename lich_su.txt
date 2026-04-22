@@ -87,7 +87,7 @@ answer1: 5 nhóm ngữ hệ.
 answer2: 6 nhóm ngữ hệ.
 answer3: 7 nhóm ngữ hệ.
 answer4: 8 nhóm ngữ hệ.
-Key: 4
+Key: 1
 
 Ask14: Điều kiện tự nhiên nào sau đây tạo thuận lợi cho cư dân Văn Lang - Âu Lạc phát triển ngành nông nghiệp lúa nước?
 answer1: Tài nguyên khoáng sản phong phú.
