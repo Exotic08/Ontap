@@ -6,7 +6,7 @@
 // CẤU HÌNH ĐỀ THI VÀ DATABASE
 // ==========================================
 const QUIZ_LIST = [
-    { id: "tieng_anh1", title: "Đề 1 Tiếng Anh", file: "tieng_anh1.txt" },
+    { id: "tieng_anh1", title: "Cô Mai Said🗣️: Đề 1 không vào đâu", file: "tieng_anh1.txt" },
     { id: "tieng_anh2", title: "Đề 2 Tiếng Anh", file: "tieng_anh2.txt" },
     { id: "tieng_anh3", title: "Đề 3 Tiếng Anh", file: "tieng_anh3.txt" },
     { id: "tieng_anh4", title: "Đề 4 Tiếng Anh", file: "tieng_anh4.txt" },
