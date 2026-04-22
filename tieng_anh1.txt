@@ -214,7 +214,7 @@ answer1: convenient
 answer2: inexpensive
 answer3: throwaway
 answer4: single-use
-Key: 3
+Key: 4
 
 Ask36: [Bài đọc 2] Why are we hooked on buying new things?
 answer1: We throw the old items to make room for the new ones.
