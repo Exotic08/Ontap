@@ -142,7 +142,7 @@ Key: hospitable
 
 Ask23: Viết lại câu với câu điều kiện: "I don't see you very often because you live so far away."
 Type: short
-Key: If you didn't live so far away, I would see you more often.
+Key: If you didn't live so far away, I would see you very often.
 
 Ask24: Viết lại câu dùng mệnh đề quan hệ: "His grandmother had a great influence on his life. She was a hard working woman."
 Type: short
