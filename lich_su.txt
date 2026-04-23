@@ -348,7 +348,7 @@ answer2: b) Địa bàn cư trú của 4 dân tộc Kinh, Hoa, Chăm và Khmer c
 answer3: c) Trong những thập kỉ gần đây, do sự tác động của nhiều yếu tố, việc cư trú đan xen giữa các dân tộc đã bắt đầu xuất hiện và phát triển.
 answer4: d) Bản chất của việc cư trú đan xen hiện nay là sự chuyển đổi địa bàn sinh sống giữa các dân tộc sinh sống ở đồng bằng với các dân tộc sinh sống ở khu vực trong du, miền núi.
 Type: multi
-Key: 0,1,0,1
+Key: 0,1,0,0
 
 Ask51: Đọc đoạn tư liệu sau và CHỌN CÁC Ý ĐÚNG: “Phù Nam là một trong những quốc gia cổ sớm ở Đông Nam Á, phát triển mạnh nhờ vị trí nằm trên các tuyến giao thương quốc tế. Nền kinh tế kết hợp giữa nông nghiệp, thủ công nghiệp và thương mại."
 answer1: a) Phù Nam là một quốc gia cổ hình thành sớm ở Đông Nam Á.
